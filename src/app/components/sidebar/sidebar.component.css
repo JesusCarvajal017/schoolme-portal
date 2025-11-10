@@ -1,0 +1,96 @@
+/* === Contenedor principal === */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background-color: #1b1b63; /* Azul oscuro como en Figma */
+  color: white;
+  border-radius: 0 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* === Logo === */
+.logo-sidebar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+.logo-sidebar img {
+  width: 100px;
+  height: auto;
+}
+
+/* === Items === */
+.sidebar-link,
+.mat-expansion-panel-header,
+.sidebar-child {
+  background: transparent !important;
+  color: white !important;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+/* Hover */
+.sidebar-link:hover,
+.mat-expansion-panel-header:hover,
+.sidebar-child:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* === Íconos === */
+.sidebar-icon {
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+/* === Flecha expandible === */
+.arrow {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+.mat-expanded .arrow {
+  transform: rotate(180deg);
+}
+
+/* === Sub-items === */
+
+.sidebar-child {
+  padding-left: 5px !important; 
+  font-size: 13px;
+  font-weight: 400;
+  border-radius: 6px;
+}
+
+
+/* === Fix expansión Material === */
+.sidebar-panel {
+  background: transparent !important;
+  color: white !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+/* Forzar letras blancas en todo el sidebar */
+.sidebar,
+.sidebar * {
+  color: white !important;
+}
+
+/* Eliminar posibles colores grises de Angular Material */
+.mat-expansion-panel-header,
+.mat-expansion-panel,
+.mat-list-item {
+  color: white !important;
+}
+
+/* Texto de los sub-items en blanco */
+.sidebar-child span {
+  color: white !important;
+}

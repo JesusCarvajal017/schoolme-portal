@@ -1,0 +1,47 @@
+
+.login-app{
+    width: 500px;
+    height: 500px;
+
+    display: grid;
+    flex-direction: column;
+    gap: 10px;
+    /* gap: 40px; */
+}
+
+.card-template{
+    width: 350px;
+}
+
+.img-login{
+    width: 150px;
+}
+
+.form-login{
+    display: grid;
+    gap: 15px;
+}
+
+
+.google-icon {
+    width: 25px;
+}
+
+
+.a-enlace{
+    &:hover{
+        color: blue;
+        cursor: pointer;
+    }
+}
+
+.loader{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.49);
+}

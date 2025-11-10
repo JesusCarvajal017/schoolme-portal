@@ -1,0 +1,51 @@
+.rol-icon {
+    width: 150px;
+    height: 150px;
+    background-color: rgb(221, 221, 221);
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-rol {
+    font-size: 80px !important;
+    width: 80px !important;
+    height: 80px !important;
+    color: var(--primary);
+}
+
+.lat-rol-info {
+    background-color: rgb(237, 247, 255);
+    border-radius: 20px;
+}
+.form-page-modal {
+    padding: 0;
+}
+
+.rol-icon-small {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(221, 221, 221);
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-rol-small {
+    font-size: 50px !important;
+    width: 50px !important;
+    height: 50px !important;
+    color: var(--primary);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}

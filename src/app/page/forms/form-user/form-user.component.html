@@ -1,0 +1,201 @@
+<!-- form-user.component.html -->
+<header tuiHeader>
+    <h1 tuiTitle class="ms-4">
+        {{title}}
+    </h1>
+</header>
+
+<div class="col-12 row">
+    <div class="col-md-8">
+        <form [formGroup]="form" (submit)="guardarCambios()" class="form-page-modal">
+            <div class="col-12 lat-user-info">
+
+                <div class="col-12 d-flex justify-content-center m-2">
+                    <div class="user-icon-small">
+                        <mat-icon class="icon-user-small">person</mat-icon>
+                    </div>
+                </div>
+
+                <div class="col-12 text-center mb-3">
+                    <h6>Información del Usuario</h6>
+                    <p class="text-muted small">Configure los datos del usuario</p>
+                </div>
+
+                <div class="row p-3">
+                    <!-- Selector de Persona -->
+                    <div class="col-md-12 p-2">
+                        <tui-select 
+                            #selectPerson 
+                            [formControl]="form.controls.personId" 
+                            [stringify]="idToNamePerson"
+                            [tuiTextfieldLabelOutside]="true">
+                            Persona *
+                            <tui-data-list *tuiDataList>
+                                <tui-opt-group>
+                                    @if (loadingPersons) {
+                                        <div class="loading-text p-2">Cargando personas...</div>
+                                    }
+                                    @for (item of personList; track $index) {
+                                        <button 
+                                            tuiOption 
+                                            type="button" 
+                                            [value]="item.id">
+                                            {{item.fisrtName}} {{item.lastName}} - {{item.identification}}
+                                        </button>
+                                    }
+                                </tui-opt-group>
+                            </tui-data-list>
+                        </tui-select>
+
+                        @if(form.controls.personId.invalid && form.controls.personId.touched){
+                            <tui-error [error]="getPersonErrorMessage()" />
+                        }
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-12 p-2">
+                        <tui-input 
+                            type="email" 
+                            [formControl]="form.controls.email"
+                            tuiAutoFocus>
+                            Correo electrónico *
+                        </tui-input>
+
+                        @if(form.controls.email.invalid && form.controls.email.touched){
+                            <tui-error [error]="getEmailErrorMessage()" />
+                        }
+                    </div>
+
+                    <!-- Password -->
+                    <div class="col-md-12 p-2">
+                        <tui-textfield>
+                            <label tuiLabel>Contraseña *</label>
+                            <input
+                                placeholder="Mínimo 8 caracteres"
+                                tuiTextfield
+                                type="password"
+                                [formControl]="form.controls.password"
+                            />
+                            <tui-icon tuiPassword />
+                        </tui-textfield>
+
+                        @if(form.controls.password.invalid && form.controls.password.touched){
+                            <tui-error [error]="getPasswordErrorMessage()" />
+                        }
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-12 p-2">
+                        <div class="status-container">
+                            <mat-slide-toggle 
+                                [formControl]="form.controls.status"
+                                class="status-toggle">
+                            </mat-slide-toggle>
+                            <span class="status-text">
+                                Usuario {{ form.controls.status.value ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Acciones del formulario -->
+                <div class="form-actions">
+                    <button 
+                        type="button" 
+                        mat-button 
+                        class="btn-secondary"
+                        (click)="cancelar()">
+                        Cancelar
+                    </button>
+                    <button 
+                        type="submit" 
+                        mat-flat-button 
+                        color="primary"
+                        [disabled]="form.invalid">
+                        {{actionDescriptio}}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lateral con foto de usuario -->
+    <div class="col-md-4 lat-user-active">
+        <div class="col-12 p-0">
+            <div class="col-12 d-flex justify-content-center m-2">
+                <input 
+                    type="file" 
+                    hidden 
+                    #inputPhoto 
+                    accept="image/*"
+                    (change)="onFileSelected($event)"> 
+                
+                <div class="container-photo">
+                    <figure class="avatar-user" [class.no-image]="!previewUrl">
+                        @if(previewUrl) {
+                            <img 
+                                [src]="previewUrl" 
+                                alt="Foto de usuario">
+                        } @else {
+                            <img 
+                                src="icons/default.png" 
+                                alt="Usuario por defecto"
+                                onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'default-avatar\'><mat-icon>person</mat-icon></div>'">
+                        }
+                    </figure>
+                    <div class="edit-photo">
+                        <mat-icon 
+                            class="icon-photo" 
+                            (click)="inputPhoto.click()"
+                            tuiHint="Cambiar foto de perfil">
+                            flip_camera_ios
+                        </mat-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 text-center mt-3">
+                <h6>Foto de Perfil</h6>
+                <p class="text-muted small">
+                    Haga clic en el ícono de cámara para cambiar la foto
+                </p>
+                <p class="text-muted small">
+                    Formatos: JPG, JPEG, PNG, GIF
+                    <br>
+                    Tamaño máximo: 5MB
+                </p>
+            </div>
+
+            @if(previewUrl) {
+                <div class="col-12 text-center">
+                    <button 
+                        type="button" 
+                        mat-button 
+                        color="warn"
+                        (click)="removePhoto()">
+                        <mat-icon>delete</mat-icon>
+                        Quitar foto
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Botones adicionales fuera del formulario -->
+<div class="mt-3">
+    @if(isEditMode) {
+        <button 
+            class="m-2" 
+            size="m" 
+            tuiButton 
+            type="button" 
+            (click)="emitirValoresForm()">
+            Emitir Cambios
+        </button>
+    }
+    
+    
+</div>

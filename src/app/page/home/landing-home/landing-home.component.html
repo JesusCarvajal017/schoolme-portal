@@ -1,0 +1,60 @@
+<div class="main-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="logo-container">
+      <h1 class="title-colegio">By SchoolMe</h1>
+      <img src="./logo-colegio.png" alt="Logo Colegio" class="icon-colegio">
+    </div>
+  </div>
+
+  <!-- Description Text -->
+  <div class="description-section">
+    <p class="description-text">
+      🛡️ By SchoolMe ha llegado Tu colegio, más organizado, más inteligente. Agenda, datos, gestión…
+       todo en un solo lugar. Moderno, confiable y hecho para ti. ¡Bienvenido al nuevo estándar escolar!
+
+  <!-- Content Section: Cards + Image -->
+  <div class="content-section">
+    <!-- Left Side: Stats Cards -->
+    <div class="stats-container">
+      <div class="stat-card animate-in">
+        <div class="stat-icon persons-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-label">Personas</div>
+        <span class="stat-number">{{ countRegister.persons }}</span>
+      </div>
+
+      <div class="stat-card animate-in">
+        <div class="stat-icon teachers-icon">
+          <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+        <div class="stat-label">Docentes</div>
+        <span class="stat-number">{{ countRegister.teachers }}</span>
+      </div>
+
+      <div class="stat-card animate-in">
+        <div class="stat-icon students-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="stat-label">Estudiantes</div>
+        <span class="stat-number">{{ countRegister.students }}</span>
+      </div>
+
+      <div class="stat-card animate-in">
+        <div class="stat-icon attendants-icon">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="stat-label">Acudientes</div>
+        <span class="stat-number">{{ countRegister.attendats }}</span>
+      </div>
+    </div>
+
+    <!-- Right Side: School Image -->
+    <div class="image-section">
+      <img src="./colegio/foto-colegio-home.jpg" 
+           alt="Colegio" 
+           class="school-image animate-in">
+    </div>
+  </div>
+</div>

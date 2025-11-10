@@ -1,0 +1,96 @@
+<tui-root>
+   <div class="container-fluid py-2 bg-dashboard container-app">
+     <!-- ===============================================  Sidebar (móvil/tablet) =============================================== -->
+      <div class="offcanvas offcanvas-start offcanvas-fullscreen canvas-app" tabindex="-1" id="sidebarOffcanvas"
+          aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title text-light" id="sidebarOffcanvasLabel">Menú</h5>
+          <button type="button" class="btn-close bg-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+          <!-- Reutilizamos el mismo componente de menú -->
+          <app-menu [dataSlidebar]="sidebarItems" [indicador]="2"></app-menu>
+        </div>
+      </div>
+
+    <!-- contenido  de todo el dashboard -->
+    <div class="row g-3">
+      
+      <aside class="d-none d-lg-block col-lg-2 slidebar-app" >
+
+        <figure class="logo-sidebar m-1">
+          <img src="./logo-colegio.png" alt="Logo Colegio">
+        </figure>
+        <!-- <tui-scrollbar class="box"> -->
+          <app-menu [dataSlidebar]="sidebarItems" [indicador]="1"></app-menu>
+        <!-- </tui-scrollbar> -->
+      </aside>
+      <!-- =============================================== Sidebar (desktop) =============================================== -->
+     
+
+      <!-- Main contenido del dashboard -->
+      <main class="col-12 col-lg-10">
+        <!-- Topbar -->
+        <div class="d-flex align-items-center gap-2 mb-3">
+
+          <!-- Botón menú (móvil) -->
+          <button class="btn btn-outline-dark d-lg-none box-outline px-3"
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#sidebarOffcanvas">
+            <mat-icon color="primary">menu</mat-icon>
+          </button>
+
+          <!-- Barra superior -->
+          <div class="flex-grow-1 topbar d-flex align-items-center px-3">
+            <!-- aquí podrías poner buscador o botones -->
+            <!-- <div class=""></div> -->
+             <div class="col-12">
+               <div class="row">
+                  <div class="col-10"></div>
+                  <div class="col-2 d-flex justify-content-end">
+                    <tui-avatar tuiDropdownHover tuiDropdownMobile="Contact Us" tuiIconButton type="button" [tuiDropdown]="dropdown" src="@tui.user" size="m"/>
+
+                    <!-- despligue de menu de perfil -->
+                    <ng-template #dropdown>
+                      <tui-data-list>
+                        <a
+                          [routerLink]="['/dashboard/perfil']"
+                          iconStart="assets/icons/github.svg"
+                          tuiOption
+                          >
+                          <mat-icon class="m-1">account_circle</mat-icon>
+                          Perfil
+                        </a>
+                      </tui-data-list>
+                      <tui-data-list>
+                          <a
+                              tuiOption
+                              (click)="cerrarSession()"
+                          >
+                              <mat-icon class="m-1">exit_to_app</mat-icon>
+                              Salir
+                          </a>
+                          
+                      </tui-data-list>
+                  </ng-template>
+                    
+                  </div>
+                      <!-- </section> -->
+                  <!-- </div> -->
+               </div>
+             </div>
+
+          </div>
+        </div>
+
+        <!-- Contenido dinámico (rutas) -->
+        <section class="rounded content-area p-4">
+          <router-outlet></router-outlet>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+</tui-root>

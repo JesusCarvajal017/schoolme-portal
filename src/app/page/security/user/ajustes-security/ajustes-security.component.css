@@ -1,0 +1,466 @@
+/* ====== Card principal ====== */
+.ajustes-card {
+  background: #ffffff93;
+  color: #000000;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ====== Título ====== */
+.ajustes-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #000000;
+}
+
+/* ====== Grid de dos columnas ====== */
+.ajustes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* ====== Secciones ====== */
+.ajustes-section {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #c7d2fe;
+}
+
+/* ====== Formularios ====== */
+.ajustes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: #e0e7ff;
+}
+
+input {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #4f46e5;
+  background: #111827;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+input:focus {
+  border-color: #6366f1;
+}
+
+/* ====== Botón con gradiente ====== */
+.btn-gradient {
+  background: linear-gradient(90deg, #4c1d95, #5b21b6, #6366f1);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-align: center;
+}
+
+.btn-gradient:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-gradient:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* ====== Errores ====== */
+.error-text {
+  color: #f87171;
+  font-size: 0.9rem;
+  margin-top: -0.3rem;
+}
+
+/* ====== Modal de resultado ====== */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.result-modal {
+  background: #1e1e50;
+  color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+  text-align: center;
+}
+
+.result-modal.success {
+  border-top: 5px solid #22c55e; /* verde */
+}
+
+.result-modal.error {
+  border-top: 5px solid #ef4444; /* rojo */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin: 1rem 0;
+  font-size: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* ====== Animación ====== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  .ajustes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ====== Cartas con degradado azul oscuro y animación ====== */
+.ajustes-section {
+  background: linear-gradient(135deg, #1e1e50, #242471);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 0 2px transparent;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.ajustes-section:hover {
+  box-shadow: 0 0 0 3px #4f46e5;
+  transform: translateY(-4px);
+  border-color: #6366f1;
+}
+
+/* ====== Formularios ====== */
+.ajustes-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.ajustes-form label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #cbd5f7;
+}
+
+.ajustes-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #4f46e5;
+  background-color: #111827;
+  color: #fff;
+  transition: border-color 0.3s;
+}
+
+.ajustes-form input:focus {
+  border-color: #6366f1;
+}
+
+/* ====== Botones alineados horizontalmente ====== */
+.ajustes-form .btn-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #4c1d95, #5b21b6, #6366f1);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #5b21b6, #6366f1, #4c1d95);
+}
+
+/* ====== Responsive con Bootstrap ====== */
+@media (max-width: 768px) {
+  .ajustes-grid {
+    display: flex;
+    flex-direction: column;
+  }
+}
+/* ========== ESTILOS PARA MODALES ========== */
+/* Agregar estos estilos a tu ajustes-security.component.css */
+
+/* Overlay del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Contenedor del modal */
+.modal-dialog {
+  width: 90%;
+  max-width: 500px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Contenido del modal */
+.modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Header del modal */
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.btn-close:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Body del modal */
+.modal-body {
+  padding: 24px;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.modal-body p {
+  margin: 0;
+}
+
+/* Footer del modal */
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Estilos para modal de confirmación */
+.confirm-modal .modal-header {
+  background-color: #fff7ed;
+  border-bottom-color: #fed7aa;
+}
+
+.confirm-modal .modal-title {
+  color: #ea580c;
+}
+
+/* Estilos para modal de resultado según tipo */
+.modal-success .modal-header {
+  background-color: #f0fdf4;
+  border-bottom-color: #bbf7d0;
+}
+
+.modal-success .modal-title {
+  color: #16a34a;
+}
+
+.modal-error .modal-header {
+  background-color: #fef2f2;
+  border-bottom-color: #fecaca;
+}
+
+.modal-error .modal-title {
+  color: #dc2626;
+}
+
+.modal-warning .modal-header {
+  background-color: #fffbeb;
+  border-bottom-color: #fde68a;
+}
+
+.modal-warning .modal-title {
+  color: #d97706;
+}
+
+/* Botones del modal */
+.modal-footer .btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.modal-footer .btn-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.modal-footer .btn-secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .modal-dialog {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 16px;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+}
+
+/* Loading spinner para los botones */
+.loading-spinner::after {
+  content: "Procesando...";
+  animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: "Procesando.";
+  }
+  40% {
+    content: "Procesando..";
+  }
+  60%, 100% {
+    content: "Procesando...";
+  }
+}

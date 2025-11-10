@@ -1,0 +1,353 @@
+@if(isLoader){
+    <div class="loader">
+        <mat-spinner></mat-spinner>
+    </div>
+}
+
+<tui-root>
+    <div class="container-fluid vh-100">
+        
+        <!-- Muestra esto apartir de los 922 -->
+        <div class="d-block d-xl-none">
+            <div class="col-12 p-0 d-flex justify-content-center align-items-center vh-100">
+                <div class="col-12 row d-flex justify-content-center">
+                    <div class="col-12 mb-2">
+                        <h2 class="text-center">Login</h2>
+                    </div>
+                    <section class="container-login">
+                        <form (submit)="loguear()" class="form-login" [formGroup]="form" >
+                            <tui-textfield>
+                                <label tuiLabel>Correo electronico</label>
+                                <input
+                                    tuiTextfield
+                                    type="email"
+                                    [formControl]="form.controls.email"
+                                />
+                            </tui-textfield>
+    
+                            @if (form.controls.email.invalid && form.controls.email.touched) {
+                                <tui-error
+                                    [error]="obtenerErrorEmail()"
+                                />
+                            }
+                        
+                            <tui-textfield>
+                                <label tuiLabel>Contraseña</label>
+                                <input
+                                    tuiTextfield
+                                    type="password"
+                                    [formControl]="form.controls.password"
+                                />
+                                <tui-icon tuiPassword />
+                            </tui-textfield>
+                            @if(form.controls.password.invalid && form.controls.email.touched){
+                                <tui-error
+                                    [error]="obtenerErrorPassword()"
+                                />
+                            }
+
+                            <!-- Enlace recuperar contraseña -->
+                            <div class="col-12 d-flex justify-content-end">
+                                <a (click)="abrirRecuperarPassword()" class="enlace-recuperar">¿Olvidaste tu contraseña?</a>
+                            </div>
+
+                            <div class="col-12 d-grid gap-1">
+                                <button [disabled]="form.invalid && !isLoader"  class="btn btn-primary w-100" type="submit">Ingresar</button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- Muestra esto a partir de los 1200px  -->
+        <div class="d-none d-xl-block">
+            <div class="col-12 row p-0">
+                <div class="col-12"></div>
+                <div class="col-6 p-0">
+                    <div class="caja-style"></div>
+                    <figure class="img-log ">
+                        <img src="./logo_colegioo.png" alt="imagen de logo colegio">
+                    </figure>
+                </div>
+                <div class="col-6 p-0 d-flex justify-content-center align-items-center vh-100">
+                    
+                            <div class="col-12 row d-flex justify-content-center">
+                                <div class="col-12 mb-2">
+                                    <h2 class="text-center">Iniciar sesión</h2>
+                                </div>
+                                <section class="container-login">
+                                    <form (submit)="loguear()" class="form-login" [formGroup]="form" >
+                                        <tui-textfield>
+                                            <label tuiLabel>Correo electronico</label>
+                                            <input
+                                                tuiTextfield
+                                                type="email"
+                                                [formControl]="form.controls.email"
+                                            />
+                                        </tui-textfield>
+                
+                                        @if (form.controls.email.invalid && form.controls.email.touched) {
+                                            <tui-error
+                                                [error]="obtenerErrorEmail()"
+                                            />
+                                        }
+                                    
+                                        <tui-textfield>
+                                            <label tuiLabel>Contraseña</label>
+                                            <input
+                                                tuiTextfield
+                                                type="password"
+                                                [formControl]="form.controls.password"
+                                            />
+                                            <tui-icon tuiPassword />
+                                        </tui-textfield>
+                                        @if(form.controls.password.invalid && form.controls.email.touched){
+                                            <tui-error
+                                                [error]="obtenerErrorPassword()"
+                                            />
+                                        }
+
+                                        <!-- Enlace recuperar contraseña -->
+                                        <div class="col-12 d-flex justify-content-end">
+                                            <a (click)="abrirRecuperarPassword()" class="enlace-recuperar">¿Olvidaste tu contraseña?</a>
+                                        </div>
+
+                                        <div class="col-12 d-grid gap-1">
+                                            <button [disabled]="form.invalid && !isLoader"  class="btn btn-primary w-100" type="submit">Ingresar</button>
+                                        </div>
+                                    </form>
+                                </section>
+
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</tui-root>
+
+<!-- Modal de recuperar contraseña - Paso 1: Ingresar correo -->
+@if (mostrarModalRecuperar && pasoRecuperacion === 1) {
+    <div class="modal-overlay" (click)="cerrarRecuperarPassword()">
+        <div class="modal-recuperar" (click)="$event.stopPropagation()">
+            <div class="modal-header-custom">
+                <h3>Recuperar contraseña</h3>
+                <button class="btn-cerrar" (click)="cerrarRecuperarPassword()">
+                    <tui-icon icon="@tui.x" />
+                </button>
+            </div>
+            
+            <div class="modal-body-custom">
+                <p class="texto-instruccion">Ingresa tu correo electrónico y te enviaremos un código de 5 dígitos para restablecer tu contraseña.</p>
+                
+                <form [formGroup]="formRecuperar" (submit)="enviarRecuperacion()" class="form-recuperar">
+                    <tui-textfield>
+                        <label tuiLabel>Correo electronico</label>
+                        <input
+                            tuiTextfield
+                            type="email"
+                            [formControl]="formRecuperar.controls.email"
+                        />
+                    </tui-textfield>
+
+                    @if (formRecuperar.controls.email.invalid && formRecuperar.controls.email.touched) {
+                        <tui-error
+                            [error]="obtenerErrorEmailRecuperar()"
+                        />
+                    }
+
+                    <div class="modal-footer-custom">
+                        <button type="button" class="btn btn-secondary" (click)="cerrarRecuperarPassword()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" [disabled]="formRecuperar.invalid">
+                            Enviar código
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal de recuperar contraseña - Paso 2: Ingresar código -->
+@if (mostrarModalRecuperar && pasoRecuperacion === 2) {
+    <div class="modal-overlay" (click)="cerrarRecuperarPassword()">
+        <div class="modal-recuperar" (click)="$event.stopPropagation()">
+            <div class="modal-header-custom">
+                <h3>Verificar código</h3>
+                <button class="btn-cerrar" (click)="cerrarRecuperarPassword()">
+                    <tui-icon icon="@tui.x" />
+                </button>
+            </div>
+            
+            <div class="modal-body-custom">
+                <p class="texto-instruccion">
+                    Ingresa el código de 5 dígitos que enviamos a <strong>{{emailRecuperacion}}</strong>
+                </p>
+                
+                <form [formGroup]="formCodigo" (submit)="verificarCodigo()" class="form-recuperar">
+                    <div class="contenedor-codigo">
+                        <input 
+                            #input0
+                            class="input-codigo"
+                            type="text"
+                            maxlength="1"
+                            [formControl]="formCodigo.controls.digito1"
+                            (input)="moverSiguienteInput($event, input1)"
+                            (keydown)="manejarBackspace($event, null, input0)"
+                        />
+                        <input 
+                            #input1
+                            class="input-codigo"
+                            type="text"
+                            maxlength="1"
+                            [formControl]="formCodigo.controls.digito2"
+                            (input)="moverSiguienteInput($event, input2)"
+                            (keydown)="manejarBackspace($event, input0, input1)"
+                        />
+                        <input 
+                            #input2
+                            class="input-codigo"
+                            type="text"
+                            maxlength="1"
+                            [formControl]="formCodigo.controls.digito3"
+                            (input)="moverSiguienteInput($event, input3)"
+                            (keydown)="manejarBackspace($event, input1, input2)"
+                        />
+                        <input 
+                            #input3
+                            class="input-codigo"
+                            type="text"
+                            maxlength="1"
+                            [formControl]="formCodigo.controls.digito4"
+                            (input)="moverSiguienteInput($event, input4)"
+                            (keydown)="manejarBackspace($event, input2, input3)"
+                        />
+                        <input 
+                            #input4
+                            class="input-codigo"
+                            type="text"
+                            maxlength="1"
+                            [formControl]="formCodigo.controls.digito5"
+                            (input)="moverSiguienteInput($event, null)"
+                            (keydown)="manejarBackspace($event, input3, input4)"
+                        />
+                    </div>
+
+                    @if (errorCodigo) {
+                        <div class="error-codigo">
+                            {{ errorCodigo }}
+                        </div>
+                    }
+
+                    <div class="texto-reenviar">
+                        <span>¿No recibiste el código? </span>
+                        <a (click)="reenviarCodigo()" class="enlace-reenviar">Reenviar código</a>
+                    </div>
+
+                    <div class="modal-footer-custom">
+                        <button type="button" class="btn btn-secondary" (click)="volverPasoAnterior()">
+                            Atrás
+                        </button>
+                        <button type="submit" class="btn btn-primary" [disabled]="formCodigo.invalid">
+                            Verificar código
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal de recuperar contraseña - Paso 3: Nueva contraseña -->
+@if (mostrarModalRecuperar && pasoRecuperacion === 3) {
+    <div class="modal-overlay" (click)="cerrarRecuperarPassword()">
+        <div class="modal-recuperar" (click)="$event.stopPropagation()">
+            <div class="modal-header-custom">
+                <h3>Nueva contraseña</h3>
+                <button class="btn-cerrar" (click)="cerrarRecuperarPassword()">
+                    <tui-icon icon="@tui.x" />
+                </button>
+            </div>
+            
+            <div class="modal-body-custom">
+                <p class="texto-instruccion">
+                    Crea una contraseña segura para tu cuenta
+                </p>
+                
+                <form [formGroup]="formNuevaPassword" (submit)="establecerNuevaPassword()" class="form-recuperar">
+                    <tui-textfield>
+                        <label tuiLabel>Nueva contraseña</label>
+                        <input
+                            tuiTextfield
+                            type="password"
+                            [formControl]="formNuevaPassword.controls.password"
+                            placeholder="Mínimo 8 caracteres"
+                        />
+                        <tui-icon tuiPassword />
+                    </tui-textfield>
+
+                    @if (formNuevaPassword.controls.password.invalid && formNuevaPassword.controls.password.touched) {
+                        <tui-error
+                            [error]="obtenerErrorNuevaPassword()"
+                        />
+                    }
+
+                    <!-- Requisitos de contraseña -->
+                    <div class="requisitos-password">
+                        <div class="requisito-item" [class.cumplido]="cumpleRequisito('minLength')">
+                            <tui-icon [icon]="cumpleRequisito('minLength') ? '@tui.check' : '@tui.circle'" 
+                                      [class.icono-cumplido]="cumpleRequisito('minLength')" />
+                            <span>Mínimo 8 caracteres</span>
+                        </div>
+                        <div class="requisito-item" [class.cumplido]="cumpleRequisito('mayuscula')">
+                            <tui-icon [icon]="cumpleRequisito('mayuscula') ? '@tui.check' : '@tui.circle'" 
+                                      [class.icono-cumplido]="cumpleRequisito('mayuscula')" />
+                            <span>Al menos una letra mayúscula</span>
+                        </div>
+                        <div class="requisito-item" [class.cumplido]="cumpleRequisito('numero')">
+                            <tui-icon [icon]="cumpleRequisito('numero') ? '@tui.check' : '@tui.circle'" 
+                                      [class.icono-cumplido]="cumpleRequisito('numero')" />
+                            <span>Al menos un número</span>
+                        </div>
+                    </div>
+                
+                    <tui-textfield>
+                        <label tuiLabel>Confirmar contraseña</label>
+                        <input
+                            tuiTextfield
+                            type="password"
+                            [formControl]="formNuevaPassword.controls.confirmarPassword"
+                        />
+                        <tui-icon tuiPassword />
+                    </tui-textfield>
+
+                    @if (formNuevaPassword.controls.confirmarPassword.invalid && formNuevaPassword.controls.confirmarPassword.touched) {
+                        <tui-error
+                            [error]="obtenerErrorConfirmarPassword()"
+                        />
+                    }
+
+                    @if (formNuevaPassword.hasError('passwordsMismatch') && formNuevaPassword.controls.confirmarPassword.touched) {
+                        <tui-error
+                            error="Las contraseñas no coinciden"
+                        />
+                    }
+
+                    <div class="modal-footer-custom">
+                        <button type="button" class="btn btn-secondary" (click)="cerrarRecuperarPassword()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" [disabled]="formNuevaPassword.invalid">
+                            Restablecer contraseña
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,64 @@
+<div class="container-fluid edit-student-container">
+  <div class="row">
+    <div class="col-12">
+      <div class="header-section mb-4">
+        <h2>{{ title }}</h2>
+        <p class="text-muted">Edite la información del estudiante y sus datos personales</p>
+      </div>
+
+      <!-- Tabs para separar los formularios -->
+      <mat-tab-group animationDuration="300ms">
+        
+        <!-- Tab 1: Datos del Estudiante -->
+        <mat-tab label="Datos del Estudiante">
+          <div class="tab-content p-3">
+            <app-form-student 
+              [title]="title" 
+              [actionDescriptio]="'Guardar cambios del estudiante'"
+              [model]="modelStudent"
+              (posteoForm)="onStudentFormChange($event)">
+            </app-form-student>
+          </div>
+        </mat-tab>
+
+        <!-- Tab 2: Información Personal -->
+        <mat-tab label="Información Personal">
+          <div class="tab-content p-3">
+            <ng-container *ngIf="modelPerson; else loadingPerson">
+              <app-form-todos 
+                [actionDescriptio]="'Guardar cambios personales'"
+                [model]="modelPerson"
+                (posteoForm)="onPersonFormChange($event)">
+              </app-form-todos>
+            </ng-container>
+
+            <ng-template #loadingPerson>
+              <div class="loading-state text-center p-5">
+                <p class="text-muted">Cargando información personal...</p>
+              </div>
+            </ng-template>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+
+      <!-- Botón global para guardar todos los cambios -->
+      <div class="action-buttons mt-4 d-flex justify-content-end gap-2">
+        <button 
+          mat-stroked-button 
+          type="button"
+          (click)="router.navigate(['dashboard/students'])">
+          Cancelar
+        </button>
+        <button 
+          mat-flat-button 
+          color="primary"
+          type="button"
+          (click)="saveAllChanges()">
+          Guardar todos los cambios
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

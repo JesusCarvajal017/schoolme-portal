@@ -1,0 +1,108 @@
+<header tuiHeader class="m-1">
+    <h1 tuiTitle>
+        <div class="col-12 d-flex">
+            <span>Director de grupo</span>
+            <p class="count">{{ groupDirector.length }} Director de grupo</p>
+        </div>
+    </h1>
+    <aside tuiAccessories>
+        <div tuiAppearance="secondary" tuiButtonGroup>
+            <!-- CAMBIO: Usar modalCommand en lugar de routerLink -->
+            <button class="btn-add" (click)="modalCommand('Crear nuevo Director de grupo')">
+                <mat-icon>add_circle</mat-icon>
+                Crear Director de grupo
+            </button>
+        </div>
+    </aside>
+</header>
+
+<section class="table-container">
+    <!-- Tabs -->
+    <div class="col-12 row ">
+        <div class="col-6">
+            <div class="tabs">
+                <button [ngClass]="{'active' : idicadorActive}" (click)="cambiarStatus(1)">Activos</button>
+                <button [ngClass]="{'active' : idicadorActive == 0}" (click)="cambiarStatus(0)">Inactivos</button>
+            </div>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <!-- Buscador y filtro -->
+            <div class="actions">
+                <div class="search-box m-1">
+                    <mat-icon>search</mat-icon>
+                    <input #searchInput type="text" placeholder="Buscar..." (input)="onSearch(searchInput.value)" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Nombre del grupo</th>
+                <th>Status</th>
+                <th class="text-center">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of paginatedUsers; track $index) {
+            <tr>
+                <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
+                <td>{{ item.fisrtName }} {{ item.secondName }}
+                <td>{{ item.lastName }} {{ item.secondLastName }}</td>
+                <td>{{ item.nameGroup}}</td>
+
+                <td>
+                    <mat-slide-toggle [checked]="item.status === 1"
+                        (change)="logical($event, item.id)"></mat-slide-toggle>
+                </td>
+                <td class="actions-col">
+                    <button mat-icon-button (click)="modalCommand('Editar grado', item)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                    <button mat-icon-button [swal]="{
+            title: 'Confirmacion',
+            text: '¿Deseas borrar este registro?',
+            showCancelButton: true
+          }" (confirm)="deleteRegister(item.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                    <button mat-icon-button>
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="totalPages > 1">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+            &lt;
+        </button>
+
+        <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+            [class.active]="currentPage === i + 1">
+            {{ i + 1 }}
+        </button>
+
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            &gt;
+        </button>
+    </div>
+</section>
+
+<ng-template let-observer [tuiDialogOptions]="{label: titleGroups, size: 'l'}" [(tuiDialog)]="open">
+    <div class="modal-content">
+        <app-form-group-director [title]="titleGroups" [actionDescriptio]="isEditMode ? 'Actualizar' : 'Crear'"
+            [model]="modelGroupDirector" (posteoForm)="handleGroupDirectorSubmit($event)">
+        </app-form-group-director>
+    </div>
+</ng-template>

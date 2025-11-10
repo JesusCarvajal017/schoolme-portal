@@ -1,0 +1,19 @@
+@if(!elements) {
+    <div class="col-12 d-flex justify-content-center">
+        <app-loader></app-loader>
+    </div>
+}@else if (elements.length === 0) {
+    <div #vacio>
+        <ng-content select="[vacio]"></ng-content>
+    </div>
+
+    @if (!vacio.innerHTML.trim()) {
+        <div class="m-2 alert alert-primary" role="alert">
+            No hay registros disponibles
+        </div>
+    }
+}
+@else {
+    <ng-content select="[contenido]"></ng-content>
+}
+

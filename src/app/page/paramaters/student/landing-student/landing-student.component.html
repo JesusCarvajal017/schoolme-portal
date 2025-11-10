@@ -1,0 +1,135 @@
+<header tuiHeader class="m-1">
+  <h1 tuiTitle>
+    <div class="col-12 d-flex">
+      <span>Estudiantes</span>
+      <p class="count">{{ students.length }} Estudiantes</p>
+    </div>
+  </h1>
+  <aside tuiAccessories>
+    <div tuiAppearance="secondary" tuiButtonGroup>
+      <button class="btn-add" (click)="modalCommand('Crear nuevo Estudiante')">
+        <mat-icon>add_circle</mat-icon>
+        Crear Estudiante
+      </button>
+    </div>
+  </aside>
+</header>
+
+<section class="table-container">
+  <!-- Tabs -->
+  <div class="col-12 row ">
+    <div class="col-6">
+      <div class="tabs">
+        <button [ngClass]="{'active' : idicadorActive}" (click)="cambiarStatus(1)">Activos</button>
+        <button [ngClass]="{'active' : idicadorActive == 0}" (click)="cambiarStatus(0)">Inactivos</button>
+      </div>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+      <!-- Buscador -->
+      <div class="actions">
+        <div class="search-box m-1">
+          <mat-icon>search</mat-icon>
+          <input #searchInput type="text" placeholder="Buscar..." (input)="onSearch(searchInput.value)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-listado-generico [elements]="students">
+    <ng-container contenido>
+      <section class="table-container">
+
+
+        <!-- Tabla -->
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombres</th>
+              <th>Tipo</th>
+              <th>Identificación</th>
+              <th>Grupo</th>
+              <th>Status</th>
+              <th class="text-center">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of paginatedUsers; track item.id) {
+            <tr>
+              <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
+              <td>{{ item.fullName}}
+              <td>{{ item.acronymDocument }}
+              <td>{{ item.identification }}</td>
+              <td>{{ item.groupName}}</td>
+              <td>
+                <mat-slide-toggle [checked]="item.status === 1" (change)="logical($event, item.id)"></mat-slide-toggle>
+              </td>
+              <td class="actions-col">
+                <button mat-icon-button (click)="modalCommand('Editar estudiante', item)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+
+                <button mat-icon-button [swal]="{
+            title: 'Confirmacion',
+            text: '¿Deseas borrar este registro?',
+            showCancelButton: true
+          }" (confirm)="deleteRegister(item.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+
+                <button mat-icon-button>
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="pagination" *ngIf="totalPages > 1">
+          <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+            &lt;
+          </button>
+
+          <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+            [class.active]="currentPage === i + 1">
+            {{ i + 1 }}
+          </button>
+
+          <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            &gt;
+          </button>
+        </div>
+      </section>
+    </ng-container>
+
+  </app-listado-generico>
+  <!-- Modal simplificado -->
+  <ng-template let-observer [tuiDialogOptions]="{label: titleStudent, size: 'l'}" [(tuiDialog)]="open">
+    <div class="modal-content">
+
+      <!-- Modo Creación: Formulario de estudiante -->
+      <ng-container *ngIf="!isEditMode">
+        <app-form-student [title]="titleStudent" [actionDescriptio]="'Crear'"
+          (posteoForm)="handleStudentSubmit($event)">
+        </app-form-student>
+      </ng-container>
+
+      <!-- Modo Edición: Solo formulario de información personal -->
+      <ng-container *ngIf="isEditMode">
+        <ng-container *ngIf="modelPerson; else loadingPerson">
+          <app-form-todos [actionDescriptio]="'Actualizar información'" [model]="modelPerson"
+            (posteoForm)="handlePersonSubmit($event)">
+          </app-form-todos>
+        </ng-container>
+
+        <ng-template #loadingPerson>
+          <div class="loading-state text-center p-5">
+            <p class="text-muted">Cargando información personal...</p>
+          </div>
+        </ng-template>
+      </ng-container>
+
+    </div>
+  </ng-template>

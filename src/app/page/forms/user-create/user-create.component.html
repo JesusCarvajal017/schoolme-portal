@@ -1,0 +1,45 @@
+<tui-root>
+    <div class="container vh-100">
+        <div class="col-12 d-flex justify-content-center align-items-center vh-100">
+            <!-- <div class="login-app"> -->
+                <div tuiAppearance="floating" tuiCardLarge class="card-template m-2 shadow">
+                   
+                    <form  class="form-login"  >
+                        <tui-input>
+                            <label tuiLabel>Email</label>
+                           
+                            <input
+                                tuiTextfieldLegacy
+                                type="email"
+                                
+                            />
+                        </tui-input>
+
+                       
+                        <tui-textfield>
+                            <label tuiLabel>Password</label>
+                            <input
+                                tuiTextfield
+                                type="password"
+                                
+                            />
+                            <tui-icon tuiPassword />
+                        </tui-textfield>
+                        
+                        <div class="col-12 d-grid gap-1">
+                            <button class="btn btn-primary w-100" type="submit">Crear Usuario</button>
+                            <button class="btn btn-light w-100" type="submit">
+                                <img src="img/google.png" alt="google oauth" class="google-icon m-2">
+                                Continuar con google
+                            </button>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center">
+                            <span class="fs-6"> <a routerLink="/login" class="a-enlace">¿Ya tienes cuenta?</a></span>
+                        </div>
+                    </form>
+                </div>
+            <!-- </div> -->
+        </div>
+
+    </div>
+</tui-root>

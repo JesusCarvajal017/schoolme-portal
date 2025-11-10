@@ -1,0 +1,126 @@
+@if(isLoading){
+  <!-- Loading state -->
+  <div class="profile-card">
+    <div class="d-flex flex-column justify-content-center align-items-center" style="height: 400px;">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted">Cargando información del perfil...</p>
+    </div>
+  </div>
+}
+@else if (hasError && !isLoading) {
+  <div class="profile-card">
+    <div class="text-center py-5">
+      <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+      <h3 class="mt-3 text-muted">Error al cargar el perfil</h3>
+      <p class="text-muted mb-4">{{ errorMessage }}</p>
+      <button class="btn btn-primary" (click)="loadUserProfile()" [disabled]="isLoading">
+        <i class="bi bi-arrow-clockwise me-2"></i> Reintentar
+      </button>
+    </div>
+  </div>
+}
+@else{
+  <div class="profile-card">
+    <div class="row g-0 h-100">
+      
+      <!-- Sidebar -->
+      <div class="col-md-4 col-lg-3">
+        <div class="profile-sidebar">
+          <div class="profile-image-section">
+            <div class="profile-image-wrapper position-relative">
+              <img 
+                [src]="profileImageUrl" 
+                [alt]="fullName"
+                class="profile-image"
+                (error)="onImageError()"
+              />
+              
+              <span class="status-indicator" [ngClass]="statusClass"></span>
+
+              <!-- Upload overlay -->
+              <div class="upload-overlay" [class.uploading]="isUploadingImage">
+                <input 
+                  type="file" 
+                  id="profileImageInput" 
+                  accept="image/jpeg,image/jpg,image/png,image/webp" 
+                  (change)="onImageUpload($event)"
+                  class="d-none"
+                  [disabled]="isUploadingImage"
+                  #profileImageInput
+                />
+                <!-- Normal button -->
+                <button 
+                  *ngIf="!isUploadingImage"
+                  class="btn btn-sm btn-dark upload-btn"
+                  (click)="profileImageInput.click()"
+                  title="Cambiar imagen de perfil (máx. 5MB)"
+                >
+                  <i class="bi bi-camera"></i>
+                </button>
+                <!-- Uploading spinner -->
+                <div *ngIf="isUploadingImage" class="upload-loading">
+                  <div class="spinner-border text-light" role="status" style="width: 24px; height: 24px;">
+                    <span class="visually-hidden">Subiendo imagen...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Name & status -->
+            <div class="profile-name-section">
+              <h2 class="profile-name">{{ fullName }}</h2>
+              <span class="status-badge" [ngClass]="statusClass">
+                <i class="bi" [ngClass]="statusClass === 'online' ? 'bi-circle-fill' : 'bi-circle'"></i>
+                {{ statusText }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="col-md-8 col-lg-9">
+        <div class="profile-content">
+          
+          <!-- Info grid -->
+          <div class="profile-info-grid">
+            @for(item of infoList; track $index ){
+              <div class="info-card">
+                <div class="info-icon">
+                  <i class="bi" [ngClass]="item.icon"></i>
+                </div>
+                <div class="info-content">
+                  <label class="info-label">{{item.label}}</label>
+                  <div class="info-value">{{item.value}}</div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Action buttons -->
+          <div class="profile-actions mt-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <button class="btn btn-primary w-100 action-btn">
+                  <i class="bi bi-person-badge me-2"></i> Información Personal
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-primary w-100 action-btn" 
+                [routerLink]="['/dashboard/ajustes-security']">
+                <i class="bi bi-person-badge me-2"></i> Ajustes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+}
+
+
+

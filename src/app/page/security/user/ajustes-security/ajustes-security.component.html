@@ -1,0 +1,138 @@
+<div class="ajustes-wrapper container-fluid bg-white py-4">
+  <div class="ajustes-card container">
+    <!-- Header -->
+    <div class="ajustes-header text-center mb-4">
+      <h1 class="ajustes-title">
+        <span class="icon">⚙️</span> Ajustes de Seguridad
+      </h1>
+      <p class="ajustes-subtitle">Gestiona tu correo electrónico y contraseña de forma segura</p>
+    </div>
+
+    <!-- Grid horizontal 50/50 -->
+    <div class="row gx-4">
+      <!-- Actualizar correo -->
+      <div class="col-md-6">
+        <div class="ajustes-section" [class.loading]="loadingEmail">
+          <h2 class="section-title mb-3">
+            <span class="icon">📧</span> Actualizar Correo
+          </h2>
+          <form [formGroup]="emailForm" (ngSubmit)="submitEmail()" class="ajustes-form" novalidate>
+            <div class="form-group mb-3"
+                 [class.has-error]="emailForm.get('email')?.invalid && (emailForm.get('email')?.touched || emailForm.get('email')?.dirty)">
+              <label for="email">NUEVO CORREO ELECTRÓNICO</label>
+              <input id="email" type="email" formControlName="email" placeholder="ejemplo@correo.com" autocomplete="email" />
+              <div *ngIf="emailForm.get('email')?.invalid && (emailForm.get('email')?.touched || emailForm.get('email')?.dirty)" class="error-text">
+                <span *ngIf="emailForm.get('email')?.errors?.['required']">El correo es obligatorio</span>
+                <span *ngIf="emailForm.get('email')?.errors?.['email']">Formato de correo inválido</span>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary" [disabled]="loadingEmail || emailForm.invalid">
+                <span *ngIf="!loadingEmail">Actualizar Correo</span>
+                <span *ngIf="loadingEmail" class="loading-spinner"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Cambiar contraseña -->
+      <div class="col-md-6">
+        <div class="ajustes-section" [class.loading]="loadingPassword">
+          <h2 class="section-title mb-3">
+            <span class="icon">🔑</span> Cambiar Contraseña
+          </h2>
+          <form [formGroup]="passwordForm" (ngSubmit)="submitPassword()" class="ajustes-form" novalidate>
+            <div class="form-group mb-3"
+                 [class.has-error]="passwordForm.get('passwordNew')?.invalid && (passwordForm.get('passwordNew')?.touched || passwordForm.get('passwordNew')?.dirty)">
+              <label for="passwordNew">NUEVA CONTRASEÑA</label>
+              <input id="passwordNew" type="password" formControlName="passwordNew" placeholder="Mínimo 8 caracteres, una mayúscula y un carácter especial" autocomplete="new-password" />
+              <div *ngIf="passwordForm.get('passwordNew')?.invalid && (passwordForm.get('passwordNew')?.touched || passwordForm.get('passwordNew')?.dirty)" class="error-text">
+                <span *ngIf="passwordForm.get('passwordNew')?.errors?.['required']">La contraseña es obligatoria</span>
+                <span *ngIf="passwordForm.get('passwordNew')?.errors?.['minlength']">Debe tener al menos 8 caracteres</span>
+                <span *ngIf="passwordForm.get('passwordNew')?.errors?.['pattern']">Debe incluir al menos una mayúscula y un carácter especial</span>
+              </div>
+            </div>
+
+            <div class="form-group mb-3"
+                 [class.has-error]="passwordForm.get('passwordConfirm')?.invalid && (passwordForm.get('passwordConfirm')?.touched || passwordForm.get('passwordConfirm')?.dirty)">
+              <label for="passwordConfirm">CONFIRMAR CONTRASEÑA</label>
+              <input id="passwordConfirm" type="password" formControlName="passwordConfirm" placeholder="Repite la contraseña" autocomplete="new-password" />
+              <div *ngIf="passwordForm.get('passwordConfirm')?.invalid && (passwordForm.get('passwordConfirm')?.touched || passwordForm.get('passwordConfirm')?.dirty)" class="error-text">
+                <span *ngIf="passwordForm.get('passwordConfirm')?.errors?.['required']">La confirmación es obligatoria</span>
+              </div>
+            </div>
+
+            <div *ngIf="passwordForm.errors?.['mismatch'] && (passwordForm.get('passwordNew')?.touched || passwordForm.get('passwordConfirm')?.touched)" class="error-text">
+              Las contraseñas no coinciden
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary" [disabled]="loadingPassword || passwordForm.invalid">
+                <span *ngIf="!loadingPassword">Cambiar Contraseña</span>
+                <span *ngIf="loadingPassword" class="loading-spinner"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Agregar estos modales al final de tu HTML, después del cierre de .ajustes-wrapper -->
+
+<!-- Modal de Confirmación -->
+<div class="modal-overlay" *ngIf="showConfirmModal" (click)="closeConfirmModal()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content confirm-modal">
+      <div class="modal-header">
+        <h4 class="modal-title">⚠️ Confirmar Acción</h4>
+        <button type="button" class="btn-close" (click)="closeConfirmModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="white-space: pre-line; line-height: 1.6;">{{ confirmMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeConfirmModal()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="confirmActionHandler()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Resultado -->
+<div class="modal-overlay" *ngIf="showResultModal" (click)="closeResultModal()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div 
+      class="modal-content result-modal"
+      [class.modal-success]="modalType === 'success'"
+      [class.modal-error]="modalType === 'error'"
+      [class.modal-warning]="modalType === 'warning'"
+    >
+      <div class="modal-header">
+        <h4 class="modal-title">
+          <span *ngIf="modalType === 'success'">✅ Éxito</span>
+          <span *ngIf="modalType === 'error'">❌ Error</span>
+          <span *ngIf="modalType === 'warning'">⚠️ Atención</span>
+        </h4>
+        <button type="button" class="btn-close" (click)="closeResultModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="white-space: pre-line; line-height: 1.6;">{{ modalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closeResultModal()">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

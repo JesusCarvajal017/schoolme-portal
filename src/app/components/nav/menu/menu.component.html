@@ -1,0 +1,69 @@
+<div class="accordion accordion-flush" [attr.id]=" idMenu">
+
+  <!-- ciclo que recorre la data del menu dinamico -->
+  @for (item of dataSlidebar; track $index) {
+
+    <div class="accordion-item accordion-app" [class.leaf]="!(item.formularios?.length)">
+
+      <!-- logica de los acordinones de bootstrap -->
+      <h2 class="accordion-header" [attr.id]="'hdr-'+$index">
+
+        <!-- el caso de modulo sin formularios -->
+        @if (!(item.formularios?.length)) {
+
+          <!-- Item sin hijos -->
+          <a class="accordion-button no-bg leaf-button" [routerLink]="item.path">
+            <mat-icon class="me-2">{{ item.icon }}</mat-icon>
+            {{ item.name }}
+          </a>
+        }
+
+
+        <!-- caso de de modulo con formularios -->
+        @else {
+
+          <!-- Item con hijos -->
+        <button class="accordion-button no-bg accordion-app collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#acc'+$index"
+            [attr.aria-controls]="'acc'+$index"
+            aria-expanded="false" [attr.data-cont]=" '#' + idMenu">
+
+            <!-- icono y label del item -->
+            <mat-icon class="me-2">{{ item.icon }}</mat-icon>
+            {{ item.name }}
+
+            <!-- icono de despligue -->
+           <span class="ms-auto icon-toggle">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </span>
+
+          </button>
+        }
+      </h2>
+
+      <!-- desplegables referenciados  -->
+      @if (item.formularios?.length) {
+        <div class="accordion-collapse collapse" [attr.id]="'acc'+$index" [attr.aria-labelledby]="'hdr-'+$index" [attr.data-bs-parent]="'#' + idMenu">
+          <div class="accordion-body p-0">
+            <nav class="list-group list-group-flush despegable-contain-app m-2">
+              @for (child of item.formularios; track child) {  
+                <a class="list-group-item list-group-item-action ps-4 accordion-app despegable-app" [routerLink]="child.path">
+                  <div class="col-12 row">
+                    <div class="col-2">
+                      <mat-icon >keyboard_arrow_right</mat-icon>
+                    </div>
+                    <div class="col-10">
+                      {{ child.name }}
+                    </div>
+                  </div>
+                </a>
+              }
+            </nav>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

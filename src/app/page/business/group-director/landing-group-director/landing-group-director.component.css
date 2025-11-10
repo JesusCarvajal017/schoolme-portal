@@ -1,0 +1,200 @@
+/* Header */
+header h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+header .count {
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
+  font-weight: normal;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+}
+.btn-add mat-icon {
+  font-size: 20px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.tabs button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.tabs button.active {
+  background: #000;
+  color: white;
+  border: none;
+}
+
+/* Search & Filter */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.search-box mat-icon {
+  font-size: 20px;
+  margin-right: 5px;
+  color: #666;
+}
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.filter-btn mat-icon {
+  font-size: 18px;
+}
+
+/* Tabla */
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+.custom-table thead {
+  background: #f9f9f9;
+}
+.custom-table th {
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
+.custom-table tr:hover td {
+  background: #f7f7f7;
+}
+/* Columna de acciones */
+.actions-col {
+  display: flex;
+  justify-content: center;  /* centra horizontal */
+  align-items: center;      /* centra vertical */
+  gap: 6px;                 /* espacio entre iconos */
+}
+
+/* Forzar que todos los botones sean iguales */
+.actions-col button[mat-icon-button] {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 15px;
+}
+.pagination button {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pagination button.active {
+  background: #3f51b5;
+  color: white;
+  border: none;
+}
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* Agregar estos estilos a tu landing-rol.component.css existente */
+
+/* Estilos para el modal */
+.modal-content {
+  padding: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+/* Ajustar el formulario para el modal */
+::ng-deep .modal-content .form-page {
+  margin: 0;
+  padding: 20px;
+}
+
+/* Ocultar el botón cancelar del formulario cuando está en modal */
+::ng-deep .modal-content .form-page > div:last-child a {
+  display: none;
+}
+
+/* Mejorar la apariencia del botón crear */
+.btn-add {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

@@ -1,0 +1,68 @@
+#sidebarOffcanvas{
+    background-color: var(--primary);
+}
+
+.bg-dashboard{
+  background-color: rgb(245, 244, 244);
+}
+
+.container-app{
+    position: fixed;
+    height: 100vh !important;
+    width: 100vw;
+    background-color: rgb(238, 238, 238);
+    /* overflow-y: auto; */
+}
+
+.slidebar-app{
+    height: 98vh;
+    border-radius: 20px;
+    background-color: var(--primary);
+    overflow-y: auto;
+}
+
+/* logo del dasboard */
+.logo-sidebar{
+    display: flex;
+    justify-content: center;
+}
+
+
+	.box {
+    inline-size: 16rem;
+    block-size: 9.75rem;
+    border: 1px solid;
+}
+
+.logo-sidebar img{
+    width: 70px;
+}
+
+
+/* Solo para emular el boceto (quítalo si no lo necesitas) */
+.box-outline { border: 2px solid #000; }
+
+.topbar { 
+    height: 56px; 
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px #0000002d;
+}
+
+.aside-menu{
+    border-radius: 30px !important;
+}
+
+.content-area { 
+    height: 87vh ; 
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 5px #0000002d;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+
+/* .container-app{
+    height: 100vh !important;
+} */

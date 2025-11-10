@@ -1,0 +1,5 @@
+.tolbar-spacer {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}

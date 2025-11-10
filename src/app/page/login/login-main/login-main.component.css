@@ -1,0 +1,371 @@
+.login-app{
+    width: 500px;
+    height: 500px;
+
+    display: grid;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-template{
+    width: 350px;
+}
+
+.img-login{
+    width: 150px;
+}
+
+.form-login{
+    display: grid;
+    gap: 15px;
+}
+
+
+.google-icon {
+    width: 25px;
+}
+
+
+.a-enlace{
+    &:hover{
+        color: blue;
+        cursor: pointer;
+    }
+}
+
+.loader{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.49);
+}
+
+/* estilos generales de la vista */
+
+.caja-style{
+    position: fixed;
+    left: -35%;
+    top: -40%;
+    width: 100%;
+    height: 150%;
+    background-color: yellow;
+    transform: rotate(-60deg);
+
+    z-index: -1;
+}
+
+
+.img-log img{
+    z-index: 10;
+}
+
+.img-log{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.img-log-lg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+.container-login{
+    width: 70%;
+}
+
+/* Estilos para el enlace de recuperar contraseña */
+.enlace-recuperar {
+    color: #0066cc;
+    font-size: 0.875rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.enlace-recuperar:hover {
+    color: #0052a3;
+    text-decoration: underline;
+}
+
+/* Estilos para el modal de recuperar contraseña */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-recuperar {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header-custom h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.btn-cerrar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-cerrar:hover {
+    background-color: #f3f4f6;
+}
+
+.modal-body-custom {
+    padding: 1.5rem;
+}
+
+.texto-instruccion {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.form-recuperar {
+    display: grid;
+    gap: 1rem;
+}
+
+.modal-footer-custom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.modal-footer-custom .btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-footer-custom .btn-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.modal-footer-custom .btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+
+.modal-footer-custom .btn-primary {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.modal-footer-custom .btn-primary:hover {
+    background-color: #0b5ed7;
+}
+
+.modal-footer-custom .btn-primary:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Responsive para el modal */
+@media (max-width: 576px) {
+    .modal-recuperar {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-header-custom,
+    .modal-body-custom {
+        padding: 1rem;
+    }
+    
+    .modal-footer-custom {
+        flex-direction: column;
+    }
+    
+    .modal-footer-custom .btn {
+        width: 100%;
+    }
+
+    .input-codigo {
+        width: 45px;
+        height: 45px;
+        font-size: 1.25rem;
+    }
+}
+
+/* Estilos para el paso 2: Código de verificación */
+.contenedor-codigo {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.input-codigo {
+    width: 55px;
+    height: 55px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.input-codigo:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.input-codigo:invalid:not(:placeholder-shown) {
+    border-color: #dc3545;
+}
+
+.input-codigo.ng-invalid.ng-touched {
+    border-color: #dc3545;
+}
+
+.error-codigo {
+    color: #dc3545;
+    font-size: 0.875rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #fee;
+    border-radius: 6px;
+}
+
+.texto-reenviar {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 1rem;
+}
+
+.enlace-reenviar {
+    color: #0066cc;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.enlace-reenviar:hover {
+    color: #0052a3;
+    text-decoration: underline;
+}
+
+/* Estilos para el paso 3: Nueva contraseña */
+.requisitos-password {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.requisito-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.requisito-item:last-child {
+    margin-bottom: 0;
+}
+
+.requisito-item.cumplido {
+    color: #059669;
+    font-weight: 500;
+}
+
+.requisito-item tui-icon {
+    font-size: 1rem;
+    color: #9ca3af;
+}
+
+.requisito-item.cumplido tui-icon {
+    color: #059669;
+}
+
+.icono-cumplido {
+    animation: checkMark 0.3s ease;
+}
+
+@keyframes checkMark {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

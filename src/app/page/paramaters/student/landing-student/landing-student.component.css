@@ -1,0 +1,280 @@
+/* Header */
+header h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.count {
+  text-align: center;
+  width: 100px;
+  border: 1.5px solid #000;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
+  font-weight: bold;
+  /* display: inline-block; */
+}
+
+.titulo-tabla{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 25px !important;
+}
+
+.container-duo{
+  display: flex;
+  align-items: center;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  /* width: 100px !important; */
+}
+.btn-add mat-icon {
+  font-size: 20px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.tabs button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.tabs button.active {
+  background: #000;
+  color: white;
+  border: none;
+}
+
+/* Search & Filter */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.search-box mat-icon {
+  font-size: 20px;
+  margin-right: 5px;
+  color: #666;
+}
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.filter-btn mat-icon {
+  font-size: 18px;
+}
+
+/* Tabla */
+.custom-table {
+  width: 100%;
+  /* height: 10px; */
+  /* border-spacing: 0 8px; */
+  /* overflow-y: ; */
+}
+
+.custom-table thead {
+  background: #f9f9f9;
+}
+.custom-table th {
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  /* height: 20px !important; */
+}
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  /* height: 20px !important; */
+}
+.custom-table tr:hover td {
+  background: #f7f7f7;
+}
+
+
+/* Columna de acciones */
+.actions-col {
+  display: flex;
+  justify-content: center;  /* centra horizontal */
+  align-items: center;      /* centra vertical */
+  gap: 6px;                 /* espacio entre iconos */
+}
+
+/* Forzar que todos los botones sean iguales */
+.actions-col button[mat-icon-button] {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 15px;
+}
+.pagination button {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pagination button.active {
+  background: #3f51b5;
+  color: white;
+  border: none;
+}
+.modal-content {
+  min-height: 500px;
+}
+
+.tab-content {
+  padding: 20px;
+  min-height: 450px;
+  background: #fff;
+}
+
+.modal-actions {
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  background: #f9f9f9;
+}
+
+.modal-actions button {
+  min-width: 120px;
+}
+
+.loading-state {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loading-state p {
+  font-size: 16px;
+  color: #999;
+}
+
+/* Mejorar la apariencia de los tabs en el modal */
+::ng-deep .mat-mdc-tab-group {
+  margin: -20px -20px 0 -20px;
+}
+
+::ng-deep .mat-mdc-tab-labels {
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+::ng-deep .mat-mdc-tab-label {
+  font-weight: 500;
+  min-width: 180px;
+  padding: 0 24px;
+  height: 48px;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .mat-mdc-tab-label:hover {
+  opacity: 0.9;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+::ng-deep .mat-mdc-tab-label-active {
+  opacity: 1;
+  background-color: #fff;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+  overflow: visible !important;
+}
+
+/* Ajustar el padding del contenido del tab */
+::ng-deep .mat-mdc-tab-body-wrapper {
+  margin-top: 0;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  ::ng-deep .mat-mdc-tab-label {
+    min-width: 140px;
+    font-size: 13px;
+    padding: 0 16px;
+  }
+
+  .tab-content {
+    padding: 15px;
+    min-height: 400px;
+  }
+
+  .modal-actions {
+    padding: 10px 15px;
+  }
+
+  .modal-actions button {
+    min-width: 100px;
+    font-size: 13px;
+  }
+}
+
+/* Animaciones suaves */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}

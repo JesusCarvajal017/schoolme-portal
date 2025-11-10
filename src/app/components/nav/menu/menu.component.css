@@ -1,0 +1,54 @@
+
+/* rota el icono cuando el botón NO está colapsado */
+button.accordion-button:not(.collapsed) .icon-toggle {
+  transform: rotate(180deg);
+  transition: transform .25s ease;
+}
+
+
+
+.accordion-button::after { display: none; }
+.accordion-button.no-bg,
+.accordion-button.no-bg:focus,
+.accordion-button.no-bg:active {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.leaf .leaf-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: inherit;
+}
+.leaf .leaf-button:hover { background: transparent; }
+
+.collapsing { transition: height .25s ease; }
+
+.icon-toggle { display: inline-block; transition: transform .1s ease; }
+.icon-toggle.rotate { transform: rotate(180deg); }
+
+
+/* style me */
+.accordion-app{
+  background-color: var(--primary) !important;
+  color: #fff;
+  border: var(--primary) !important;
+ 
+}
+
+.despegable-contain-app{
+  border-radius: 10px;
+}
+
+.despegable-app{
+  background-color: var(--second) !important;
+
+  &:hover{
+    background-color: var(--second) !important;
+    color: #ffffff7e;
+  }
+  /* border-radius: 10px; */
+}

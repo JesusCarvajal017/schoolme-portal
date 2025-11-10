@@ -1,0 +1,9 @@
+@if(!elements) {
+    <div class="col-12 d-flex justify-content-center">
+        <app-loader></app-loader>
+    </div>
+}
+@else {
+    <ng-content select="[contenido]"></ng-content>
+}
+
