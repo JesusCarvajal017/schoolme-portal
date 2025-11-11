@@ -18,10 +18,6 @@ export class MenuComponent {
 
   idMenu !: string ;
 
-
-
-
-  
   ngOnInit(): void{
     this.idMenu = `sidebarAccordion${this.indicador}`; 
 

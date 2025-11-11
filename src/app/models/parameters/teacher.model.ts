@@ -10,6 +10,5 @@ export interface Teacher{
 export interface CreateModelTeacher{
     id: number;
     personId: number;
-    fullName: string;
     status: number;
 }

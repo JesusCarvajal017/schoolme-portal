@@ -8,10 +8,12 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
 import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { authInterceptor } from "./service/auth/token-interceptor-http";
+import { provideCharts, withDefaultRegisterables } from "ng2-charts";
 
 export const appConfig: ApplicationConfig = {
   providers: 
-  [provideAnimations(), 
+  [
+    provideAnimations(), 
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])), provideAnimations(),
     provideRouter(routes, withComponentInputBinding()), 
@@ -19,5 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     importProvidersFrom([SweetAlert2Module.forRoot()]),
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {subscriptSizing: 'dynamic'}},
+    provideCharts(withDefaultRegisterables()), 
   ]
 };

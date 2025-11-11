@@ -8,25 +8,31 @@
             </div>
         </div>
         <div class="col-12 text-center">
-            <h6>Información del director de grupo</h6>
+            <h6>Creación de profesor</h6>
             <p class="text-muted small">Configure los datos básicos</p>
         </div>
         <div class="col-12">
 
             <div class="row p-3">
                 <div class="col-md-12 p-2">
-                    <tui-select #select [formControl]="form.controls.personId" [stringify]="idToNamePerson">
-                        Persona
-                        <tui-data-list *tuiDataList>
-                            <tui-opt-group>
-                                @for (item of personList; track $index) {
-                                <button tuiOption type="button" [value]="item.id">
-                                    {{ item.fullName }}
-                                </button>
-                                }
-                            </tui-opt-group>
+                    <tui-textfield
+                        tuiChevron
+                        [stringify]="stringify"
+                    >
+                        <input tuiSelect [formControl]="form.controls.personId" placeholder="Eliga una persona"/>
+                    
+                        <tui-data-list *tuiTextfieldDropdown>
+                            <button
+                                *ngFor="let item of personList"
+                                new
+                                tuiOption
+                                type="button"s
+                                [value]="item.id"
+                            >
+                                {{ item.fisrtName }}
+                            </button>
                         </tui-data-list>
-                    </tui-select>
+                    </tui-textfield>
            
                 </div>
                 <div class="col-md-12 p-2">
@@ -35,7 +41,14 @@
                         <span class="fs-6 ms-1">Estado activo</span>
                     </label>
                 </div>
+
+                
             </div>
+            <div class="row p-3">
+
+                
+            </div>
+
         </div>
 
         <!-- </div> -->

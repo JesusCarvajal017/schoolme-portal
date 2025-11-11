@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: "http://host.docker.internal:5052/api"
+    apiUrl: "https://api.schoolme.space/api"
 };

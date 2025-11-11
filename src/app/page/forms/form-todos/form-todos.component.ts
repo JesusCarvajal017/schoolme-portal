@@ -176,6 +176,7 @@ export class FormTodosComponent {
     secondName: [''],
     lastName: ['', {validators: [Validators.required]}],
     secondLastName: [''],
+    email: ['', [Validators.required, Validators.email]],
     identification: new FormControl<number | null>(null, { validators: [Validators.required] }),
     phone: new FormControl<number | null>(null, { validators: [Validators.required] }),
     gender: new FormControl<number | null>(null, { validators: [Validators.required] }),
@@ -257,6 +258,7 @@ export class FormTodosComponent {
       documentTypeId: dataForm.documentTypeId ?? 0,
       phone: dataForm.phone ?? 0,
       gender: dataForm.gender ?? 0,
+      email: dataForm.email,
       status: this.form.controls['status'].value ? 1 : 0,
       dataBasic: {
         brithDate: dataForm.brithDate ? formatTuiDay(dataForm.brithDate) : '',

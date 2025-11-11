@@ -30,10 +30,16 @@ import { LandingStudentComponent } from './page/paramaters/student/landing-stude
 import { LandingTeacherComponent } from './page/paramaters/teacher/landing-teacher/landing-teacher.component';
 import { LandingAttendantsComponent } from './page/business/attendants/landing-attendants/landing-attendants.component';
 import { AjustesSecurityComponent } from './page/security/user/ajustes-security/ajustes-security.component';
+import { PanelComponent } from './page/home/panel/panel.component';
+import { LandingComponent } from './page/home/landing-page/landing.component';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '', redirectTo: '', pathMatch: 'full' },
+    {
+        path: '',
+        component: LandingComponent
+    },
     {
         path: 'login',
         component: LoginMainComponent
@@ -72,7 +78,9 @@ export const routes: Routes = [
             {path: 'acudientes' , component: LandingAttendantsComponent, canActivate: [esAdminGuard]},
             {path: 'aulas' , component: LandingGroupsComponent, canActivate: [esAdminGuard ]},
             {path: 'agrupación' , component: LandingGradeComponent, canActivate: [esAdminGuard]},
-            {path: 'cargaAcademica' , component: LandingAcademicLoadComponent, canActivate: [esAdminGuard]}
+            {path: 'cargaAcademica' , component: LandingAcademicLoadComponent, canActivate: [esAdminGuard]},
+
+            {path: 'panel' , component: PanelComponent, canActivate: [esAdminGuard]}
 
         ]
     },

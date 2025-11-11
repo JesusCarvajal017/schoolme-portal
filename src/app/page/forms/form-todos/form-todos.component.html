@@ -23,6 +23,11 @@
                 </tui-input>
             </div>
             <div class="col-md-6 p-1">
+                <tui-input tuiAutoFocus [formControl]="form.controls.email">
+                    Correo Electronico *
+                </tui-input>
+            </div>
+            <div class="col-md-6 p-1">
                 <tui-select
                     #select
                     [formControl]="form.controls.documentTypeId"
