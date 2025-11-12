@@ -6,24 +6,24 @@
   --dorado: #F2C41E;
 }
 
-.calendario-semanal {
+.contenedor-futurista {
+  display: flex;
   height: 100vh;
   background: linear-gradient(135deg, #ffffff, #ffffff);
-  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
   font-family: 'Poppins', sans-serif;
-  overflow: auto;
   position: relative;
+  overflow: hidden;
 }
 
-.calendario-semanal::before {
+.contenedor-futurista::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 20% 80%, rgba(242, 196, 30, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(58, 132, 182, 0.1) 0%, transparent 50%);
   animation: particulas 20s ease-in-out infinite;
 }
 
@@ -32,179 +32,199 @@
   50% { opacity: 1; transform: translateY(-10px); }
 }
 
-.titulo-calendario {
-  color: #000000;
-  font-size: 2.5em;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 0 0 20px rgba(8, 4, 46, 0.5);
-}
-
-.grid-calendario {
-  display: grid;
-  grid-template-columns: 100px repeat(5, 1fr);
-  gap: 5px;
-  background: rgb(8, 14, 63);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
+/* Sección izquierda (días) */
+.seccion-dias {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  border-radius: 25px;
+  margin: 20px;
+  box-shadow: 0 8px 20px rgba(40, 131, 206, 0.582);
 }
 
-.cabecera-dia {
-  padding: 15px;
-  background: linear-gradient(135deg, #3A84B6, #1A157E);
-  color: #F3E9FF;
-  text-align: center;
-  font-weight: bold;
-  border-radius: 10px;
+.dias-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
+.boton-dia {
+  width: 95%;
+  padding: 25px 20px;
+  background: rgb(255, 255, 255);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  box-shadow: 0 0px 0px rgb(3, 3, 17), inset 0 0px 0 rgb(11, 8, 51);
+  border: 1px solid rgba(16, 8, 76, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.cabecera-dia:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #1e96f2, #3A84B6);
-  color: #000826;
-  box-shadow: 0 6px 20px rgba(30, 182, 242, 0.4);
-}
-
-.cabecera-dia.activo {
-  background: #1e84f2;
-  color: #000826;
-  box-shadow: 0 0 20px rgba(9, 7, 74, 0.8);
-}
-
-.fila-hora {
-  display: contents;
-}
-
-.celda-hora {
-  padding: 15px;
-  background: rgba(26, 21, 126, 0.8);
-  color: #F3E9FF;
   text-align: center;
-  font-weight: bold;
-  border-radius: 10px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.celda-curso {
-  min-height: 80px;
-  padding: 5px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
+  color: #000000;
+  font-size: 1.2em;
+  font-weight: 500;
   position: relative;
-  transition: background 0.3s ease;
+  overflow: hidden;
+  transform: scale(1);
 }
 
-.celda-curso:hover {
-  background: rgba(255, 255, 255, 0.1);
+.boton-dia::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #1eabf2, transparent);
+  transition: left 0.4s ease;
 }
 
-.evento-curso {
-  background: linear-gradient(135deg, rgba(58,132,182,0.9), rgba(26,21,126,0.8));
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.evento-curso:hover {
+.boton-dia:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(242, 196, 30, 0.4);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: #000826;
+  box-shadow: 0 0 20px rgba(19, 94, 138);
 }
 
-.nombre-evento {
-  color: #F3E9FF;
+.boton-dia:hover::before {
+  left: 100%;
+}
+
+.boton-dia.activo {
+  background: rgb(19, 94, 138);
+  box-shadow: 0 0 30px #1e8ff2;
+  transform: scale(1.05);
+  color: #ffffff;
+  animation: springExpand 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes springExpand {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1.05); }
+}
+
+.boton-dia:not(.activo) {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+/* Sección derecha (panel de cursos) */
+.seccion-cursos {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin: 20px;
+  position: relative;
+}
+
+.panel-cursos {
+  width: 90%;
+  max-height: 80vh;
+  background: linear-gradient(135deg, rgba(19, 94, 138), rgba(58,132,182,0.85));
+  backdrop-filter: blur(10px);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  overflow-y: auto;
+  animation: entradaPanel 0.5s ease-out;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes entradaPanel {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.titulo-panel {
+  color: #ffffff;
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 0 15px rgb(0, 0, 0);
+}
+
+.lista-cursos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tarjeta-curso {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+  border-radius: 18px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: staggeredFadeIn 0.6s ease-out both;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+
+@keyframes staggeredFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tarjeta-curso:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(30, 196, 242, 0.4);
+}
+
+.nombre-curso {
+  color: #000000;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.hora-curso {
+  color: #000000;
   font-size: 0.9em;
-  font-weight: bold;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 
-.detalles-evento {
-  color: #F3E9FF;
-  font-size: 0.8em;
-  margin-bottom: 3px;
+.aula-curso {
+  color: #000000;
+  font-size: 0.9em;
+  margin-bottom: 5px;
 }
 
-.aula-evento {
-  color: #F3E9FF;
-  font-size: 0.8em;
-  margin-bottom: 3px;
+.estudiantes-curso {
+  color: #091ab5;
+  font-size: 0.9em;
 }
 
-.estudiantes-evento {
-  color: #F2C41E;
-  font-size: 0.8em;
-  font-weight: bold;
-}
-
-/* Responsividad */
+/* Responsividad básica */
 @media (max-width: 768px) {
-  .calendario-semanal {
-    padding: 10px;
+  .contenedor-futurista {
+    flex-direction: column;
+    height: auto;
   }
 
-  .titulo-calendario {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+  .seccion-dias {
+    flex: none;
+    height: auto;
+    margin: 10px;
   }
 
-  .grid-calendario {
-    grid-template-columns: 60px repeat(5, 120px);
-    gap: 2px;
-    padding: 10px;
-    overflow-x: auto;
-    font-size: 0.7em;
+  .seccion-cursos {
+    flex: none;
+    margin: 10px;
   }
 
-  .cabecera-dia {
-    padding: 10px;
-    font-size: 0.8em;
-  }
-
-  .celda-hora {
-    padding: 10px;
-    font-size: 0.8em;
-  }
-
-  .celda-curso {
-    min-height: 60px;
-    padding: 2px;
-  }
-
-  .evento-curso {
-    padding: 4px;
-    margin-bottom: 2px;
-  }
-
-  .nombre-evento {
-    font-size: 0.8em;
-  }
-
-  .detalles-evento,
-  .aula-evento,
-  .estudiantes-evento {
-    font-size: 0.7em;
-  }
-}
-
-@media (max-width: 480px) {
-  .grid-calendario {
-    grid-template-columns: 50px repeat(5, 100px);
-  }
-
-  .titulo-calendario {
-    font-size: 1.2em;
+  .panel-cursos {
+    width: 95%;
+    max-height: none;
   }
 }

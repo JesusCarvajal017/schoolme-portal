@@ -1,24 +1,24 @@
-<div class="calendario-semanal">
-  <h1 class="titulo-calendario">Horario Docente</h1>
-  <div class="grid-calendario">
-    <!-- Cabecera con días -->
-    <div class="cabecera-hora"></div>
-    <div *ngFor="let dia of diasSemana" class="cabecera-dia" [class.activo]="diaSeleccionado === dia" (click)="seleccionarDia(dia)">
-      {{ dia }}
+<div class="contenedor-futurista">
+  <!-- Sección izquierda: días de la semana -->
+  <div class="seccion-dias">
+    <div class="dias-container">
+      <div *ngFor="let dia of diasSemana" class="boton-dia" [class.activo]="diaSeleccionado === dia" (click)="seleccionarDia(dia)">
+        {{ dia }}
+      </div>
     </div>
+  </div>
 
-    <!-- Filas por horas -->
-    <div *ngFor="let hora of ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']" class="fila-hora">
-      <div class="celda-hora">{{ hora }}</div>
-      <div *ngFor="let dia of diasSemana" class="celda-curso">
-        <ng-container *ngFor="let curso of horario[dia]">
-          <div *ngIf="curso.horaInicio.startsWith(hora.slice(0,2))" class="evento-curso">
-            <div class="nombre-evento">{{ curso.nombre }}</div>
-            <div class="detalles-evento">{{ curso.horaInicio }} - {{ curso.horaFin }}</div>
-            <div class="aula-evento">{{ curso.aula }}</div>
-            <div class="estudiantes-evento">{{ curso.numeroEstudiantes }} estudiantes</div>
-          </div>
-        </ng-container>
+  <!-- Sección derecha: panel dinámico que muestra las tarjetas de cursos -->
+  <div class="seccion-cursos">
+    <div *ngIf="diaSeleccionado" class="panel-cursos">
+      <h2 class="titulo-panel">Horario de {{ diaSeleccionado }}</h2>
+      <div class="lista-cursos">
+        <div *ngFor="let curso of cursosDiaSeleccionado; let i = index" class="tarjeta-curso" [style.animation-delay.ms]="i * 100">
+          <div class="nombre-curso">{{ curso.nombre }}</div>
+          <div class="hora-curso">Horario: {{ curso.horaInicio }} - {{ curso.horaFin }}</div>
+          <div class="aula-curso">Aula: {{ curso.aula }}</div>
+          <div class="estudiantes-curso">Estudiantes: {{ curso.numeroEstudiantes }}</div>
+        </div>
       </div>
     </div>
   </div>
