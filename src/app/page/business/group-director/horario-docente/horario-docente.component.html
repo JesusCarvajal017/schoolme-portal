@@ -1,0 +1,25 @@
+<div class="calendario-semanal">
+  <h1 class="titulo-calendario">Horario Docente</h1>
+  <div class="grid-calendario">
+    <!-- Cabecera con días -->
+    <div class="cabecera-hora"></div>
+    <div *ngFor="let dia of diasSemana" class="cabecera-dia" [class.activo]="diaSeleccionado === dia" (click)="seleccionarDia(dia)">
+      {{ dia }}
+    </div>
+
+    <!-- Filas por horas -->
+    <div *ngFor="let hora of ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']" class="fila-hora">
+      <div class="celda-hora">{{ hora }}</div>
+      <div *ngFor="let dia of diasSemana" class="celda-curso">
+        <ng-container *ngFor="let curso of horario[dia]">
+          <div *ngIf="curso.horaInicio.startsWith(hora.slice(0,2))" class="evento-curso">
+            <div class="nombre-evento">{{ curso.nombre }}</div>
+            <div class="detalles-evento">{{ curso.horaInicio }} - {{ curso.horaFin }}</div>
+            <div class="aula-evento">{{ curso.aula }}</div>
+            <div class="estudiantes-evento">{{ curso.numeroEstudiantes }} estudiantes</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
