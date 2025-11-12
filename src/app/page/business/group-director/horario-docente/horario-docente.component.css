@@ -1,0 +1,210 @@
+:root {
+  --azul-oscuro: #000826;
+  --azul-rey: #1A157E;
+  --azul-medio: #3A84B6;
+  --lavanda: #F3E9FF;
+  --dorado: #F2C41E;
+}
+
+.calendario-semanal {
+  height: 100vh;
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  overflow: auto;
+  position: relative;
+}
+
+.calendario-semanal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, rgba(242, 196, 30, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(58, 132, 182, 0.1) 0%, transparent 50%);
+  animation: particulas 20s ease-in-out infinite;
+}
+
+@keyframes particulas {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-10px); }
+}
+
+.titulo-calendario {
+  color: #000000;
+  font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 20px rgba(8, 4, 46, 0.5);
+}
+
+.grid-calendario {
+  display: grid;
+  grid-template-columns: 100px repeat(5, 1fr);
+  gap: 5px;
+  background: rgb(8, 14, 63);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cabecera-dia {
+  padding: 15px;
+  background: linear-gradient(135deg, #3A84B6, #1A157E);
+  color: #F3E9FF;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cabecera-dia:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #1e96f2, #3A84B6);
+  color: #000826;
+  box-shadow: 0 6px 20px rgba(30, 182, 242, 0.4);
+}
+
+.cabecera-dia.activo {
+  background: #1e84f2;
+  color: #000826;
+  box-shadow: 0 0 20px rgba(9, 7, 74, 0.8);
+}
+
+.fila-hora {
+  display: contents;
+}
+
+.celda-hora {
+  padding: 15px;
+  background: rgba(26, 21, 126, 0.8);
+  color: #F3E9FF;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.celda-curso {
+  min-height: 80px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.celda-curso:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.evento-curso {
+  background: linear-gradient(135deg, rgba(58,132,182,0.9), rgba(26,21,126,0.8));
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.evento-curso:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(242, 196, 30, 0.4);
+}
+
+.nombre-evento {
+  color: #F3E9FF;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.detalles-evento {
+  color: #F3E9FF;
+  font-size: 0.8em;
+  margin-bottom: 3px;
+}
+
+.aula-evento {
+  color: #F3E9FF;
+  font-size: 0.8em;
+  margin-bottom: 3px;
+}
+
+.estudiantes-evento {
+  color: #F2C41E;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .calendario-semanal {
+    padding: 10px;
+  }
+
+  .titulo-calendario {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .grid-calendario {
+    grid-template-columns: 60px repeat(5, 120px);
+    gap: 2px;
+    padding: 10px;
+    overflow-x: auto;
+    font-size: 0.7em;
+  }
+
+  .cabecera-dia {
+    padding: 10px;
+    font-size: 0.8em;
+  }
+
+  .celda-hora {
+    padding: 10px;
+    font-size: 0.8em;
+  }
+
+  .celda-curso {
+    min-height: 60px;
+    padding: 2px;
+  }
+
+  .evento-curso {
+    padding: 4px;
+    margin-bottom: 2px;
+  }
+
+  .nombre-evento {
+    font-size: 0.8em;
+  }
+
+  .detalles-evento,
+  .aula-evento,
+  .estudiantes-evento {
+    font-size: 0.7em;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-calendario {
+    grid-template-columns: 50px repeat(5, 100px);
+  }
+
+  .titulo-calendario {
+    font-size: 1.2em;
+  }
+}
