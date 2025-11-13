@@ -20,8 +20,8 @@ export class PersonService extends GenericService<PersonOrigin, CreateModelPerso
     return this.http.get<PersonOrigin[]>(`${this.urlBase}?status=${status}`);
   }
 
-  crearComplete(entity: CreateModelPerson, rol = null): Observable<CreateModelPerson> {
-    var url : string = rol == null ? `${this.urlBase}/CreateComplet` :`${this.urlBase}/CreateComplet/rolId=${rol}`;
+  crearComplete(entity: CreateModelPerson, rol?: number): Observable<CreateModelPerson> {
+    var url : string = rol == null ? `${this.urlBase}/CreateComplet` :`${this.urlBase}/CreateComplet?rolId=${rol}`;
 
     return this.http.post<CreateModelPerson>(url, entity);
   }

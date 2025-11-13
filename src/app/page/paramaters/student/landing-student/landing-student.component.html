@@ -119,9 +119,9 @@
       <!-- Modo Edición: Solo formulario de información personal -->
       <ng-container *ngIf="isEditMode">
         <ng-container *ngIf="modelPerson; else loadingPerson">
-          <app-form-todos [actionDescriptio]="'Actualizar información'" [model]="modelPerson"
+          <!-- <app-form-todos [model]="modelPerson"
             (posteoForm)="handlePersonSubmit($event)">
-          </app-form-todos>
+          </app-form-todos> -->
         </ng-container>
 
         <ng-template #loadingPerson>

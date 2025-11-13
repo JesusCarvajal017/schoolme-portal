@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -33,7 +33,8 @@ import { TuiChevron, TuiSelect, TuiCheckbox } from '@taiga-ui/kit';
     TuiTextfield,
     TuiSelect,
     TuiDataList,
-    TuiCheckbox
+    TuiCheckbox,
+    // FormControl
 ],
   templateUrl: './form-teacher.component.html',
   styleUrl: './form-teacher.component.css',
@@ -102,13 +103,12 @@ export class FormTeacherComponent implements OnInit, OnChanges {
       let capture = this.form.getRawValue();
 
       const dataGroupDirector: CreateModelTeacher = {
-        id: this.model?.id || 0,
+        // id: this.model?.id || 0,
         personId: capture.personId,
         status: capture.status ? 1 : 0,
-
       }
 
-      console.log(dataGroupDirector);
+      // console.log(dataGroupDirector);
 
       this.posteoForm.emit(dataGroupDirector);
     }

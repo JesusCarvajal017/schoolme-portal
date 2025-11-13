@@ -1,96 +1,142 @@
 <div class="col-12 row">
+    <div class="col-12 text-center">
+       <h6>{{ modalInfo.title }}</h6>
+       <p class="text-muted small">{{ modalInfo.descripcion }}</p>
+   </div>
     
     <form [formGroup]="form" (submit)="createPerson()">
+
         <div class="row m-3">
             <div class="col-md-6 p-1">
-                <tui-input tuiAutoFocus [formControl]="form.controls.fisrtName">
-                    Primer nombre *
-                </tui-input>
+                <tui-textfield>
+                    <label tuiLabel> Primer nombre *</label>
+                    <input
+                        tuiTextfield
+                        [formControl]="form.controls.fisrtName"
+                    />
+                
+                </tui-textfield>
             </div>
             <div class="col-md-6 p-1">
-                <tui-input tuiAutoFocus [formControl]="form.controls.secondName">
-                    Segundo nombre
-                </tui-input>
+                <tui-textfield>
+                    <label tuiLabel> Segundo nombre </label>
+                    <input
+                        tuiTextfield
+                        [formControl]="form.controls.secondName"
+                    />
+                
+                </tui-textfield>
             </div>
             <div class="col-md-6 p-1">
-                <tui-input tuiAutoFocus [formControl]="form.controls.lastName">
-                    Primer apellido *
-                </tui-input>
+                <tui-textfield>
+                    <label tuiLabel> Primer apellido</label>
+                    <input
+                        tuiTextfield
+                        [formControl]="form.controls.lastName"
+                    />
+                
+                </tui-textfield>
             </div>
             <div class="col-md-6 p-1">
-                <tui-input tuiAutoFocus [formControl]="form.controls.secondLastName">
-                    Segundo apellido
-                </tui-input>
+                <tui-textfield>
+                    <label tuiLabel>  Segundo apellido</label>
+                    <input
+                        tuiTextfield
+                        [formControl]="form.controls.secondLastName"
+                    />
+                
+                </tui-textfield>
             </div>
+
+            @if(isUser){
+                <div class="col-md-6 p-1">
+                    <tui-textfield>
+                        <label tuiLabel>Correo Electronico *</label>
+                        <input
+                            tuiTextfield
+                            [formControl]="form.controls.email"
+                        />
+                    
+                    </tui-textfield>
+                </div>
+            }
+
             <div class="col-md-6 p-1">
-                <tui-input tuiAutoFocus [formControl]="form.controls.email">
-                    Correo Electronico *
-                </tui-input>
-            </div>
-            <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.documentTypeId"
-                    [stringify]="idToName"
-                    [tuiTextfieldLabelOutside]="true"
-                >
-                    Tipo documento
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of documentTypeList; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
+                <tui-textfield tuiChevron [stringify]="tipoDocumento">
+
+                    <input tuiSelect [formControl]="form.controls.documentTypeId" placeholder="Tipo documento"/>
+                
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of documentTypeList; track $index) {
+                            <button
+                                new
+                                tuiOption
+                                type="button"s
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </button>
+                        }
                     </tui-data-list>
-                </tui-select>
+                </tui-textfield>
+
             </div>
             <div class="col-md-6 p-1">
-                <tui-input-number [formControl]="form.controls.identification">
-                    N° identificación
-                </tui-input-number>
+
+                <tui-textfield>
+                    <label tuiLabel>N° identificación</label>
+                    <input
+                        tuiInputNumber
+                        [formControl]="form.controls.identification"
+                    />
+                
+                </tui-textfield>
             </div>
             <div class="col-md-6 p-1" >
-                <tui-input-number [formControl]="form.controls.phone">
-                    Telefono *
-                </tui-input-number>
+                <tui-textfield>
+                    <label tuiLabel>Telefono *</label>
+                    <input
+                        tuiInputNumber
+                        [formControl]="form.controls.phone"
+                    />
+                
+                </tui-textfield>
             </div>
 
             <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.gender"
-                    [stringify]="idToNameGender"
-                    [tuiTextfieldLabelOutside]="true"
-                >
-                    Genero
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of generos; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
+
+                <tui-textfield tuiChevron [stringify]="generofy">
+
+                    <input tuiSelect [formControl]="form.controls.gender" placeholder="Genero"/>
+                
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of generos; track $index) {
+                            <button
+                                new
+                                tuiOption
+                                type="button"s
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </button>
+                        }
                     </tui-data-list>
-                </tui-select>
+                </tui-textfield>
+                
             </div>
 
             <!--  ================================= datos de databasic =================================   -->
 
             <div class="col-md-6 p-1">
-                <tui-input type="text" tuiAutoFocus [formControl]="form.controls.adress">
-                    Dirección
-                </tui-input>
+
+                <tui-textfield>
+                    <label tuiLabel>Dirección *</label>
+                    <input
+                        tuiTextfield
+                        [formControl]="form.controls.adress"
+                    />
+                
+                </tui-textfield>
 
                 @if(form.controls.adress.invalid && form.controls.adress.touched){
                     <tui-error
@@ -99,133 +145,115 @@
                 }
                 <!-- <mat-error>{{ ObtenerErrorCampoAndres() }}</mat-error> -->
             </div>
-            
             <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.departamentId"
-                    [stringify]="idToNameDepartament"
-                    [tuiTextfieldLabelOutside]="true"
-                    (tuiValueChange)="cargarMunicipio()"
-                >
-                    Departamento de residencia
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of departaments; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
-                    </tui-data-list>
-                </tui-select>
-            </div>
+                <tui-textfield tuiChevron [stringify]="departamentofy">
+                    <input
+                        tuiSelect
+                        [formControl]="form.controls.departamentId"
+                        (tuiValueChange)="onDepartChange($any($event))"
+                        placeholder="Departamento"
+                    />
 
-            
-            <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.munisipalityId"
-                    [stringify]="idToNameMunicipality"
-                    [tuiTextfieldLabelOutside]="true"
-                >
-                    Municipio de residencia
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of municipality; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of departaments; track $index) {
+                        <button tuiOption type="button" [value]="item.id">
+                            {{ item.name }}
+                        </button>
+                        }
                     </tui-data-list>
-                </tui-select>
-            </div>
-
-            <div class="col-md-6 p-1">
-                <tui-input-date tuiUnfinishedValidator="Finish filling the field" formControlName="brithDate">
-                    Fecha de naciemiento
-                </tui-input-date>
+                </tui-textfield>
             </div>
             
             <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.rhId"
-                    [stringify]="idToNameRh"
-                    [tuiTextfieldLabelOutside]="true"
-                >
-                    Rh
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of rhList; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
+                <tui-textfield tuiChevron [stringify]="municipiofy">
+                    <input
+                        tuiSelect
+                        [formControl]="form.controls.munisipalityId"
+                        placeholder="Municipio"
+                    />
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of municipality; track $index) {
+                        <button tuiOption type="button" [value]="item.id">
+                            {{ item.name }}
+                        </button>
+                        }
                     </tui-data-list>
-                </tui-select>
+                </tui-textfield>
+            </div>
+
+
+            <div class="col-md-6 p-1">
+
+                <tui-textfield>
+                    <label tuiLabel>Fecha de nacieminto</label>
+                    <input
+                        tuiInputDate
+                        [formControl]="form.controls.brithDate"
+                    />
+                    <tui-calendar *tuiTextfieldDropdown />
+                </tui-textfield>
+
+            </div>
+            
+            <div class="col-md-6 p-1">
+
+                <tui-textfield tuiChevron [stringify]="rhfy">
+                    <input tuiSelect [formControl]="form.controls.rhId" placeholder="rh"/>
+                
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of rhList; track $index) {
+                            <button
+                                new
+                                tuiOption
+                                type="button"
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </button>
+                        }
+                    </tui-data-list>
+                </tui-textfield>
+
             </div>
 
             <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.materialStatusId"
-                    [stringify]="idToNameStatus"
-                    [tuiTextfieldLabelOutside]="true"
-                >
-                    Estado civil
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of statusCivil; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
+                <tui-textfield tuiChevron [stringify]="estadocivilfy">
+                    <input tuiSelect [formControl]="form.controls.materialStatusId" placeholder="Estado civil"/>
+                
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of statusCivil; track $index) {
+                            <button
+                                new
+                                tuiOption
+                                type="button"
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </button>
+                        }
                     </tui-data-list>
-                </tui-select>
+                </tui-textfield>
+
             </div>
 
             <div class="col-md-6 p-1">
-                <tui-select
-                    #select
-                    [formControl]="form.controls.epsId"
-                    [stringify]="idToNameEps"
-                    [tuiTextfieldLabelOutside]="true"
-                >
-                    Eps
-                    <tui-data-list *tuiDataList>
-                        <tui-opt-group>
-                            @for (item of epsList; track $index) {
-                                <button
-                                    tuiOption
-                                    type="button"
-                                    [value]="item.id"
-                                >
-                                    {{ item.name }}
-                                </button>
-                            }
-                        </tui-opt-group>
+
+                <tui-textfield tuiChevron [stringify]="epsfy">
+                    <input tuiSelect [formControl]="form.controls.epsId" placeholder="Eps"/>
+                
+                    <tui-data-list *tuiTextfieldDropdown>
+                        @for (item of epsList; track $index) {
+                            <button
+                                new
+                                tuiOption
+                                type="button"
+                                [value]="item.id"
+                            >
+                                {{ item.name }}
+                            </button>
+                        }
                     </tui-data-list>
-                </tui-select>
+                </tui-textfield>
             </div>
 
             <div class="col-md-6 p-1" >
@@ -233,7 +261,7 @@
             </div>
         </div> 
         <div>
-            <button mat-button type="submit" [disabled]="form.invalid">{{ actionDescriptio}}</button>
+            <button mat-button type="submit" [disabled]="form.invalid">{{ modalInfo.titleButton }}</button>
         </div>
     </form>
     

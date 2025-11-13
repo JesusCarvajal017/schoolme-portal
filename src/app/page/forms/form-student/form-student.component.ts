@@ -1,26 +1,21 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CreateModelStudent, Student } from '../../../models/parameters/student.model';
-import { RouterLink } from '@angular/router';
 
-import { TuiHeader } from '@taiga-ui/layout';
-import { TuiDataList, TuiHint, TuiIcon, TuiTextfield, TuiTitle } from '@taiga-ui/core';
-import { TuiInputModule, TuiTextfieldControllerModule, TuiSelectModule } from '@taiga-ui/legacy';
-
-import { TuiCheckbox, TuiDataListWrapper, TuiTooltip } from '@taiga-ui/kit';
-import { MatIconModule } from "@angular/material/icon";
+import { MatIconModule, MatIcon } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
 
 // Importar servicios para obtener usuarios y roles
 import { PersonService } from '../../../service/person.service';
-import { CreateModelPerson, Person, PersonOrigin } from '../../../models/security/person.model';
-import { StudentService } from '../../../service/parameters/student.service';
+import { Person, PersonOrigin } from '../../../models/security/person.model';
 import { GroupsService } from '../../../service/parameters/groups.service';
 import { Groups } from '../../../models/parameters/groups.model';
+import { TuiTextfieldComponent } from "@taiga-ui/core";
+import { TuiStringHandler } from '@taiga-ui/cdk/types';
 
 
 @Component({
@@ -33,19 +28,11 @@ import { Groups } from '../../../models/parameters/groups.model';
     ReactiveFormsModule,
     MatButtonModule,
     MatSlideToggleModule,
-
-    TuiTextfieldControllerModule,
-    TuiInputModule,
-    TuiSelectModule,
-    TuiTextfield,
-    TuiDataList,
-    TuiHint,
-    MatIconModule,
-
-    TuiDataListWrapper,
-  ],
+    MatIcon
+],
   templateUrl: './form-student.component.html',
-  styleUrl: './form-student.component.css'
+  styleUrl: './form-student.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormStudentComponent implements OnInit, OnChanges {
 
@@ -73,6 +60,9 @@ export class FormStudentComponent implements OnInit, OnChanges {
   private readonly personService = inject(PersonService);
   private readonly groupsService = inject(GroupsService);
 
+  protected readonly stringify: TuiStringHandler<number> = (id) =>
+    this.persons.find((item) => item.id === id)?.fisrtName ?? '';
+
   form = this.formBuilder.nonNullable.group({
     personId: [0, { validators: [Validators.required, Validators.min(1)] }],
     groupsId: [0, { validators: [Validators.required, Validators.min(1)] }],
@@ -96,21 +86,6 @@ export class FormStudentComponent implements OnInit, OnChanges {
       this.form.patchValue(values);
     }
   }
-
-  // // Cargar usuarios desde el servicio
-  // loadUsers(): void {
-  //   this.loadingPerson = true;
-  //   this.personService.obtenerTodos(1).subscribe({
-  //     next: (data) => {
-  //       this.persons = data;
-  //       this.loadingPerson = false;
-  //     },
-  //     error: (err) => {
-  //       console.error('Error cargando usuarios:', err);
-  //       this.loadingPerson = false;
-  //     }
-  //   });
-  // }
 
   // Cargar roles desde el servicio
   loadRoles(): void {

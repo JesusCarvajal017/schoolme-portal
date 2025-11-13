@@ -93,6 +93,8 @@ export interface PersonComplete {
 }
 
 
+
+
 // modelo para el formulario reactivo
 export type FormPersonValue = {
   status: boolean;

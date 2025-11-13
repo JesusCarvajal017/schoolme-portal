@@ -7,7 +7,9 @@
   </h1>
   <aside tuiAccessories>
     <div tuiAppearance="secondary" tuiButtonGroup>
-      <button class="btn-add" (click)="modalCommand('Crear nuevo Profesor')">
+      
+      <!-- creacion de docente -->
+      <button class="btn-add" (click)="modalCommand(1)">
         <mat-icon>add_circle</mat-icon>
         Crear Profesor
       </button>
@@ -46,72 +48,65 @@
           <tr>
             <th>#</th>
             <th>Nombres</th>
+            <th>Apellidos</th>
             <th>Tipo</th>
             <th>Identificación</th>
+            <th>Teléfono</th>
             <th>Status</th>
             <th class="text-center">Acción</th>
           </tr>
         </thead>
         <tbody>
           @for (item of paginatedUsers; track item.id) {
-            <tr>
-              <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
-              <td>{{ item.fullName}}
-              <td>{{ item.acronymDocument }} 
-              <td>{{ item.identification }}</td>
-              <td>
-                <mat-slide-toggle
-                  [checked]="item.status === 1"
-                  (change)="logical($event, item.id)"
-                ></mat-slide-toggle>
-              </td>
-              <td class="actions-col">
-                 <!-- routerLink="/dashboard/todos/editar/{{ item.id }}" -->
-                <a mat-icon-button>
-                  <mat-icon (click)="modalCommand('Actualización de datos', item)">edit</mat-icon>
-                </a>
-                <button
-                  mat-icon-button
-                  [swal]="{
-                    title: 'Confirmacion',
-                    text: '¿Deseas borrar este registro?',
-                    showCancelButton: true
-                  }"
-                  (confirm)="deleteRegister(item.id)"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
+          <tr>
+            <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
+            <td>{{ item.fullName}}</td>
+            <td>{{ item.lastName}}</td>
+            <td>{{ item.acronymDocument }}</td>
+            <td>{{ item.identification }}</td>
+            <td>{{ item.phone }}</td>
+            <td>
+              <mat-slide-toggle [checked]="item.status === 1" (change)="logical($event, item.id)"></mat-slide-toggle>
+            </td>
+            <td class="actions-col">
+              <button mat-icon-button (click)="modalCommand(2, item.id)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button [swal]="{
+              title: 'Confirmacion',
+              text: '¿Deseas borrar este registro?',
+              showCancelButton: true
+          }" (confirm)="deleteRegister(item.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+              <button mat-icon-button>
                 <mat-icon>more_vert</mat-icon>
-              </td>
-            </tr>
+              </button>
+            </td>
+          </tr>
           }
         </tbody>
       </table>
-    
+
       <!-- Paginación -->
       <div class="pagination" *ngIf="totalPages > 1">
         <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
           &lt;
         </button>
-    
-        <button
-          *ngFor="let page of [].constructor(totalPages); let i = index"
-          (click)="changePage(i + 1)"
-          [class.active]="currentPage === i + 1"
-        >
+
+        <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+          [class.active]="currentPage === i + 1">
           {{ i + 1 }}
         </button>
-    
-        <button
-          (click)="changePage(currentPage + 1)"
-          [disabled]="currentPage === totalPages"
-        >
+
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
           &gt;
         </button>
       </div>
     </section>
   </ng-container>
-
 </app-listado-generico>
 
 <!-- Modal simplificado -->
@@ -120,14 +115,15 @@
 
     <!-- Modo Creación: Formulario de profesor -->
     <ng-container *ngIf="!isEditMode">
-      <app-form-teacher [title]="titleTeacher" [actionDescriptio]="'Crear'" (posteoForm)="handleTeacherSubmit($event)">
-      </app-form-teacher>
+      <!-- <app-form-teacher [title]="titleTeacher" [actionDescriptio]="'Crear'" (posteoForm)="handleTeacherSubmit($event)"></app-form-teacher> -->
+      <app-form-todos [isUser]="isUser" [modalInfo]="modalInfo" [model]="modelUpdate" (posteoForm)="handleEpsSubmit($event)"></app-form-todos>
+
     </ng-container>
 
     <!-- Modo Edición: Solo formulario de información personal -->
     <ng-container *ngIf="isEditMode">
       <ng-container *ngIf="modelPerson; else loadingPerson">
-        <app-form-todos [actionDescriptio]="'Actualizar información'" [model]="modelPerson"
+        <app-form-todos [isUser]="isUser" [modalInfo]="modalInfo" [model]="modelPerson"
           (posteoForm)="handlePersonSubmit($event)">
         </app-form-todos>
       </ng-container>
