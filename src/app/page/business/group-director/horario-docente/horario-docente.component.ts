@@ -16,7 +16,7 @@ interface Curso {
   templateUrl: './horario-docente.component.html',
   styleUrl: './horario-docente.component.css'
 })
-export class HorarioDocenteFuturistaComponent {
+export class HorarioDocenteComponent {
   diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   diaSeleccionado: string | null = null;
 
@@ -25,6 +25,10 @@ export class HorarioDocenteFuturistaComponent {
     'Lunes': [
       { nombre: 'Matemáticas Avanzadas', horaInicio: '08:00', horaFin: '10:00', numeroEstudiantes: 25, aula: 'Aula 101' },
       { nombre: 'Física Cuántica', horaInicio: '10:30', horaFin: '12:30', numeroEstudiantes: 20, aula: 'Laboratorio 2' },
+      { nombre: 'Programación Web', horaInicio: '09:00', horaFin: '11:00', numeroEstudiantes: 30, aula: 'Aula 203' },
+      { nombre: 'Bases de Datos', horaInicio: '11:30', horaFin: '13:30', numeroEstudiantes: 28, aula: 'Aula 105' },
+      { nombre: 'Programación Web', horaInicio: '09:00', horaFin: '11:00', numeroEstudiantes: 30, aula: 'Aula 203' },
+      { nombre: 'Bases de Datos', horaInicio: '11:30', horaFin: '13:30', numeroEstudiantes: 28, aula: 'Aula 105' },
       { nombre: 'Programación Web', horaInicio: '09:00', horaFin: '11:00', numeroEstudiantes: 30, aula: 'Aula 203' },
       { nombre: 'Bases de Datos', horaInicio: '11:30', horaFin: '13:30', numeroEstudiantes: 28, aula: 'Aula 105' }
     ],

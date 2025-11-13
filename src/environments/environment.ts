@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: "http://host.docker.internal:5052/api"
+    apiUrl: "http://host.docker.internal:7000/api"
 };

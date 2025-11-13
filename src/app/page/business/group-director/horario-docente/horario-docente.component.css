@@ -8,8 +8,8 @@
 
 .contenedor-futurista {
   display: flex;
-  height: 100vh;
-  background: linear-gradient(135deg, #ffffff, #ffffff);
+  height: 80vh;
+  background: linear-gradient(135deg, #000928, #3582B9);
   border-radius: 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
   font-family: 'Poppins', sans-serif;
@@ -40,10 +40,10 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: linear-gradient(135deg, #ffffff, #ffffff);
+  background: linear-gradient(135deg, #ffffff00, #ffffff00);
   border-radius: 25px;
   margin: 20px;
-  box-shadow: 0 8px 20px rgba(40, 131, 206, 0.582);
+  box-shadow: 0 8px 20px rgba(3, 17, 97, 0.877);
 }
 
 .dias-container {
@@ -80,7 +80,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, #1eabf2, transparent);
+  background: linear-gradient(90deg, transparent, #000c1233, transparent);
   transition: left 0.4s ease;
 }
 
@@ -96,11 +96,11 @@
 }
 
 .boton-dia.activo {
-  background: rgb(19, 94, 138);
-  box-shadow: 0 0 30px #1e8ff2;
-  transform: scale(1.05);
+  background: var(--primary);
+  box-shadow: 0 0 30px #020357;
+  /* transform: scale(1.05); */
   color: #ffffff;
-  animation: springExpand 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* animation: springExpand 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); */
 }
 
 @keyframes springExpand {
@@ -120,15 +120,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  margin: 20px;
+  padding: 1vb;
+  margin: 1vb;
   position: relative;
 }
 
 .panel-cursos {
   width: 90%;
-  max-height: 80vh;
-  background: linear-gradient(135deg, rgba(19, 94, 138), rgba(58,132,182,0.85));
+  max-height: 75vh;
+  background: linear-gradient(135deg, var(--primary), rgba(5, 37, 58, 0.85));
   backdrop-filter: blur(10px);
   border-radius: 25px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);

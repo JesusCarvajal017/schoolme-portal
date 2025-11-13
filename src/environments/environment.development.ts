@@ -1,5 +1,5 @@
 // environments/environment.ts
 export const environment = {
-  uri: '192.168.20.29',
-  apiUrl:  'http://localhost:5052/api'
+  uri: '10.3.234.105',
+  apiUrl:  'http://10.3.234.105:7000/api'
 };
