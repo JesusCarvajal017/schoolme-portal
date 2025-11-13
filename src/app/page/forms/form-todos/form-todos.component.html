@@ -143,40 +143,57 @@
                         [error]="ObtenerErrorCampoAndres()"
                     />
                 }
-                <!-- <mat-error>{{ ObtenerErrorCampoAndres() }}</mat-error> -->
+
             </div>
+
             <div class="col-md-6 p-1">
-                <tui-textfield tuiChevron [stringify]="departamentofy">
+                <tui-textfield
+                    tuiChevron
+                    [stringify]="departamentofy"
+                    (valueChange)="cargarMunicipio()"
+                >
                     <input
                         tuiSelect
                         [formControl]="form.controls.departamentId"
-                        (tuiValueChange)="onDepartChange($any($event))"
                         placeholder="Departamento"
-                    />
 
+                    />
+                
                     <tui-data-list *tuiTextfieldDropdown>
-                        @for (item of departaments; track $index) {
-                        <button tuiOption type="button" [value]="item.id">
+                        <button
+                            *ngFor="let item of departaments"
+                            new
+                            tuiOption
+                            type="button"
+                            [value]="item.id"
+                        >
                             {{ item.name }}
                         </button>
-                        }
                     </tui-data-list>
                 </tui-textfield>
             </div>
-            
-            <div class="col-md-6 p-1">
-                <tui-textfield tuiChevron [stringify]="municipiofy">
+
+            <div #inputMunicaplity class="col-md-6 p-1">
+                <tui-textfield
+                    tuiChevron
+                    [stringify]="municipiofy"
+                >
                     <input
                         tuiSelect
                         [formControl]="form.controls.munisipalityId"
                         placeholder="Municipio"
                     />
+                
                     <tui-data-list *tuiTextfieldDropdown>
-                        @for (item of municipality; track $index) {
-                        <button tuiOption type="button" [value]="item.id">
+                        <button
+                            *ngFor="let item of municipality"
+                            new
+                            tuiOption
+                            type="button"
+                            [value]="item.id"
+                        >
                             {{ item.name }}
                         </button>
-                        }
                     </tui-data-list>
                 </tui-textfield>
             </div>

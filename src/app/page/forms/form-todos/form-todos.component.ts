@@ -44,6 +44,7 @@ import { TuiTextfield, TuiDataList} from "@taiga-ui/core";
 import { CommonModule } from '@angular/common';
 import { TuiChevron, TuiSelect, TuiInputNumber, TuiInputDate} from '@taiga-ui/kit';
 import { infoModal } from '../../../models/global/info-modal.model';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-form-todos',
@@ -63,7 +64,7 @@ import { infoModal } from '../../../models/global/info-modal.model';
     TuiSelect,
     TuiInputNumber,
     TuiInputDate,
-    TuiOption,        // <- FALTABA (sin esto no cambia el valor)
+  
    
   
 ],
@@ -157,11 +158,13 @@ export class FormTodosComponent {
     this.cargarRh();
     this.cargarStatus();
     this.cargarEps();
+    this.cargarMunicipio();
 
     // cambio de valor para mostrar si crea el usuario
     this.activadorUser.valueChanges.subscribe(value => {
       this.userView = value;
     });
+
 
   }
 
@@ -371,7 +374,6 @@ export class FormTodosComponent {
 
   // =================================== end metodos del componente ===================================
   
-
   // ==================================================== parche  de selects =================================================
 
   // helpers de select 
@@ -389,25 +391,51 @@ export class FormTodosComponent {
   // municipality
   municipality : Municipality[] = [];
 
-  // cargarMunicipio() : void {
-  //   if(this.model){
-  //     // ================== servicio de muncipio ===================================
-  //     this.servicesMuncipality.MunicipiosDepart(this.model.dataBasic.departamentId).subscribe({
-  //       next: (data)=> {
-  //         this.municipality = data; 
-  //       },
-  //       error: (err)=>{
-  //         console.log(err)
-  //       }
-  //     });
-  //   }
+  private _departChangeBound = false;
 
-  //   this.form.controls.departamentId.valueChanges.subscribe(val => {
-  //     this.servicesMuncipality.MunicipiosDepart(val).subscribe(data =>{
-  //       this.municipality = data;
-  //     });
-  //   });    
-  // }
+  cargarMunicipio(): void {
+    alert('Se esta disparando');
+
+    // carga inicial si vienes con model
+    if (this.model?.dataBasic?.departamentId) {
+      this.servicesMuncipality
+        .MunicipiosDepart(this.model.dataBasic.departamentId)
+        .subscribe({
+          next: (data) => {
+            this.municipality = data;
+            console.log(this.municipality);
+          },
+          error: (err) => console.log(err),
+        });
+    }
+
+    // evita múltiples suscripciones
+    if (this._departChangeBound) return;
+    this._departChangeBound = true;
+
+    // escucha cambios del control
+    this.form.controls.departamentId.valueChanges.subscribe({
+      next: (val) => {
+        if (val === null || val === undefined) {
+          this.municipality = [];
+          this.form.controls.munisipalityId.reset();
+          return;
+        }
+
+        this.form.controls.munisipalityId.reset();
+        this.municipality = [];
+
+        this.servicesMuncipality.MunicipiosDepart(val).subscribe({
+          next: (data) => {
+            this.municipality = data;
+            console.log(this.municipality);
+          },
+          error: (err) => console.log(err),
+        });
+      },
+      error: (err) => console.log(err),
+    });
+  }
 
   // Cargar catálogos
   cargarDepartamento(): void {
@@ -416,23 +444,6 @@ export class FormTodosComponent {
       error: console.error,
     });
   }
-
-  onDepartChange(id: number | string | null): void {
-    this.form.controls.munisipalityId.setValue(null, { emitEvent: false });
-    this.municipality = [];
-
-    if (id == null) return;
-
-    this.servicesMuncipality.MunicipiosDepart(+id).subscribe({
-      next: data => {
-        this.municipality = data
-        console.log(data);
-      } ,
-      
-      error: console.error,
-    });
-  }
-
 
   rhList : Rh[] = [];
 
