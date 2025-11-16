@@ -1,0 +1,13 @@
+<h1>Mis Cursos</h1>
+
+<div class="cursos-grid">
+  <mat-card *ngFor="let curso of cursos" class="curso-card" (click)="seleccionarCurso(curso)">
+    <mat-card-header>
+      <mat-card-title>{{ curso.nombre }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Jornada:</strong> {{ curso.jornada }}</p>
+      <p><strong>Estudiantes:</strong> {{ curso.estudiantes }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
