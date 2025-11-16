@@ -31,6 +31,9 @@ import { LandingTeacherComponent } from './page/paramaters/teacher/landing-teach
 import { LandingAttendantsComponent } from './page/business/attendants/landing-attendants/landing-attendants.component';
 import { AjustesSecurityComponent } from './page/security/user/ajustes-security/ajustes-security.component';
 import { HorarioDocenteComponent } from './page/business/group-director/horario-docente/horario-docente.component';
+import { DirectorCursosDashboardComponent } from './page/business/group-director/agenda/director-cursos-dashboard/director-cursos-dashboard.component';
+import { AgendaDirectorCursoComponent } from './page/business/group-director/agenda/agenda-director-curso/agenda-director-curso.component';
+
 
 
 export const routes: Routes = [
@@ -74,7 +77,10 @@ export const routes: Routes = [
             {path: 'aulas' , component: LandingGroupsComponent, canActivate: [esAdminGuard ]},
             {path: 'agrupación' , component: LandingGradeComponent, canActivate: [esAdminGuard]},
             {path: 'cargaAcademica' , component: LandingAcademicLoadComponent, canActivate: [esAdminGuard]},
-            {path: 'mihorario' , component: HorarioDocenteComponent, canActivate: [esAdminGuard]}
+            {path: 'mihorario' , component: HorarioDocenteComponent, canActivate: [esAdminGuard]},
+            {path: 'dashagenda' , component: DirectorCursosDashboardComponent, canActivate: [esAdminGuard]},
+            {path: 'agendadirector', component: AgendaDirectorCursoComponent, canActivate: [esAdminGuard]}
+
 
         ]
     },

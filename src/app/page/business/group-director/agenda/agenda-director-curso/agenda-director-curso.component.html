@@ -1,0 +1,105 @@
+<div class="agenda-container" [ngClass]="{'split-view': estudianteSeleccionado}">
+
+  <!-- Sección Izquierda: Listado de Estudiantes -->
+  <div class="left-section">
+    <header tuiHeader class="m-1">
+      <h1 tuiTitle>
+        <div class="col-12 d-flex">
+          <span>Estudiantes del Grupo [Nombre del Grupo]</span>
+          <p class="count">{{ students.length }} Estudiantes</p>
+        </div>
+      </h1>
+    </header>
+
+    <section class="table-container">
+      <div class="col-12 d-flex justify-content-end">
+        <!-- Buscador -->
+        <div class="actions">
+          <div class="search-box m-1">
+            <mat-icon>search</mat-icon>
+            <input #searchInput type="text" placeholder="Buscar..." (input)="onSearch(searchInput.value)" />
+          </div>
+        </div>
+      </div>
+
+      <app-listado-generico [elements]="students">
+        <ng-container contenido>
+          <section class="table-container">
+
+
+            <!-- Tabla -->
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombres</th>
+                  <th>Tipo</th>
+                  <th>Identificación</th>
+                  <th>Grupo</th>
+                  <th class="text-center">Agenda</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of paginatedUsers; track item.id) {
+                <tr>
+                  <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
+                  <td>{{ item.fullName}}
+                  <td>{{ item.acronymDocument }}
+                  <td>{{ item.identification }}</td>
+                  <td>{{ item.groupName}}</td>
+                  <td class="actions-col">
+                    <button mat-icon-button (click)="abrirAgenda(item)">
+                      <mat-icon>calendar_month</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <div class="pagination" *ngIf="totalPages > 1">
+              <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                <
+              </button>
+
+              <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+                [class.active]="currentPage === i + 1">
+                {{ i + 1 }}
+              </button>
+
+              <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                >
+              </button>
+            </div>
+          </section>
+        </ng-container>
+
+      </app-listado-generico>
+    </section>
+  </div>
+
+  <!-- Sección Derecha: Vista de la Agenda -->
+  <div class="right-section" *ngIf="estudianteSeleccionado">
+    <header class="agenda-header">
+      <h2>Agenda de {{ estudianteSeleccionado.fullName }}</h2>
+      <button mat-icon-button (click)="cerrarAgenda()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </header>
+    <section class="agenda-content">
+      <mat-tab-group>
+        <mat-tab label="Observaciones">
+          <textarea placeholder="Observaciones del estudiante..." rows="10" cols="50"></textarea>
+        </mat-tab>
+        <mat-tab label="Asistencia">
+          <textarea placeholder="Registro de asistencia..." rows="10" cols="50"></textarea>
+        </mat-tab>
+        <mat-tab label="Calificaciones">
+          <textarea placeholder="Calificaciones..." rows="10" cols="50"></textarea>
+        </mat-tab>
+      </mat-tab-group>
+    </section>
+  </div>
+
+</div>
