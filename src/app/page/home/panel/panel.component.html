@@ -1,0 +1,51 @@
+
+<div class="container-fluid g-3">
+  <div class="row gy-3">
+    <!-- Barras -->
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-semibold">Ventas vs Costos (Barras)</div>
+        <div class="card-body chart-wrapper">
+          <canvas
+            baseChart
+            [type]="barType"
+            [data]="barData"
+            [options]="barOptions">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Torta -->
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-semibold">Participación por país (Torta)</div>
+        <div class="card-body chart-wrapper">
+          <canvas
+            baseChart
+            [type]="pieType"
+            [data]="pieData"
+            [options]="pieOptions">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Línea -->
+  <div class="row gy-3 mt-0 mt-lg-2">
+    <div class="col-12">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-semibold">Usuarios activos (Línea)</div>
+        <div class="card-body chart-wrapper tall">
+          <canvas
+            baseChart
+            [type]="lineType"
+            [data]="lineData"
+            [options]="lineOptions">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
