@@ -152,9 +152,6 @@ header h1 {
   justify-content: center;
   align-items: center;
 }
-
-
-
 /* Paginación */
 .pagination {
   display: flex;
@@ -173,4 +170,43 @@ header h1 {
   background: #3f51b5;
   color: white;
   border: none;
+}
+/* Estilos para el modal simplificado */
+.modal-content {
+  min-height: 400px;
+  padding: 20px;
+}
+
+.loading-state {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loading-state p {
+  font-size: 16px;
+  color: #999;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 15px;
+    min-height: 350px;
+  }
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-in-out;
 }

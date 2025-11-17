@@ -12,6 +12,8 @@ import { AuthMainService } from '../../../service/auth/auth-main.service';
 import { Router, RouterLink } from '@angular/router';
 import { CredencialesUsuario } from '../../../global/dtos/seguridad';
 import {TuiRoot} from '@taiga-ui/core';
+import { UserService } from '../../../service/user.service';
+import { PasswordsNew } from '../../../models/security/user.model';
 
 
 
@@ -32,7 +34,8 @@ import {TuiRoot} from '@taiga-ui/core';
 })
 export class LoginMainComponent  {
   private readonly alerts = inject(TuiAlertService);
-  securityauth = inject(AuthMainService); 
+  securityauth = inject(AuthMainService);
+  userService = inject(UserService);
   router = inject(Router);
   isLoader = false;
 
@@ -42,6 +45,7 @@ export class LoginMainComponent  {
   emailRecuperacion = "";
   errorCodigo = "";
   codigoVerificado = "";
+  idRecuperadoCodigo !: number;
 
   private formBuilder = inject(FormBuilder);
 
@@ -249,31 +253,58 @@ export class LoginMainComponent  {
 
     // TODO: Aquí implementarás la lógica de envío de correo con el código
     this.emailRecuperacion = this.formRecuperar.controls.email.value!;
+
+    this.securityauth.enviarCodigo(this.emailRecuperacion).subscribe({
+      next: () => {
+        this.alerts
+          .open(`Se ha enviado un código de verificación a ${this.emailRecuperacion}`, {
+            label: 'Código enviado',
+            appearance: 'success',
+            autoClose: 4000
+          })
+          .subscribe();
+          this.pasoRecuperacion = 2;
+      },
+      error:()=>{
+        this.alerts
+          .open(`No se pudo enviar el codigo a  ${this.emailRecuperacion}`, {
+            label: 'Vuelve a digitar tu correo',
+            appearance: 'info',
+            autoClose: 4000
+          })
+          .subscribe();
+      }
+    })
     
     // Simula el envío exitoso y avanza al paso 2
-    this.alerts
-      .open(`Se ha enviado un código de verificación a ${this.emailRecuperacion}`, {
-        label: 'Código enviado',
-        appearance: 'success',
-        autoClose: 4000
-      })
-      .subscribe();
+   
 
-    this.pasoRecuperacion = 2;
   }
 
   /**
    * Reenvía el código
    */
   reenviarCodigo(): void {
-    // TODO: Implementar lógica de reenvío
-    this.alerts
-      .open('Se ha reenviado el código de verificación', {
-        label: 'Código reenviado',
-        appearance: 'info',
-        autoClose: 3000
-      })
-      .subscribe();
+    this.securityauth.enviarCodigo(this.emailRecuperacion).subscribe({
+      next: () => {
+        this.alerts
+          .open(`Se ha enviado un código de verificación a ${this.emailRecuperacion}`, {
+            label: 'Código enviado',
+            appearance: 'success',
+            autoClose: 4000
+          })
+          .subscribe();
+      },
+      error:()=>{
+        this.alerts
+          .open(`No se pudo enviar el codigo a  ${this.emailRecuperacion}`, {
+            label: 'Vuelve a digitar tu correo',
+            appearance: 'info',
+            autoClose: 4000
+          })
+          .subscribe();
+      }
+    })
     
     this.formCodigo.reset();
     this.errorCodigo = "";
@@ -297,26 +328,36 @@ export class LoginMainComponent  {
       (this.formCodigo.controls.digito5.value || '');
 
     // TODO: Aquí implementarás la lógica de verificación del código
-    console.log('Código ingresado:', codigo);
-    console.log('Email:', this.emailRecuperacion);
+    this.securityauth.validateCodigo(this.emailRecuperacion, codigo).subscribe({
+      next: (data)=>{
+        this.idRecuperadoCodigo =  data.data.id;
+        this.codigoVerificado = codigo;
+        this.alerts
+          .open('Código verificado correctamente', {
+            label: '¡Éxito!',
+            appearance: 'success',
+            autoClose: 3000
+          })
+          .subscribe();
 
-    // Simula verificación exitosa
-    this.codigoVerificado = codigo;
-    this.alerts
-      .open('Código verificado correctamente', {
-        label: '¡Éxito!',
-        appearance: 'success',
-        autoClose: 3000
-      })
-      .subscribe();
-
-    // Avanza al paso 3
-    this.pasoRecuperacion = 3;
+          // Avanza al paso 3
+          this.pasoRecuperacion = 3;
+      },
+      error: () =>{
+        this.alerts
+          .open('El codigo no es correcto', {
+            label: '¡Ups!',
+            appearance: 'error',
+            autoClose: 3000
+          })
+          .subscribe();
+      }
+    });
   }
 
   /**
    * Establece la nueva contraseña
-   */
+  */
   establecerNuevaPassword(): void {
     if(this.formNuevaPassword.invalid){
       this.formNuevaPassword.markAllAsTouched();
@@ -325,22 +366,33 @@ export class LoginMainComponent  {
 
     const nuevaPassword = this.formNuevaPassword.controls.password.value || '';
 
-    // TODO: Aquí implementarás la lógica para actualizar la contraseña
-    console.log('Email:', this.emailRecuperacion);
-    console.log('Código verificado:', this.codigoVerificado);
-    console.log('Nueva contraseña:', nuevaPassword);
+    let dataPasword : PasswordsNew = {
+      idUser: this.idRecuperadoCodigo,
+      passwordNew: nuevaPassword,
+      passwordConfirm: nuevaPassword
+    }
 
-    // Simula el restablecimiento exitoso
-    this.alerts
-      .open('Tu contraseña ha sido restablecida exitosamente', {
-        label: '¡Contraseña actualizada!',
-        appearance: 'success',
-        autoClose: 4000
-      })
-      .subscribe();
+    this.userService.changePassword(dataPasword.idUser, dataPasword.passwordNew, dataPasword.passwordConfirm).subscribe({
+      next: ()=> {
+        // Simula el restablecimiento exitoso
+        this.alerts
+          .open('Tu contraseña ha sido restablecida exitosamente', {
+            label: '¡Contraseña actualizada!',
+            appearance: 'success',
+            autoClose: 4000
+          })
+          .subscribe();
 
-    // Cierra el modal y limpia todo
-    this.cerrarRecuperarPassword();
+          // Cierra el modal y limpia todo
+          this.cerrarRecuperarPassword();
+      }, error: () => {
+
+      }
+    });
+
+  
+
+
   }
 
   /**

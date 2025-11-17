@@ -1,8 +1,8 @@
 <header tuiHeader class="m-1">
   <h1 tuiTitle>
     <div class="col-12 d-flex">
-      <span>Profesores</span>
-      <p class="count">{{ filteredTeacher.length }} Profesores</p>
+      <span>Acudientes</span>
+      <p class="count">{{ filteredTeacher.length }} Acudientes</p>
     </div>
   </h1>
   <aside tuiAccessories>
@@ -11,7 +11,7 @@
       <!-- creacion de docente -->
       <button class="btn-add" (click)="modalCommand(1)">
         <mat-icon>add_circle</mat-icon>
-        Crear Profesor
+        Crear acudiente
       </button>
     </div>
   </aside>
@@ -22,7 +22,7 @@
   <div class="col-12 row ">
     <div class="col-6">
       <div class="tabs">
-        <button [ngClass]="{'active' : idicadorActive}" (click)="cambiarStatus(1)">Activos</button>
+        <button [ngClass]="{'active' : idicadorActive}" (click)="cambiarStatus(3)">Activos</button>
         <button [ngClass]="{'active' : idicadorActive == 0}" (click)="cambiarStatus(0)">Inactivos</button>
       </div>
     </div>
@@ -40,18 +40,14 @@
 <app-listado-generico [elements]="filteredTeacher">
   <ng-container contenido>
     <section class="table-container">
-
-
       <!-- Tabla -->
       <table class="custom-table">
         <thead>
           <tr>
             <th>#</th>
             <th>Nombres</th>
-            <th>Apellidos</th>
             <th>Tipo</th>
             <th>Identificación</th>
-            <th>Teléfono</th>
             <th>Status</th>
             <th class="text-center">Acción</th>
           </tr>
@@ -60,15 +56,17 @@
           @for (item of paginatedUsers; track item.id) {
           <tr>
             <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
-            <td>{{ item.fullName}}</td>
-            <td>{{ item.lastName}}</td>
+            <td>{{ item.fisrtName}}</td>
             <td>{{ item.acronymDocument }}</td>
             <td>{{ item.identification }}</td>
-            <td>{{ item.phone }}</td>
             <td>
-              <mat-slide-toggle [checked]="item.status === 1" (change)="logical($event, item.id)"></mat-slide-toggle>
+              <mat-slide-toggle [checked]="item.status === 3" (change)="logical($event, item.id)"></mat-slide-toggle>
             </td>
             <td class="actions-col">
+              <button mat-icon-button (click)="goToStudent(item.id)">
+                <mat-icon matTooltip="Mi familia">family_restroom</mat-icon>
+              </button>
+
               <button mat-icon-button (click)="modalCommand(2, item.id)">
                 <mat-icon>edit</mat-icon>
               </button>
@@ -77,7 +75,7 @@
                     title: 'Confirmacion',
                     text: '¿Deseas borrar este registro?',
                     showCancelButton: true
-                }" (confirm)="deleteRegister(item.id, item.personId)">
+                }" (confirm)="deleteRegister(item.id, item.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </td>
@@ -106,7 +104,7 @@
 </app-listado-generico>
 
 
-<ng-template let-observer [tuiDialogOptions]="{label: titleTeacher, size: 'l'}" [(tuiDialog)]="open" >
+<ng-template let-observer [tuiDialogOptions]="{label: titleTeacher, size: 'l'}" [(tuiDialog)]="open">
   <div class="modal-content">
       <app-form-todos [isUser]="isUser" [modalInfo]="modalInfo" [model]="modelUpdate" (posteoForm)="handleSubmit($event)"></app-form-todos>
   </div>

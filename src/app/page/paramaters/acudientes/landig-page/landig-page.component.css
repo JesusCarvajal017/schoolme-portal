@@ -3,11 +3,27 @@ header h1 {
   font-size: 20px;
   font-weight: 600;
 }
-header .count {
+
+.count {
+  text-align: center;
+  width: 100px;
+  border: 1.5px solid #000;
+  border-radius: 10px;
   font-size: 14px;
   color: #666;
   margin-left: 8px;
-  font-weight: normal;
+  font-weight: bold;
+  /* display: inline-block; */
+}
+
+.titulo-tabla{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 25px !important;
+}
+
+.container-duo{
+  display: flex;
+  align-items: center;
 }
 
 .btn-add {
@@ -20,6 +36,7 @@ header .count {
   font-weight: 500;
   color: #333;
   text-decoration: none;
+  /* width: 100px !important; */
 }
 .btn-add mat-icon {
   font-size: 20px;
@@ -88,9 +105,11 @@ header .count {
 /* Tabla */
 .custom-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
+  /* height: 10px; */
+  /* border-spacing: 0 8px; */
+  /* overflow-y: ; */
 }
+
 .custom-table thead {
   background: #f9f9f9;
 }
@@ -100,16 +119,20 @@ header .count {
   font-size: 14px;
   font-weight: 600;
   color: #555;
+  /* height: 20px !important; */
 }
 .custom-table td {
   padding: 12px;
   font-size: 14px;
   background: white;
   border-bottom: 1px solid #eee;
+  /* height: 20px !important; */
 }
 .custom-table tr:hover td {
   background: #f7f7f7;
 }
+
+
 /* Columna de acciones */
 .actions-col {
   display: flex;
@@ -129,9 +152,6 @@ header .count {
   justify-content: center;
   align-items: center;
 }
-
-
-
 /* Paginación */
 .pagination {
   display: flex;
@@ -151,50 +171,42 @@ header .count {
   color: white;
   border: none;
 }
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-/* Agregar estos estilos a tu landing-rol.component.css existente */
-
-/* Estilos para el modal */
+/* Estilos para el modal simplificado */
 .modal-content {
-  padding: 0;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 15px 20px;
-  border-top: 1px solid #e0e0e0;
-  background-color: #f8f9fa;
-}
-
-/* Ajustar el formulario para el modal */
-::ng-deep .modal-content .form-page {
-  margin: 0;
+  min-height: 400px;
   padding: 20px;
 }
 
-/* Ocultar el botón cancelar del formulario cuando está en modal */
-::ng-deep .modal-content .form-page > div:last-child a {
-  display: none;
+.loading-state {
+  padding: 60px 20px;
+  text-align: center;
 }
 
-/* Mejorar la apariencia del botón crear */
-.btn-add {
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.loading-state p {
+  font-size: 16px;
+  color: #999;
 }
 
-.btn-add:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+/* Responsivo */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 15px;
+    min-height: 350px;
+  }
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-in-out;
 }

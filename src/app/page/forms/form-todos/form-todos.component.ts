@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, input, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { CreateModelPerson, FormPersonValue, Person, PersonComplete } from '../../../models/security/person.model';
+import { CreateModelPerson, PersonComplete } from '../../../models/security/person.model';
 import { Router, RouterLink } from '@angular/router';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -14,7 +14,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { DocumentTypeService } from '../../../service/parameters/documentType.service';
 import { Gender, GenderType } from '../../../global/model/enumGenero';
 
-import { MatIcon, MatIconModule } from "@angular/material/icon";
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
 
@@ -38,13 +37,12 @@ import { DataBasicService } from '../../../service/business/dataBasic.service';
 import { UserService } from '../../../service/user.service';
 import { AddressValid } from '../../../utilities/validations/validaciones';
 
-import { TuiError, TuiOption } from '@taiga-ui/core';
+import { TuiError} from '@taiga-ui/core';
 import { TuiStringHandler } from '@taiga-ui/cdk/types';
 import { TuiTextfield, TuiDataList} from "@taiga-ui/core";
 import { CommonModule } from '@angular/common';
 import { TuiChevron, TuiSelect, TuiInputNumber, TuiInputDate} from '@taiga-ui/kit';
 import { infoModal } from '../../../models/global/info-modal.model';
-import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-form-todos',
@@ -63,10 +61,7 @@ import { concat } from 'rxjs';
     TuiChevron,
     TuiSelect,
     TuiInputNumber,
-    TuiInputDate,
-  
-   
-  
+    TuiInputDate
 ],
   templateUrl: './form-todos.component.html',
   styleUrl: './form-todos.component.css'
@@ -85,11 +80,9 @@ export class FormTodosComponent {
 
   // ======================= start salidas de componente =======================
 
-  // emision de data en caso de ser un componente reutilizable
-  // @Output()
-  // posteoForm = new EventEmitter<CreateModelPerson>();
-
   // ======================= end salidas de componente =======================
+
+  
   // ======================== start propiedades de configuración ========================
 
   activadorUser = new FormControl<boolean>(false, { nonNullable: true });
@@ -168,6 +161,8 @@ export class FormTodosComponent {
 
   }
 
+  private _hydrating = false;  
+
   // ================================ start formularios reactivos ================================
 
   private readonly formBuilder = inject(FormBuilder);
@@ -207,8 +202,8 @@ export class FormTodosComponent {
     fisrtName: ['', {validators: [Validators.required]}],
     secondName: [''],
     lastName: ['', {validators: [Validators.required]}],
+    email: ['', [Validators.email, (control: AbstractControl): ValidationErrors | null => this.isUser ? Validators.required(control) : null]],
     secondLastName: [''],
-    email: ['', [Validators.required, Validators.email]],
     identification: new FormControl<number | null>(null, { validators: [Validators.required] }),
     phone: new FormControl<number | null>(null, { validators: [Validators.required] }),
     gender: new FormControl<number | null>(null, { validators: [Validators.required] }),
@@ -246,8 +241,14 @@ export class FormTodosComponent {
   // ==================================== end manejador de errores ==================================================
   ngOnChanges(): void {
     if (!this.model) return;
-    const day = this.model.dataBasic?.brithDate ? parseTuiDay(this.model.dataBasic.brithDate) : null;
 
+    this._hydrating = true;
+
+    const day = this.model.dataBasic?.brithDate
+      ? parseTuiDay(this.model.dataBasic.brithDate)
+      : null;
+
+    // Parchea TODO excepto munisipalityId (aún no hay lista)
     this.form.patchValue({
       fisrtName: this.model.fisrtName,
       secondName: this.model.secondName,
@@ -262,17 +263,40 @@ export class FormTodosComponent {
       stratumStatus: !!this.model.dataBasic?.stratumStatus,
       materialStatusId: this.model.dataBasic?.materialStatusId ?? null,
       epsId: this.model.dataBasic?.epsId ?? null,
-      munisipalityId: this.model.dataBasic?.munisipalityId ?? null,
-      departamentId: this.model.dataBasic.departamentId, // si aplica
+      departamentId: this.model.dataBasic?.departamentId ?? null,
       brithDate: day,
-      status: !!this.model.status ? true : false
-    });
-    
-      
-      // sincroniza estado visual
+      status: !!this.model.status,
+      // NO pongas aún munisipalityId
+    }, { emitEvent: false });
+
+    // Si viene departamento en el modelo, carga municipios y recién ahí pon munisipalityId
+    const depto = this.model.dataBasic?.departamentId;
+    const muni  = this.model.dataBasic?.munisipalityId ?? null;
+
+    if (depto != null) {
+      this.servicesMuncipality.MunicipiosDepart(depto).subscribe({
+        next: (lista) => {
+          this.municipality = lista;
+          // Ahora sí, asigna el municipio SIN emitir
+          this.form.controls.munisipalityId.setValue(muni, { emitEvent: false });
+          this._hydrating = false;
+          // sincroniza estado visual
+          this.form.markAsPristine();
+          this.form.updateValueAndValidity(); // ya sin {emitEvent:false}
+        },
+        error: (err) => {
+          console.log(err);
+          this._hydrating = false;
+        }
+      });
+    } else {
+      // No hay departamento -> limpia municipios
+      this.municipality = [];
+      this.form.controls.munisipalityId.setValue(null, { emitEvent: false });
+      this._hydrating = false;
       this.form.markAsPristine();
-      this.form.updateValueAndValidity({ emitEvent: false });
-    // this.form.patchValue(values); // cargar los datos en el formulario
+      this.form.updateValueAndValidity();
+    }
   }
 
   // =================================== start metodos del componente ===================================
@@ -291,7 +315,7 @@ export class FormTodosComponent {
       documentTypeId: dataForm.documentTypeId ?? 0,
       phone: dataForm.phone ?? 0,
       gender: dataForm.gender ?? 0,
-      email: dataForm.email,
+      email: dataForm.email ?? '',
       status: this.form.controls['status'].value ? 1 : 0,
       dataBasic: {
         brithDate: dataForm.brithDate ? formatTuiDay(dataForm.brithDate) : '',
@@ -340,21 +364,6 @@ export class FormTodosComponent {
 
   }
 
-
-  // this.router.navigate(['/dashboard/todos']);
-  emitirValoresForm(){
-    let capture = this.form.getRawValue() ; // caputar los datos del formulario, con los tipo estrictamente definididos
-
-    console.log(capture);
-
-    const dataPerson : any = {
-      ...capture,
-      status: capture.status ? 1 : 0, // convertir el valor booleano a un valor numerico como lo establece en la db
-    }
-
-    // this.posteoForm.emit(dataPerson);
-  }
-
   guardarCambios(){
 
   }
@@ -394,8 +403,7 @@ export class FormTodosComponent {
   private _departChangeBound = false;
 
   cargarMunicipio(): void {
-    alert('Se esta disparando');
-
+  
     // carga inicial si vienes con model
     if (this.model?.dataBasic?.departamentId) {
       this.servicesMuncipality

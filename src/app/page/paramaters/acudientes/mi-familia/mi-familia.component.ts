@@ -1,13 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 // angular material
-import { MatCardModule } from '@angular/material/card';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatButtonModule } from '@angular/material/button';
+
 
 // taiga-ui
 import { TuiHeader } from '@taiga-ui/layout';
@@ -19,21 +15,29 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
 
 // servicios y modelos
-import { TeacherService } from '../../../../service/parameters/teacher.service';
-import { Teacher, CreateModelTeacher } from '../../../../models/parameters/teacher.model';
+import { Teacher } from '../../../../models/parameters/teacher.model';
 import { PersonService } from '../../../../service/person.service';
 import { CreateModelPerson, PersonComplete } from '../../../../models/security/person.model';
-import { FormTeacherComponent } from "../../../forms/form-teacher/form-teacher.component";
 import { FormTodosComponent } from "../../../forms/form-todos/form-todos.component";
 import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
 import { infoModal } from '../../../../models/global/info-modal.model';
-import { ThemeService } from 'ng2-charts';
 import { teacherComplete } from '../../../../models/business/teacher.model';
+import { Attendants, CreateModelAttendants } from '../../../../models/parameters/attendants.model';
+import { AttendantsService } from '../../../../service/parameters/attendants.service';
+import { MatTooltipModule} from '@angular/material/tooltip';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { ModalMaterialComponent } from "../../../../components/modal-material/modal-material.component";
+import { TableStudentsListComponent } from "../../student/table-students-list/table-students-list.component";
+import { getRelationrNameById } from '../../../../global/model/enumGenero';
 
 @Component({
-  standalone: true,
-  selector: 'app-landing-teacher',
+  selector: 'app-mi-familia',
   imports: [
+    MatIcon,
     CommonModule,
     TuiTitle,
     MatSidenavModule,
@@ -48,16 +52,20 @@ import { teacherComplete } from '../../../../models/business/teacher.model';
     TuiDialog,
     TuiHint,
     FormTodosComponent,
-    ListadoGenericoComponent
+    ListadoGenericoComponent,
+    MatTooltipModule,
+    RouterLink,
+    ModalMaterialComponent
 ],
-  templateUrl: './landing-teacher.component.html',
-  styleUrl: './landing-teacher.component.css',
+  templateUrl: './mi-familia.component.html',
+  styleUrl: './mi-familia.component.css'
 })
-export class LandingTeacherComponent implements OnInit {
-  
+
+export class MiFamiliaComponent {
+
   // Modelos
-  teacher: Teacher[] = [];
-  filteredTeacher: Teacher[] = [];
+  attendants: Attendants[] = [];
+  filteredTeacher: Attendants[] = [];
   modelTeacher?: Teacher;
 
   model?: teacherComplete;
@@ -90,14 +98,30 @@ export class LandingTeacherComponent implements OnInit {
   titleForm!: string;
 
   isUser !: boolean;
+  
+  idPersonAttendans !: number;
+
+  transpRelation(id: number){
+    return getRelationrNameById(id);
+  }
+
 
   // Servicios
   private readonly alerts = inject(TuiAlertService);
-  private serviceTeacher = inject(TeacherService);
-  private servicePerson = inject(PersonService)
+  private serviceAttendants = inject(AttendantsService);
+  private servicePerson = inject(PersonService);
+
+  route = inject(ActivatedRoute);
+
+
+  router = inject(Router);
 
   ngOnInit(): void {
     // carga de informacion de la tabla
+    const id = this.route.snapshot.paramMap.get('id') ?? "";
+    this.idPersonAttendans = parseInt(id);
+
+
     this.cargarData();
   }
 
@@ -154,10 +178,10 @@ export class LandingTeacherComponent implements OnInit {
   queryId(id: number) : void {
 
     // consulta la entidad por medio del id la entidad propia
-    this.serviceTeacher.ObtenerComplete(id).subscribe({
+    this.servicePerson.ObtenerComplete(id).subscribe({
       next: (data)=>{
         // modelo de person complete es decir, person <-> databasic
-        this.modelUpdate = data.person;
+        this.modelUpdate = data;
       }
     });
   }
@@ -167,55 +191,7 @@ export class LandingTeacherComponent implements OnInit {
     this.idperson = 0;
   }
 
-  // Modal para crear o editar
-  handleSubmit(data: CreateModelPerson): void {
-    if(this.modelUpdate){
 
-      console.log("pasa por aqui update")
-
-      // del modelo de person sacamos el id de la persona
-      var prId = this.modelUpdate.id ?? 0;
-
-      // actualizar person junto a databasic
-      this.servicePerson.actulizarComplete(prId,data).subscribe({
-        next: () =>{
-          this.closeModal();
-          this.cargarData(this.idicadorActive);
-          Swal.fire("Exitoso", "docente actualizado correctamente", "success");
-        }, 
-        error: (err) => {
-          console.log(err);
-        }
-      });
-    }else{
-      // registrar
-      this.servicePerson.crearComplete(data,3).subscribe({
-        next: (res) =>{
-          
-          // lista informacion necesaria para el registro del docente
-          var teacher: CreateModelTeacher = {
-            personId: res.id ?? 0,
-            status:1
-          }
-          
-          this.serviceTeacher.crear(teacher).subscribe({
-            next:()=>{
-              console.log("se creo el profesor")
-            }
-          });
-          
-          Swal.fire("Exitoso", "docente creado correctamente", "success");
-          
-          this.closeModal();
-          this.cargarData(this.idicadorActive);
-        }, 
-        error: (err) => {
-          console.log(err);
-        }
-      });
-    }
-
-  }
 
   closeModal(): void {
     this.open = false;
@@ -230,8 +206,8 @@ export class LandingTeacherComponent implements OnInit {
   }
 
   cargarData(status: number = 1): void {
-    this.serviceTeacher.obtenerTodos(status).subscribe((data) => {
-      this.teacher = data;
+    this.serviceAttendants.obtenerRelacionNinos(status,this.idPersonAttendans).subscribe((data) => {
+      this.attendants = data;
       this.applyFilters();
     });
   }
@@ -242,11 +218,11 @@ export class LandingTeacherComponent implements OnInit {
   }
 
   applyFilters(): void {
-    let filtered = this.teacher;
+    let filtered = this.attendants;
 
     if (this.searchTerm.trim() !== '') {
-      filtered = this.teacher.filter((r) =>
-        `${r.fullName} ${r.identification}`
+      filtered = this.attendants.filter((r) =>
+        `${r.nameAttendant} ${r.identification}`
           .toLowerCase()
           .includes(this.searchTerm)
       );
@@ -274,7 +250,7 @@ export class LandingTeacherComponent implements OnInit {
   logical(event: any, id: number): void {
     let value: number = event.checked ? 1 : 0;
 
-    this.serviceTeacher.eliminarLogico(id, value).subscribe({
+    this.serviceAttendants.eliminarLogico(id, value).subscribe({
       next: () => {
         this.cargarData(this.idicadorActive);
         this.showNotification('Se ha cambiado el estado');
@@ -283,16 +259,18 @@ export class LandingTeacherComponent implements OnInit {
   }
 
   deleteRegister(id: number, personId: number): void {
-
-    this.servicePerson.eliminar(personId).subscribe({
+    this.serviceAttendants.eliminar(personId).subscribe({
       next: ()=>{
-        this.alerts.open("Limpieza aplicada", { label: 'Dococente borrado con exito!' }).subscribe();
+        this.alerts.open("Relación desvinculad", { label: 'Desviculación exitosa!' }).subscribe();
+        this.cargarData();
+      },
+      error: (error) => {
+        this.alerts.open("Ups!", { label: 'La relacion no pude borrarse!' }).subscribe();
       }
     });
+  }
 
-    this.serviceTeacher.eliminar(id).subscribe(() => {
-      Swal.fire('Exitoso', 'El registro ha sido eliminado correctamente', 'success');
-      this.cargarData(this.idicadorActive);
-    });
+  goToStudent(id: number) {
+    this.router.navigate(['/dashboard/acudientes', id]);
   }
 }

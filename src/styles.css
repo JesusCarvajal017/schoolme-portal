@@ -4,7 +4,6 @@
     --second:  #ffffff10;
 }
 
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -12,7 +11,142 @@ a{
     text-decoration: none;
 }
 
-
 .container-app{
     height: 100vh;
+}
+
+.hover-portal{
+    border-radius: 50%;
+}
+
+.hover-portal:hover{
+    background-color: #00092845;
+}
+
+/* =========================================================
+   1. CAMPO CERRADO (mat-form-field con mat-select)
+   Usa la clase: class="tui-like-select"
+   ========================================================= */
+
+.mat-mdc-form-field.tui-like-select .mat-mdc-text-field-wrapper {
+  border-radius: 14px !important;                  /* cajita redondeada */
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important;
+  /* OJO: sin overflow:hidden para no cortar el label flotante */
+}
+
+/* Quita el overlay morado de Material */
+.mat-mdc-form-field.tui-like-select .mat-mdc-form-field-focus-overlay {
+  background: transparent !important;
+}
+
+/* Borde gris suave tipo Taiga */
+.mat-mdc-form-field.tui-like-select .mdc-notched-outline__leading,
+.mat-mdc-form-field.tui-like-select .mdc-notched-outline__notch,
+.mat-mdc-form-field.tui-like-select .mdc-notched-outline__trailing {
+  border-color: #e6e6ea !important;
+  border-width: 1px !important;
+}
+
+/* Radios bien repartidos para evitar “doble esquina” */
+.mat-mdc-form-field.tui-like-select .mdc-notched-outline__leading {
+  border-radius: 14px 0 0 14px !important;
+}
+.mat-mdc-form-field.tui-like-select .mdc-notched-outline__notch {
+  border-radius: 0 !important;
+}
+.mat-mdc-form-field.tui-like-select .mdc-notched-outline__trailing {
+  border-radius: 0 14px 14px 0 !important;
+}
+
+/* Altura y padding del contenido */
+.mat-mdc-form-field.tui-like-select .mat-mdc-form-field-flex {
+  min-height: 48px !important;
+  padding: 4px 18px !important;
+}
+
+/* Label flotante (texto “Genero”) */
+.mat-mdc-form-field.tui-like-select .mat-mdc-floating-label {
+  color: #9ca3af !important;
+  font-weight: 400 !important;
+}
+
+/* Valor seleccionado */
+.mat-mdc-form-field.tui-like-select .mat-mdc-select-value-text {
+  color: #6b7280 !important;
+}
+
+/* Flechita del select */
+.mat-mdc-form-field.tui-like-select .mat-mdc-select-arrow svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: #9ca3af !important;
+}
+
+/* Estado FOCUS: borde morado suave + glow */
+.mat-mdc-form-field.tui-like-select.mat-focused
+.mdc-notched-outline__leading,
+.mat-mdc-form-field.tui-like-select.mat-focused
+.mdc-notched-outline__notch,
+.mat-mdc-form-field.tui-like-select.mat-focused
+.mdc-notched-outline__trailing {
+  border-color: #b3b3ff !important;
+}
+
+.mat-mdc-form-field.tui-like-select.mat-focused
+.mat-mdc-text-field-wrapper {
+  box-shadow: 0 0 0 3px rgba(179, 179, 255, 0.18) !important;
+}
+
+/* Disabled */
+.mat-mdc-form-field.tui-like-select.mat-form-field-disabled
+.mat-mdc-text-field-wrapper {
+  background-color: #f6f6f9 !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field.tui-like-select.mat-form-field-disabled
+.mdc-notched-outline__leading,
+.mat-mdc-form-field.tui-like-select.mat-form-field-disabled
+.mdc-notched-outline__notch,
+.mat-mdc-form-field.tui-like-select.mat-form-field-disabled
+.mdc-notched-outline__trailing {
+  border-color: #e5e7eb !important;
+}
+
+/* =========================================================
+   2. PANEL DESPLEGADO (lista de opciones)
+   Usa: panelClass="tui-like-select-panel"
+   ========================================================= */
+
+.tui-like-select{
+    width: 100%;
+}
+
+.tui-like-select-panel {
+  border-radius: 14px !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16) !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  background: #ffffff !important;
+}
+
+/* Opciones */
+.tui-like-select-panel .mat-mdc-option {
+  font-size: 14px !important;
+  color: #374151 !important;
+  padding: 10px 18px !important;
+  border-radius: 8px !important;
+}
+
+/* Hover */
+.tui-like-select-panel .mat-mdc-option:hover {
+  background-color: #f3f4ff !important;
+}
+
+/* Seleccionado */
+.tui-like-select-panel
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: #e0e7ff !important;
+  color: #4338ca !important;
 }

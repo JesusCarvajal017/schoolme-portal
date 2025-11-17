@@ -24,9 +24,13 @@ import { StudentService } from '../../../../service/parameters/student.service';
 import { Student, CreateModelStudent } from '../../../../models/parameters/student.model';
 import { PersonService } from '../../../../service/person.service';
 import { CreateModelPerson, PersonComplete } from '../../../../models/security/person.model';
-import { FormStudentComponent } from "../../../forms/form-student/form-student.component";
-import { FormTodosComponent } from "../../../forms/form-todos/form-todos.component";
 import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
+import { MatMenu, MatMenuModule } from "@angular/material/menu";
+import { infoModal } from '../../../../models/global/info-modal.model';
+
+import { FormTodosComponent } from "../../../forms/form-todos/form-todos.component";
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { GradeService } from '../../../../service/parameters/grade.service';
 
 @Component({
   standalone: true,
@@ -45,10 +49,9 @@ import { ListadoGenericoComponent } from "../../../../components/listado-generic
     SweetAlert2Module,
     TuiDialog,
     TuiHint,
-    TuiInputModule,
-    FormStudentComponent,
-    FormTodosComponent,
-    ListadoGenericoComponent
+    ListadoGenericoComponent,
+    MatButtonModule, MatMenuModule,
+    FormTodosComponent
 ],
   templateUrl: './landing-student.component.html',
   styleUrl: './landing-student.component.css',
@@ -59,6 +62,7 @@ export class LandingStudentComponent implements OnInit {
   students: Student[] = [];
   filteredStudents: Student[] = [];
   modelStudent?: Student;
+  
   modelPerson?: PersonComplete;
   
   idicadorActive: number = 1;
@@ -74,11 +78,24 @@ export class LandingStudentComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 1;
 
-  // Servicios
+  // ====================================== Start Servicios ======================================
+
   private readonly alerts = inject(TuiAlertService);
   private serviceStudent = inject(StudentService);
   private servicePerson = inject(PersonService);
+  private servicesGrade = inject(GradeService);
+
+  private readonly formBuilder = inject(FormBuilder);
+
+
+  formGrade = this.formBuilder.nonNullable.group({
+    gradeId:  new FormControl<number | null>(null, { validators: [Validators.required] })
+  })
+
   private router = inject(Router);
+
+  // ====================================== Start Servicios ======================================
+
 
   ngOnInit(): void {
     this.cargarData();
@@ -88,65 +105,121 @@ export class LandingStudentComponent implements OnInit {
     this.alerts.open(message, { label: 'Estado actualizado!' }).subscribe();
   }
 
+  isUser = false;
+  idperson!: number;
+  modalInfo!: infoModal;
+  action !: number;
+
+
+  protected  modalCommand(action: number, id: number = 0): void { 
+    if(action == 2){
+      // input de correo electronico
+      this.isUser= false;
+
+      var infoM : infoModal = {
+        title : "actualizacion de datos",
+        titleButton : "actualizar",
+        descripcion : ""
+      }
+
+      // id de la entidad de teacher 
+      // esto va a retoranar la informacion de la persona 
+      this.idperson = id;
+
+      // carga del modelo de person complete
+      this.queryId(id);
+
+      // informacion del modal para el usuario
+      this.modalInfo = infoM;
+
+    }else if(action == 1){
+
+      // limpiar la data, para evitar que aparezcan llenos los campos al registrar
+      this.clearData();
+
+      // input de correo electronico, para el caso de crear person con user
+      this.isUser= false;
+
+      var infoM : infoModal = {
+        title : "Registrar datos",
+        titleButton : "Registrar",
+        descripcion : ""
+      }
+      
+      // informacion del modal para el usuario
+      this.modalInfo = infoM;
+    }
+    else{
+      this.clearData();
+    }
+
+    this.open = true;
+  }
+
+ // carga el modelo de person, no de la entidad propia
+  queryId(id: number) : void {
+
+    // consulta la entidad por medio del id la entidad propia
+    this.serviceStudent.ObtenerComplete(id).subscribe({
+      next: (data)=>{
+        // modelo de person complete es decir, person <-> databasic
+        this.modelPerson = data.person;
+      }
+    });
+  }
+
+  clearData() : void{
+    this.modelPerson =  null!;
+    this.idperson = 0;
+  }
+
   // Modal para crear o editar
-  protected modalCommand(title: string, student?: Student): void {
-    this.titleStudent = title;
-    this.isEditMode = !!student;
-    this.modelStudent = student;
+  handleSubmit(data: CreateModelPerson): void {
+    if(this.modelPerson){
+      // id de persona
+      var prId = this.modelPerson.id ?? 0;
 
-    // Si estamos editando, cargar la información completa de la persona
-    if (this.isEditMode && student?.personId) {
-      this.servicePerson.ObtenerComplete(student.personId).subscribe({
-        next: (person) => {
-          this.modelPerson = person;
-          this.open = true;
-        },
+      // actualizar
+      this.servicePerson.actulizarComplete(prId,data).subscribe({
+        next: () =>{
+          Swal.fire("Exitoso", "Estudiante actualizado correctamente", "success");
+          this.cargarData(this.idicadorActive);
+          this.closeModal();
+        }, 
         error: (err) => {
-          console.error('Error cargando persona:', err);
-          Swal.fire("Error", "No se pudo cargar la información de la persona", "error");
+          console.log(err);
         }
       });
-    } else {
-      this.modelPerson = undefined;
-      this.open = true;
-    }
-  }
-
-  // Manejar submit del formulario de estudiante (solo para crear)
-  handleStudentSubmit(data: CreateModelStudent): void {
-    if (!this.isEditMode) {
-      // Crear nuevo estudiante
-      this.serviceStudent.crear(data).subscribe({
-        next: () => {
+    }else{
+      // registrar
+      this.servicePerson.crearComplete(data).subscribe({
+        next: (res) =>{
+          
+          // lista informacion necesaria para el registro del docente
+          let student: CreateModelStudent = {
+            personId: res.id ?? 0,
+            status:1
+          }
+          
+          this.serviceStudent.crear(student).subscribe({
+            next:()=>{
+              console.log("se creo el estudiante")
+            }
+          });
+          
           Swal.fire("Exitoso", "Estudiante creado correctamente", "success");
+          
           this.closeModal();
           this.cargarData(this.idicadorActive);
-        },
+        }, 
         error: (err) => {
-          Swal.fire("Error", "No se pudo crear el estudiante", "error");
-          console.error(err);
+          console.log(err);
         }
       });
     }
+
   }
 
-  // Manejar submit del formulario de persona (solo para editar)
-  handlePersonSubmit(data: CreateModelPerson): void {
-    if (this.isEditMode && this.modelStudent?.personId) {
-      // Actualizar información de la persona
-      this.servicePerson.actulizarComplete(this.modelStudent.personId, data).subscribe({
-        next: () => {
-          Swal.fire("Exitoso", "Información actualizada correctamente", "success");
-          this.closeModal();
-          this.cargarData(this.idicadorActive);
-        },
-        error: (err) => {
-          Swal.fire("Error", "No se pudo actualizar la información", "error");
-          console.error(err);
-        }
-      });
-    }
-  }
 
   closeModal(): void {
     this.open = false;
@@ -163,6 +236,7 @@ export class LandingStudentComponent implements OnInit {
   cargarData(status: number = 1): void {
     this.serviceStudent.obtenerTodos(status).subscribe((data) => {
       this.students = data;
+      // console.log(this.students);
       this.applyFilters();
     });
   }
@@ -218,5 +292,14 @@ export class LandingStudentComponent implements OnInit {
       Swal.fire('Exitoso', 'El registro ha sido eliminado correctamente', 'success');
       this.cargarData(this.idicadorActive);
     });
+  }
+
+
+
+
+
+  matricula : boolean = false;
+  activeMatricula(id: number){
+
   }
 }

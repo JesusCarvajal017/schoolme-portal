@@ -60,9 +60,6 @@
             </div>
         </div>
 
-
-
-
         <!-- Muestra esto a partir de los 1200px  -->
         <div class="d-none d-xl-block">
             <div class="col-12 row p-0">
@@ -131,7 +128,7 @@
 
 <!-- Modal de recuperar contraseña - Paso 1: Ingresar correo -->
 @if (mostrarModalRecuperar && pasoRecuperacion === 1) {
-    <div class="modal-overlay" (click)="cerrarRecuperarPassword()">
+    <div class="modal-overlay">
         <div class="modal-recuperar" (click)="$event.stopPropagation()">
             <div class="modal-header-custom">
                 <h3>Recuperar contraseña</h3>
@@ -175,7 +172,7 @@
 
 <!-- Modal de recuperar contraseña - Paso 2: Ingresar código -->
 @if (mostrarModalRecuperar && pasoRecuperacion === 2) {
-    <div class="modal-overlay" (click)="cerrarRecuperarPassword()">
+    <div class="modal-overlay">
         <div class="modal-recuperar" (click)="$event.stopPropagation()">
             <div class="modal-header-custom">
                 <h3>Verificar código</h3>
@@ -265,7 +262,7 @@
 
 <!-- Modal de recuperar contraseña - Paso 3: Nueva contraseña -->
 @if (mostrarModalRecuperar && pasoRecuperacion === 3) {
-    <div class="modal-overlay" (click)="cerrarRecuperarPassword()">
+    <div class="modal-overlay">
         <div class="modal-recuperar" (click)="$event.stopPropagation()">
             <div class="modal-header-custom">
                 <h3>Nueva contraseña</h3>

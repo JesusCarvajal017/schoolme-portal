@@ -1,0 +1,28 @@
+.custom-table {
+  width: 100%;
+  /* height: 10px; */
+  /* border-spacing: 0 8px; */
+  /* overflow-y: ; */
+}
+
+.custom-table thead {
+  background: #f9f9f9;
+}
+.custom-table th {
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  /* height: 20px !important; */
+}
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  /* height: 20px !important; */
+}
+.custom-table tr:hover td {
+  background: #f7f7f7;
+}

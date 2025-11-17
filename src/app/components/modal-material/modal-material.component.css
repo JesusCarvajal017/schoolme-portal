@@ -1,0 +1,15 @@
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  /* width: 100px !important; */
+}
+.btn-add mat-icon {
+  font-size: 20px;
+}
