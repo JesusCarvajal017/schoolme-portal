@@ -1,0 +1,230 @@
+:root {
+  --azul-oscuro: #000826;
+  --azul-rey: #1A157E;
+  --azul-medio: #3A84B6;
+  --lavanda: #F3E9FF;
+  --dorado: #F2C41E;
+}
+
+.contenedor-futurista {
+  display: flex;
+  height: 80vh;
+  background: linear-gradient(135deg, #000928, #3582B9);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.contenedor-futurista::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: particulas 20s ease-in-out infinite;
+}
+
+@keyframes particulas {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-10px); }
+}
+
+/* Sección izquierda (días) */
+.seccion-dias {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff00, #ffffff00);
+  border-radius: 25px;
+  margin: 20px;
+  box-shadow: 0 8px 20px rgba(3, 17, 97, 0.877);
+}
+
+.dias-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
+.boton-dia {
+  width: 95%;
+  padding: 25px 20px;
+  background: rgb(255, 255, 255);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  box-shadow: 0 0px 0px rgb(3, 3, 17), inset 0 0px 0 rgb(11, 8, 51);
+  border: 1px solid rgba(16, 8, 76, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  color: #000000;
+  font-size: 1.2em;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transform: scale(1);
+}
+
+.boton-dia::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #000c1233, transparent);
+  transition: left 0.4s ease;
+}
+
+.boton-dia:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: #000826;
+  box-shadow: 0 0 20px rgba(19, 94, 138);
+}
+
+.boton-dia:hover::before {
+  left: 100%;
+}
+
+.boton-dia.activo {
+  background: var(--primary);
+  box-shadow: 0 0 30px #020357;
+  /* transform: scale(1.05); */
+  color: #ffffff;
+  /* animation: springExpand 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); */
+}
+
+@keyframes springExpand {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1.05); }
+}
+
+.boton-dia:not(.activo) {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+/* Sección derecha (panel de cursos) */
+.seccion-cursos {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1vb;
+  margin: 1vb;
+  position: relative;
+}
+
+.panel-cursos {
+  width: 90%;
+  max-height: 75vh;
+  background: linear-gradient(135deg, var(--primary), rgba(5, 37, 58, 0.85));
+  backdrop-filter: blur(10px);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  overflow-y: auto;
+  animation: entradaPanel 0.5s ease-out;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes entradaPanel {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.titulo-panel {
+  color: #ffffff;
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 0 15px rgb(0, 0, 0);
+}
+
+.lista-cursos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tarjeta-curso {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+  border-radius: 18px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: staggeredFadeIn 0.6s ease-out both;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+
+@keyframes staggeredFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tarjeta-curso:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(30, 196, 242, 0.4);
+}
+
+.nombre-curso {
+  color: #000000;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.hora-curso {
+  color: #000000;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.aula-curso {
+  color: #000000;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.estudiantes-curso {
+  color: #091ab5;
+  font-size: 0.9em;
+}
+
+/* Responsividad básica */
+@media (max-width: 768px) {
+  .contenedor-futurista {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .seccion-dias {
+    flex: none;
+    height: auto;
+    margin: 10px;
+  }
+
+  .seccion-cursos {
+    flex: none;
+    margin: 10px;
+  }
+
+  .panel-cursos {
+    width: 95%;
+    max-height: none;
+  }
+}

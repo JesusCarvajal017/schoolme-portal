@@ -32,6 +32,10 @@ import { PanelComponent } from './page/home/panel/panel.component';
 import { LandingComponent } from './page/home/landing-page/landing.component';
 import { LandigPageComponent } from './page/paramaters/acudientes/landig-page/landig-page.component';
 import { MiFamiliaComponent } from './page/paramaters/acudientes/mi-familia/mi-familia.component';
+import { HorarioDocenteComponent } from './page/business/group-director/horario-docente/horario-docente.component';
+import { DirectorCursosDashboardComponent } from './page/business/group-director/agenda/director-cursos-dashboard/director-cursos-dashboard.component';
+import { AgendaDirectorCursoComponent } from './page/business/group-director/agenda/agenda-director-curso/agenda-director-curso.component';
+
 
 
 export const routes: Routes = [
@@ -81,10 +85,13 @@ export const routes: Routes = [
             {path: 'panel' , component: PanelComponent, canActivate: [esAdminGuard]},
             {path: 'acudientes' , component: LandigPageComponent, canActivate: [esAdminGuard]},
             {path: 'acudientes/mifamilia/:id' , component: MiFamiliaComponent, canActivate: [esAdminGuard]}
+            {path: 'mihorario' , component: HorarioDocenteComponent, canActivate: [esAdminGuard]},
+            {path: 'dashagenda' , component: DirectorCursosDashboardComponent, canActivate: [esAdminGuard]},
+            {path: 'agendadirector', component: AgendaDirectorCursoComponent, canActivate: [esAdminGuard]}
 
 
         ]
     },
-    {path: '**', component: NotFoundComponent}      
-    
+    {path: '**', component: NotFoundComponent}
+
 ];
