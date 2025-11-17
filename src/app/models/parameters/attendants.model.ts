@@ -1,15 +1,18 @@
 export interface Attendants {
-    id: number;
-    personId: number;
-    nameAttendant: string;
-    documentTypeId: string;
-    acronymDocument: string;
-    identification: string;
-    status: number;
+  attendantId: number,
+  nameAttendant: string,
+  relationShipType: number,
+  documentTypeId: number,
+  nameStudent: string;
+  acronymDocument: string,
+  identification: number,
+  id: number,
+  status: number 
 }
+
 export interface CreateModelAttendants{
-    id: number;
-    personId: number;
-    fullName: string;
-    status: number;
+  status: number;
+  personId: number;
+  relationShipTypeEnum: number;
+  studentId: number;
 }

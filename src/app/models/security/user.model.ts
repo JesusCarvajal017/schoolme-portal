@@ -22,3 +22,10 @@ export interface CreateModolUser2{
     personId: number,
     status: number; 
 }
+
+
+export interface PasswordsNew {
+    idUser: number,
+    passwordNew: string,
+    passwordConfirm: string
+}
