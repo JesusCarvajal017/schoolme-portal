@@ -84,7 +84,7 @@ export const routes: Routes = [
             
             {path: 'panel' , component: PanelComponent, canActivate: [esAdminGuard]},
             {path: 'acudientes' , component: LandigPageComponent, canActivate: [esAdminGuard]},
-            {path: 'acudientes/mifamilia/:id' , component: MiFamiliaComponent, canActivate: [esAdminGuard]}
+            {path: 'acudientes/mifamilia/:id' , component: MiFamiliaComponent, canActivate: [esAdminGuard]},
             {path: 'mihorario' , component: HorarioDocenteComponent, canActivate: [esAdminGuard]},
             {path: 'dashagenda' , component: DirectorCursosDashboardComponent, canActivate: [esAdminGuard]},
             {path: 'agendadirector', component: AgendaDirectorCursoComponent, canActivate: [esAdminGuard]}
