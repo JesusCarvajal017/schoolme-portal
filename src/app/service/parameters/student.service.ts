@@ -22,6 +22,10 @@ export class StudentService extends GenericService<Student, CreateModelStudent, 
     return this.http.get<StudentComplete>(`${this.urlBase}/DataBasic/${id}`);
   }
 
+   public NoMatriculados(): Observable<Student[]> {
+    return this.http.get<Student[]>(`${this.urlBase}/MatriculationNot`);
+  }
+
 
 }
 export type { Student };

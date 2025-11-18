@@ -150,3 +150,75 @@ a{
   background-color: #e0e7ff !important;
   color: #4338ca !important;
 }
+
+
+/* =====================================  buttons ===================================== */
+
+.grades-card {
+  background: #eef0fa;
+  border-radius: 20px;
+  padding: 20px;
+  width: 90%;
+}
+
+.grades-title {
+  background: #ffffff;
+  color: #4b4b63;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.grades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* El label envuelve todo el "botón" */
+.grade-option {
+  display: block;
+  cursor: pointer;
+}
+
+/* Ocultamos el radio real */
+.grade-option input {
+  display: none;
+}
+
+/* El botón visual es el span */
+.grade-option span {
+  display: block;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #3d3d58;
+  border: 2px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover */
+.grade-option span:hover {
+  background: #f5f5ff;
+  border-color: #6a6aff;
+  color: #3d3dfd;
+}
+
+/* SELECCIONADO: cuando el radio está checked */
+.grade-option input:checked + span {
+  background: #6a6aff;
+  border-color: #6a6aff;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(106, 106, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+
+

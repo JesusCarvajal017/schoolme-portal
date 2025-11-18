@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 // taiga-ui
 import { TuiHeader } from '@taiga-ui/layout';
 import { TuiButtonGroup  } from '@taiga-ui/kit';
-import { TuiTitle, TuiAppearance, TuiAlertService, TuiButton, TuiDialog, TuiHint } from '@taiga-ui/core';
+import { TuiTitle, TuiAppearance, TuiAlertService, TuiDialog, TuiHint } from '@taiga-ui/core';
 import {TuiInputModule} from '@taiga-ui/legacy';
 
 // terceros
@@ -22,31 +22,40 @@ import Swal from 'sweetalert2';
 // servicios y modelos
 import { GroupsService } from '../../../../service/parameters/groups.service';
 import { Groups, CreateModelGroups } from '../../../../models/parameters/groups.model'; // Agregar CreateModelRol
-import { FormControl, FormGroup } from '@angular/forms';
 import { FormGroupsComponent } from "../../../forms/form-groups/form-groups.component";
+import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
+import { GradeService } from '../../../../service/parameters/grade.service';
+import { Grade } from '../../../../models/parameters/grade.model';
+import { Student } from '../../../../models/parameters/student.model';
+import { StudentService } from '../../../../service/parameters/student.service';
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TutionService } from '../../../../service/business/tution.service';
+import { TutionCreateModel, TutionQuery } from '../../../../models/business/tutition.model';
 // import { FormGroupsComponent } from '../../forms/form-groups/form-groups.component';
 
 @Component({
   standalone: true,
   selector: 'app-landing-groups',
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     TuiTitle,
     MatSidenavModule,
     MatCardModule,
     TuiHeader,
-    TuiButtonGroup,
-    TuiAppearance,
     MatIconModule,
     MatSlideToggleModule,
     MatButtonModule,
-    // RouterLink,
     SweetAlert2Module,
-    // TuiButton,
     TuiDialog,
     TuiHint,
-    TuiInputModule,
-    FormGroupsComponent
+    ListadoGenericoComponent,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption
 ],
   templateUrl: './landing-groups.component.html',
   styleUrl: './landing-groups.component.css',
@@ -57,6 +66,19 @@ export class LandingGroupsComponent implements OnInit {
   groups: Groups[] = [];
   filteredUsers: Groups[] = [];
   idicadorActive : number = 1;
+
+  grades : Grade[] = [];
+  students: Student[] = [];
+  tutions : TutionQuery[] = [];
+
+  studentsNotTution : Student[] = [];
+
+  idicadorProceso : boolean = true;
+  ninoSelect!: string; 
+  studentId !: number;
+  idGradeTemp!: number;
+
+
 
   // titulo de los modales, segun la acción a relizar del crud
   titleGroups!: string;
@@ -69,12 +91,32 @@ export class LandingGroupsComponent implements OnInit {
   protected open = false;
 
   // MÉTODO ACTUALIZADO para manejar creación y edición
-  protected modalCommand(title: string, groups?: Groups): void { 
-      this.titleGroups = title;
-      this.isEditMode = !!groups; // true si rol existe, false si es undefined
-      this.modelGroups = groups; // undefined para crear, objeto Rol para editar
-      this.open = true;
+  protected modalCommand(nameStudent: string, idnino: number): void { 
+    this.open = true;
+    this.ninoSelect = nameStudent;
+    this.studentId = idnino;
+
   }
+  
+  private readonly formBuilder = inject(FormBuilder);
+
+  formTution = this.formBuilder.nonNullable.group({
+    gradeId:  new FormControl<number | null>(null, { validators: [Validators.required] })
+  })
+
+
+  notMatriculate(){
+    this.idicadorProceso = true;
+    this.serviceStudents.NoMatriculados().subscribe({
+      next: (data) =>{
+        // carga data para lista los estudiantes especificos que no tienne matricula
+        this.studentsNotTution = data; 
+      },
+      error: () => console.warn("No fue posible recuperar la data de los estudiantes no matriculados")
+    })
+  }
+
+
 
   // NUEVO MÉTODO para manejar el submit del formulario
   handleRolSubmit(data: CreateModelGroups): void {
@@ -117,11 +159,15 @@ export class LandingGroupsComponent implements OnInit {
     this.open = false;
     this.modelGroups = undefined;
     this.isEditMode = false;
+    this.studentId = 0;
   }
   //  ======================= end =======================
 
   // servicio de alerta de taiga
   private readonly alerts = inject(TuiAlertService);
+  private readonly serviceGrade = inject(GradeService);
+  private readonly serviceStudents = inject(StudentService);
+  private readonly serviceTutition = inject(TutionService);
 
   // búsqueda
   searchTerm: string = '';
@@ -135,7 +181,10 @@ export class LandingGroupsComponent implements OnInit {
     this.cargarData();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cargarGrades();
+    this.notMatriculate();
+  }
 
   // notificación de estado
   protected showNotification(message: string): void {
@@ -214,9 +263,59 @@ export class LandingGroupsComponent implements OnInit {
 
   // eliminar rol
   deleteRegister(id: number) {
-    this.serviceGroups.eliminar(id).subscribe(() => {
-      Swal.fire('Exitoso', 'El registro ha sido eliminado correctamente', 'success');
-      this.cargarData(this.idicadorActive);
+    this.serviceTutition.eliminar(id).subscribe(() => {
+      this.listTutions(this.idGradeTemp);
+      Swal.fire('Exitoso', 'Matricula borrada exitosamente', 'success');
     });
   }
+
+  cargarGrades(){
+    this.serviceGrade.obtenerTodos(1).subscribe({
+      next: (data) =>{
+        this.grades = data;
+      }
+    })
+  }
+
+  studentNoTution(){
+    this.serviceStudents.NoMatriculados().subscribe({
+      next: (data) =>{
+        this.students = data;
+      }
+    })
+  }
+
+
+  matricular(){
+    let dataForm = this.formTution.getRawValue();
+
+    let data : TutionCreateModel = {
+      studentId: this.studentId,
+      status: 1, 
+      gradeId: dataForm.gradeId ?? 0
+    }
+
+    this.serviceTutition.crear(data).subscribe({
+      next: () =>{
+        this.closeModal();
+        this.notMatriculate();
+        Swal.fire('Exitoso', 'Matricula exitosa', 'success');
+      }
+    });
+  }
+
+
+  listTutions(gradeId : number){
+    this.idicadorProceso = false;
+
+    this.idGradeTemp = gradeId;
+
+    this.serviceTutition.tutionGrade(gradeId).subscribe({
+      next: (data) => {
+        this.tutions = data;
+      }
+    })
+  }
+  
+
 }
