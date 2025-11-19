@@ -25,3 +25,8 @@ export interface StudentComplete {
     groupId: number;
     person: PersonComplete;
 }
+
+export interface UpdateGrupStudent {
+    id: number;
+    groupId: number;
+}
