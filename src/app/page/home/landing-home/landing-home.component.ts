@@ -1,33 +1,29 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RegistersServices } from '../../../service/helpers/registers.service';
-import { RegisterCount } from '../../../models/helpers/registers.model';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { register } from 'swiper/element/bundle';
+
+// Registrar Swiper Elements
+register();
 
 @Component({
   selector: 'app-landing-home',
-  imports: [], // Removemos MatIconModule ya que usamos Font Awesome
+  imports: [CommonModule],
   templateUrl: './landing-home.component.html',
-  styleUrl: './landing-home.component.css'
+  styleUrl: './landing-home.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class LandingHomeComponent implements OnInit {
+  images = [
+    { src: './inicio/docentes.png', alt: 'docentes' },
+    { src: './inicio/niños.png', alt: 'niños' },
+    { src: './inicio/padres.png', alt: 'padres' },
+    { src: './inicio/niños-aula.png', alt: 'aulas' }
 
-  countRegister!: RegisterCount;
 
-  // ============== services ==============
-  servicesRegister = inject(RegistersServices);
+
+  ];
 
   ngOnInit(): void {
-    this.cargarDataRegister();
-  }
-
-  cargarDataRegister() {
-    this.servicesRegister.getCoutRegister().subscribe({
-      next: (data) => {
-        this.countRegister = data;
-      },
-      error: (error) => {
-        console.error('Error al cargar datos de registro:', error);
-        // Opcional: manejar el error con un toast o mensaje
-      }
-    });
+    // Swiper se inicializa automáticamente con los web components
   }
 }

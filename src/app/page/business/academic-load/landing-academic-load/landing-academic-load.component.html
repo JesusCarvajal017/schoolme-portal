@@ -41,12 +41,8 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Profeso</th>
-        <th>Grupo</th>
-        <th>Asignatura</th>
-        <th>Día</th>
-        <th>Status</th>
-        <th class="text-center">Acción</th>
+        <th>Profesor</th>
+        <th class="text-center">Crear Carga Academica</th>
       </tr>
     </thead>
     <tbody>
@@ -106,7 +102,7 @@
 >
     <div class="modal-content">
         <app-form-rol-form-permission
-            [title]="titleForm" 
+            [title]="titleForm"
             [actionDescriptio]="isEditMode ? 'Actualizar' : 'Crear'"
             [model]="modelRolFormPermission"
             (posteoForm)="handleFormRolPermissionSubmit($event)">
