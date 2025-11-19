@@ -1,18 +1,23 @@
 <div class="col-12 row">
   <div class="col-md-3">
     <div class="grades-card">
-      <div class="grades-title">grados</div>
+      <!-- <div class="grades-title">grados</div> -->
+
+      <mat-form-field appearance="outline" class="tui-like-select">
+          <mat-label>Grado</mat-label>
+
+          <mat-select panelClass="tui-like-select-panel" [formControl]="formGrup.controls.gradeId" (selectionChange)="cargarGrupos($event)">
+              @for (item of grades; track $index) {
+                  <mat-option [value]="item.id">{{ item.name }}</mat-option>
+              }
+          </mat-select>
+      </mat-form-field>
 
       <hr>
 
       <div class="grades-list">
-        <label class="grade-option" (click)="notMatriculate()">
-          <input type="radio" name="grado" checked>
-          <span>En proceso</span>
-        </label>
-
-        @if(grades){
-          @for (item of grades; track $index) {
+        @if(grades.length > 0){
+          @for (item of groups; track $index) {
             <label class="grade-option" (click)="listTutions(item.id)">
               <input type="radio" name="grado">
               <span>{{item.name}}</span>
@@ -31,65 +36,13 @@
       <h1 tuiTitle>
         <div class="col-12 d-flex">
           <span>Proceso de matricula</span>
+
         </div>
       </h1>
     </header>
 
-    @if(!idicadorProceso){
-      <app-listado-generico [elements]="tutions">
-        <ng-container contenido>
-          <section class="table-container">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nombre del estudiante</th>
-                  <th class="text-center">Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (item of tutions; track item.id) {
-                  <tr>
-                    <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
-                    <td>{{ `${item.fullName}`}}</td>
-        
-                    <td class="actions-col">
-                      <button mat-icon-button [swal]="{
-                            title: 'Confirmacion',
-                            text: '¿Deseas borrar este registro?',
-                            showCancelButton: true
-                        }" (confirm)="deleteRegister(item.id)">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-          
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-        
-            <!-- Paginación -->
-            <div class="pagination" *ngIf="totalPages > 1">
-              <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
-                &lt;
-              </button>
-        
-              <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
-                [class.active]="currentPage === i + 1">
-                {{ i + 1 }}
-              </button>
-        
-              <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
-                &gt;
-              </button>
-            </div>
-          </section>
-  
-        </ng-container>
-  
-      </app-listado-generico>
-    }@else {
-      <app-listado-generico [elements]="studentsNotTution">
+    
+      <app-listado-generico [elements]="students">
         <ng-container contenido>
           <section class="table-container">
             <table class="custom-table">
@@ -103,7 +56,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (item of studentsNotTution; track item.id) {
+                @for (item of students; track item.id) {
                 <tr>
                   <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
                   <td>{{ item.acronymDocument }}</td>
@@ -111,8 +64,9 @@
                   <td>{{ item.fullName }}</td>
         
                   <td class="actions-col">
-                    <button mat-icon-button (click)="modalCommand(item.fullName, item.id)" >
-                      <mat-icon>assignment</mat-icon>
+                    <!-- <button mat-icon-button (click)="modalCommand(item.fullName, item.id)" > -->
+                    <button mat-icon-button >
+                      <mat-icon>delete</mat-icon>
                     </button>
         
                   </td>
@@ -139,7 +93,7 @@
           </section>
         </ng-container>
       </app-listado-generico>
-    } 
+
 
   </div>
 

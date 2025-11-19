@@ -265,8 +265,7 @@ export class FormTodosComponent {
       epsId: this.model.dataBasic?.epsId ?? null,
       departamentId: this.model.dataBasic?.departamentId ?? null,
       brithDate: day,
-      status: !!this.model.status,
-      // NO pongas aún munisipalityId
+      status: !!this.model.status
     }, { emitEvent: false });
 
     // Si viene departamento en el modelo, carga municipios y recién ahí pon munisipalityId

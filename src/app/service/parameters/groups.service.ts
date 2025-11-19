@@ -14,7 +14,14 @@ export class GroupsService extends GenericService<Groups, CreateModelGroups, Mod
     super('Groups')
   }
 
-     override obtenerTodos(status: number = 1): Observable<Groups[]> {
+    override obtenerTodos(status: number = 1): Observable<Groups[]> {
       return this.http.get<Groups[]>(`${this.urlBase}?status=${status}`);
-}
+      
+    }
+
+    public grupGrade(gradeId: number = 1): Observable<Groups[]> {
+      return this.http.get<Groups[]>(`${this.urlBase}/GroupsGrade/${gradeId}`);
+
+      
+    }
 }

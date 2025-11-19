@@ -29,7 +29,7 @@ import { Grade } from '../../../../models/parameters/grade.model';
 import { Student } from '../../../../models/parameters/student.model';
 import { StudentService } from '../../../../service/parameters/student.service';
 import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatSelect, MatOption, MatSelectChange } from "@angular/material/select";
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TutionService } from '../../../../service/business/tution.service';
 import { TutionCreateModel, TutionQuery } from '../../../../models/business/tutition.model';
@@ -69,6 +69,7 @@ export class LandingGroupsComponent implements OnInit {
 
   grades : Grade[] = [];
   students: Student[] = [];
+
   tutions : TutionQuery[] = [];
 
   studentsNotTution : Student[] = [];
@@ -79,6 +80,9 @@ export class LandingGroupsComponent implements OnInit {
   idGradeTemp!: number;
 
 
+  sin(){
+    alert("sin")
+  }
 
   // titulo de los modales, segun la acción a relizar del crud
   titleGroups!: string;
@@ -104,6 +108,11 @@ export class LandingGroupsComponent implements OnInit {
     gradeId:  new FormControl<number | null>(null, { validators: [Validators.required] })
   })
 
+  formGrup = this.formBuilder.nonNullable.group({
+    gradeId:  new FormControl<number | null>(null, { validators: [Validators.required] })
+  })
+
+
 
   notMatriculate(){
     this.idicadorProceso = true;
@@ -116,43 +125,6 @@ export class LandingGroupsComponent implements OnInit {
     })
   }
 
-
-
-  // NUEVO MÉTODO para manejar el submit del formulario
-  handleRolSubmit(data: CreateModelGroups): void {
-    if (this.isEditMode && this.modelGroups) {
-      // Actualizar rol existente
-      const updateData: CreateModelGroups = {
-        ...data,
-        id: this.modelGroups.id
-      };
-      
-      this.serviceGroups.actualizar(updateData).subscribe({
-        next: () => {
-          Swal.fire("Exitoso", "Grupo actualizado correctamente", "success");
-          this.closeModal();
-          this.cargarData(this.idicadorActive); // Recargar la lista
-        },
-        error: (err) => {
-          Swal.fire("Error", "No se pudo actualizar el grupo", "error");
-          console.error(err);
-        }
-      });
-    } else {
-      // Crear nuevo rol
-      this.serviceGroups.crear(data).subscribe({
-        next: () => {
-          Swal.fire("Exitoso", "Grupo creado correctamente", "success");
-          this.closeModal();
-          this.cargarData(this.idicadorActive); // Recargar la lista
-        },
-        error: (err) => {
-          Swal.fire("Error", "No se pudo crear el grupo ", "error");
-          console.error(err);
-        }
-      });
-    }
-  }
 
   // NUEVO MÉTODO para cerrar modal y limpiar datos
   closeModal(): void {
@@ -168,6 +140,7 @@ export class LandingGroupsComponent implements OnInit {
   private readonly serviceGrade = inject(GradeService);
   private readonly serviceStudents = inject(StudentService);
   private readonly serviceTutition = inject(TutionService);
+  private readonly serviceGruop = inject(GroupsService);
 
   // búsqueda
   searchTerm: string = '';
@@ -177,9 +150,6 @@ export class LandingGroupsComponent implements OnInit {
   pageSize: number = 5; // 5 por página
   totalPages: number = 1;
 
-  constructor(private serviceGroups: GroupsService, private router: Router) {
-    this.cargarData();
-  }
 
   ngOnInit(): void {
     this.cargarGrades();
@@ -189,19 +159,6 @@ export class LandingGroupsComponent implements OnInit {
   // notificación de estado
   protected showNotification(message: string): void {
     this.alerts.open(message, { label: 'Se a cambiado el estado!' }).subscribe();
-  }
-
-  cambiarStatus(status : number){
-    this.idicadorActive = status;
-    this.cargarData(this.idicadorActive);
-  }
-
-  // cargar roles desde el servicio
-  cargarData(status : number = 1) {
-    this.serviceGroups.obtenerTodos(status).subscribe((data) => {
-      this.groups = data;
-      this.applyFilters();
-    });
   }
 
   // búsqueda
@@ -248,19 +205,6 @@ export class LandingGroupsComponent implements OnInit {
     }
   }
 
-  // activar/desactivar rol
-  logical(event: any, id: number) {
-    let value: number = event.checked ? 1 : 0;
-
-
-    this.serviceGroups.eliminarLogico(id, value).subscribe({
-      next: () => {
-        this.cargarData(this.idicadorActive);
-        this.showNotification('Se ha cambiado el estado');
-      },
-    });
-  }
-
   // eliminar rol
   deleteRegister(id: number) {
     this.serviceTutition.eliminar(id).subscribe(() => {
@@ -273,6 +217,16 @@ export class LandingGroupsComponent implements OnInit {
     this.serviceGrade.obtenerTodos(1).subscribe({
       next: (data) =>{
         this.grades = data;
+      }
+    })
+  }
+
+  cargarGrupos(event: MatSelectChange){
+
+
+    this.serviceGruop.grupGrade(event.value).subscribe({
+      next: (data) =>{
+        this.groups = data;
       }
     })
   }
@@ -310,9 +264,9 @@ export class LandingGroupsComponent implements OnInit {
 
     this.idGradeTemp = gradeId;
 
-    this.serviceTutition.tutionGrade(gradeId).subscribe({
+    this.serviceStudents.StudentGroups(gradeId).subscribe({
       next: (data) => {
-        this.tutions = data;
+        this.students = data;
       }
     })
   }
