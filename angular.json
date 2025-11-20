@@ -105,7 +105,16 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true,
+            "karmaConfig": "karma.conf.js"
+          },
+          "configurations": {
+            "ci": {
+              "browsers": "ChromeHeadless",
+              "codeCoverage": true,
+              "watch": false
+            }
           }
         }
       }
