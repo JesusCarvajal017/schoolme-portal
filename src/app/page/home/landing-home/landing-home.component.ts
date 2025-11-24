@@ -1,9 +1,9 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { register } from 'swiper/element/bundle';
+
 
 // Registrar Swiper Elements
-register();
+// register();
 
 @Component({
   selector: 'app-landing-home',
