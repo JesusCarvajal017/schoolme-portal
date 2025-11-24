@@ -1,3 +1,184 @@
+/* Paleta SchoolMe (ya sin variables) */
+:host {
+  display: block;
+  background-color: #e3e9f4;
+  min-height: 100vh;
+}
+
+/* Header */
+.agenda-header {
+  padding: 0.4rem 1.25rem;
+  border-radius: 999px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.space-add{
+  width: 80%;
+  display: flex;
+  justify-content: end;
+}
+
+.agenda-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+.back-button {
+  color: #000928;
+}
+
+/* Cards base */
+mat-card {
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+}
+
+/* Summary card */
+.agenda-summary-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.agenda-summary-card .agenda-summary-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.agenda-summary-card .agenda-summary-footer {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.agenda-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #171174;
+}
+
+.agenda-description {
+  font-size: 0.85rem;
+  color: #444444;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.agenda-meta {
+  font-size: 0.87rem;
+  color: #333333;
+}
+
+.agenda-meta .label {
+  opacity: 0.7;
+}
+
+.agenda-meta .value {
+  font-weight: 700;
+  color: #000928;
+}
+
+/* Assignment card */
+.agenda-assign-card {
+  padding: 1.75rem;
+  background: #f5ebff;
+}
+
+.grade-section + .grade-section {
+  margin-top: 1.4rem;
+}
+
+.grade-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+.grade-select {
+  width: 160px;
+}
+
+.grade-select .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* Groups list */
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-left: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+
+
+.group-item .mdc-form-field {
+  color: #333333;
+}
+
+.grade-divider {
+  border-bottom: 1px dashed rgba(23, 17, 116, 0.25);
+  margin-top: 1rem;
+}
+
+/* Botones */
+.sm-primary-btn {
+  background: #000928 !important;
+  color: #ffffff !important;
+  border-radius: 999px;
+  padding-inline: 1.75rem;
+  text-transform: none;
+}
+
+.sm-primary-btn mat-icon {
+  font-size: 18px;
+}
+
+.sm-primary-btn:hover {
+  background-color: #000928 !important; /* puedes ajustar si quieres un tono más oscuro */
+}
+
+/* Responsive */
+@media (max-width: 767.9px) {
+  .agenda-assign-card {
+    padding: 1.3rem;
+  }
+
+  .agenda-header {
+    border-radius: 0.8rem;
+  }
+}
+
+.assign-header {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(23, 17, 116, 0.15);
+}
+
+.assign-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+.assign-subtitle {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.current-grade-label {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+
+
+/* ============================== estilos de tabla sucio ==================================== */
 /* Header */
 header h1 {
   font-size: 20px;
@@ -48,6 +229,7 @@ header h1 {
   gap: 10px;
   margin-bottom: 15px;
 }
+
 .tabs button {
   padding: 6px 14px;
   border-radius: 20px;
@@ -112,6 +294,7 @@ header h1 {
 
 .custom-table thead {
   background: #f9f9f9;
+  /* border-radius: 20px; */
 }
 .custom-table th {
   text-align: left;

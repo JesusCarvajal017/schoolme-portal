@@ -1,0 +1,104 @@
+
+<div class="agenda-page container-fluid py-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="agenda-header d-flex align-items-center">
+                <button mat-icon-button class="me-2 back-button" [routerLink]="'/dashboard/agendas'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <h1 class="agenda-title mb-0" >
+                    Agenda ({{ agenda.name }})
+                </h1>
+
+                <div class="space-add">
+                    <button class="btn-add m-3" (click)="modalCommand(1)">
+                        <mat-icon>add_circle</mat-icon>
+                        Crear agenda
+                    </button>
+                </div>
+                <!-- holaa -->
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <app-listado-generico [elements]="listQuestion">
+        <ng-container contenido>
+            <section class="table-container">
+
+            <!-- =============================== Tabla =============================== -->
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Enunciado</th>
+                            <th>Tipo respuesta</th>
+                            <th class="text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of listQuestion; track item.id) {
+                            <tr>
+                            <td>{{ ($index + 1) }}</td>
+                            <td>{{ item.text}}</td>
+                            <td>{{ item.nameAnswer}}</td>
+
+                            <td class="actions-col">
+
+                                <button mat-icon-button [swal]="{
+                                    title: 'Confirmacion',
+                                    text: '¿Deseas borrar este registro?',
+                                    showCancelButton: true
+                                }" (confirm)="deleteRegister(item.id)">
+                                <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        </ng-container>
+    </app-listado-generico>
+</div>
+
+
+<ng-template let-observer [tuiDialogOptions]="{label: 'Agregar pregunta', size: 'm'}" [(tuiDialog)]="openModal" >
+    <div class="modal-content">
+
+        <app-listado-generico [elements]="listQuestionAdd">
+            <ng-container contenido>
+                <section class="table-container">
+
+                <!-- =============================== Tabla =============================== -->
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Enunciado</th>
+                                <th>Tipo respuesta</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of listQuestionAdd; track item.id) {
+                                <tr>
+                                    <td>{{ ($index + 1) }}</td>
+                                    <td>{{ item.text}}</td>
+                                    <td>{{ item.nameAnswer}}</td>
+
+                                    <td class="actions-col">
+                                        <button mat-icon-button (click)="addQuestion(item.id)">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </ng-container>
+        </app-listado-generico>
+    </div>
+</ng-template>

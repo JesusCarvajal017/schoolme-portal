@@ -37,6 +37,8 @@ import { AgendaDirectorCursoComponent } from './page/business/group-director/age
 import { LandingGradeTutuionComponent } from './page/paramaters/grade/landing-grade/landing-grade.component';
 import { ComposicionPreguntasComponent } from './page/business/composicion-preguntas/composicion-preguntas.component';
 import { LadingAgendaAdminComponent } from './page/business/agenda-admin/lading-agenda-admin/lading-agenda-admin.component';
+import { AsignacionAgendaComponent } from './page/business/agenda-admin/asignacion-agenda/asignacion-agenda.component';
+import { ConfiguracionAgendaComponent } from './page/business/agenda-admin/configuracion-agenda/configuracion-agenda.component';
 
 
 
@@ -91,7 +93,10 @@ export const routes: Routes = [
             {path: 'dashagenda' , component: DirectorCursosDashboardComponent, canActivate: [esAdminGuard]},
             {path: 'agendadirector', component: AgendaDirectorCursoComponent, canActivate: [esAdminGuard]},
             {path: 'composicion', component: ComposicionPreguntasComponent, canActivate: [esAdminGuard]},
+
             {path: 'agendas', component: LadingAgendaAdminComponent, canActivate: [esAdminGuard]},
+            {path: 'agendas/asignacion/:id', component: AsignacionAgendaComponent, canActivate: [esAdminGuard]},
+            {path: 'agendas/config/:id', component: ConfiguracionAgendaComponent, canActivate: [esAdminGuard]},
         ]
     },
     {path: '**', component: NotFoundComponent}

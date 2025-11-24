@@ -1,0 +1,38 @@
+<div class="col-12 row">
+    <div class="col-12 text-center">
+       <h6>{{ modalInfo.title }}</h6>
+       <p class="text-muted small">{{ modalInfo.descripcion }}</p>
+   </div>
+    
+    <form [formGroup]="form" (submit)="emitirData()">
+        <div class="col-md-12 p-1">
+            <tui-textfield>
+                <label tuiLabel>Nombre:  </label>
+                <input
+                    tuiTextfield
+                    [formControl]="form.controls.name"
+                />
+            
+            </tui-textfield>
+        </div>
+
+        <div class="col-md-12 p-1">
+            <tui-textfield>
+                <label tuiLabel>Descripcion </label>
+                <input
+                    tuiTextfield
+                    [formControl]="form.controls.description"
+                />
+            
+            </tui-textfield>
+        </div>
+        
+        <div>
+            <button mat-button type="submit" [disabled]="form.invalid">{{ modalInfo.titleButton }}</button>
+        </div>
+    </form>
+    
+</div>
+
+
+ 

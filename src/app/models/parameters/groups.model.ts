@@ -16,3 +16,9 @@ export interface CreateModelGroups{
     agendaId: number;
     status: number;
 }
+
+export interface QGroupAgendaRelation{
+    id: number, 
+    name: string,
+    isAssigned : boolean;  
+}
