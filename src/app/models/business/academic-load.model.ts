@@ -6,19 +6,16 @@ export interface AcademicLoad {
     subjectName: string;
     groupId: number;
     groupName: string;
-    days: string;
+    days: string[];
     status: number;
 }
 export interface CreateModelAcademicLoad{
     id: number;
-    teacherId: number;
-    fullName: string;
-    subjectId: number;
-    subjectName: string;
-    groupId: number;
-    groupName: string;
-    days: string;
     status: number;
+    teacherId: number;
+    subjectId: number;
+    groupId: number;
+    days: number;
 }
 
 export interface horarioDay {
