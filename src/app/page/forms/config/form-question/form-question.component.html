@@ -30,18 +30,51 @@
                             type="button"s
                             [value]="item.id"
                         >
-                            {{ item.name }}
+                            {{ item.description }}
                         </button>
                     }
                 </tui-data-list>
             </tui-textfield>
 
         </div>
+        <!-- SECCIÓN DE OPCIONES -->
+        <div class="col-md-12 p-1" *ngIf="isOptionType(form.controls.typeAnswerId.value)">
+            <label class="mb-2">Opciones</label>
+
+            <div formArrayName="options">
+                <div class="row mb-2" *ngFor="let opt of options.controls; let i = index" [formGroupName]="i">
+
+                <div class="col-10">
+                    <tui-textfield>
+                    <label tuiLabel>Opción {{ i + 1 }}</label>
+                    <input tuiTextfield formControlName="text" />
+                    </tui-textfield>
+                </div>
+
+                <div class="col-2 d-flex align-items-center">
+                    <button
+                    type="button"
+                    mat-icon-button
+                    (click)="removeOption(i)"
+                    aria-label="Eliminar opción">
+                    ✕
+                    </button>
+                </div>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                mat-stroked-button
+                (click)="addOption()">
+                Añadir opción
+            </button>
+        </div>
+
         <div>
             <button mat-button type="submit" [disabled]="form.invalid">{{ modalInfo.titleButton }}</button>
         </div>
     </form>
-    
 </div>
 
 

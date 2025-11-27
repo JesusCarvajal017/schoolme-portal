@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CommonModule, NgForOf } from '@angular/common';
+import { horarioDay } from '../../../../models/business/academic-load.model';
+import { AcademicLoadService } from '../../../../service/business/academic-load.service';
+import { Teacher, TeacherService } from '../../../../service/parameters/teacher.service';
 
 interface Curso {
   nombre: string;
@@ -16,8 +19,29 @@ interface Curso {
   templateUrl: './horario-docente.component.html',
   styleUrl: './horario-docente.component.css'
 })
-export class HorarioDocenteComponent {
-  diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+export class HorarioDocenteComponent implements OnInit{
+
+  private servicesLoad = inject(AcademicLoadService);
+  private servicesTeacher = inject(TeacherService);
+
+  teacher!: Teacher;
+  
+  ngOnInit(): void {
+    this.informacionDocente();
+  }
+
+ dias: { [key: string]: number } = {
+  lunes: 1,
+  martes: 2,
+  miercoles: 4,
+  jueves: 8,
+  viernes: 16,
+  sabado: 32,
+  domingo: 64
+};
+
+  diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+  diaSeleccionadoR: number | null = null;
   diaSeleccionado: string | null = null;
 
   // Datos mockeados con aula agregada para detalles en calendario
@@ -50,9 +74,40 @@ export class HorarioDocenteComponent {
     ]
   };
 
+  // carga informacion del docente
+  informacionDocente(){
+     const id  = parseInt(localStorage.getItem('current-user') ?? "");
+    this.servicesTeacher.obtenerPorId(id).subscribe({
+      next: (data) =>{
+        this.teacher = data;
+      } 
+    })
+  }
 
-  seleccionarDia(dia: string) {
-    this.diaSeleccionado = dia;
+  infoDiaHorario : horarioDay[] = [];
+
+  cargarDiaHorario(dayValue: number){
+   
+  }
+
+
+  seleccionarDia(dia: keyof typeof this.dias) {
+
+  
+
+    console.log(this.diaSeleccionado);
+
+    this.diaSeleccionadoR = this.dias[dia];
+
+      this.diaSeleccionado =  Object.keys(this.dias)
+                  .find(key => this.dias[key] === this.diaSeleccionadoR) ?? "";
+
+    console.log(this.diaSeleccionadoR);
+    this.servicesLoad.horario(this.teacher.id, this.diaSeleccionadoR).subscribe({
+      next :(data) => {
+        this.infoDiaHorario = data;
+      }
+    });
   }
 
   get cursosDiaSeleccionado(): Curso[] {

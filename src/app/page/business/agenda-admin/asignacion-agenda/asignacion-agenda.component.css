@@ -169,3 +169,50 @@ mat-card {
   font-weight: 600;
   color: #171174;
 }
+
+
+/* estilos de listar preguntas */
+.question-list-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question-item {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: rgba(0,0,0,0.08) 0px 3px 10px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.question-item:hover {
+  transform: translateY(-2px);
+  box-shadow: rgba(0,0,0,0.15) 0px 5px 16px;
+}
+
+.icon {
+  font-size: 1.7rem;
+}
+
+.info h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.type-label {
+  color: #666;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 20px;
+}

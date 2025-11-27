@@ -15,9 +15,11 @@ import { Grade } from '../../../../models/parameters/grade.model';
 import { QGroupAgendaRelation } from '../../../../models/parameters/groups.model';
 import { LoaderComponent } from "../../../../components/loader/loader.component";
 import { forkJoin } from 'rxjs';
-import { TuiAlertService } from '@taiga-ui/core';
+import { TuiAlertService, TuiDialog } from '@taiga-ui/core';
 import Swal from 'sweetalert2';
 import { AgendaModel } from '../../../../models/business/agenda.model';
+import { QuestionModel } from '../../../../models/parameters/question.model';
+import { AsignacionAgendaService } from '../../../../service/business/asignacion-agenda.service';
 
 interface GroupItem {
   id: number;
@@ -45,7 +47,9 @@ interface GradeBlock {
     MatSelectModule,
     MatCheckboxModule,
     RouterLink,
-    LoaderComponent
+    LoaderComponent, 
+
+    TuiDialog
 ],
   templateUrl: './asignacion-agenda.component.html',
   styleUrl: './asignacion-agenda.component.css'
@@ -61,6 +65,8 @@ export class AsignacionAgendaComponent implements OnInit{
   idAgenda!:number;
   nameGrado?: string;
   isLoader:boolean = false;
+
+  openModal: boolean = false;
 
   router = inject(Router);
 
@@ -78,6 +84,7 @@ export class AsignacionAgendaComponent implements OnInit{
   servicesAgenda = inject(AgendaService);
   servicioGruops = inject(GroupsService);
   servicesGrade = inject(GradeService);
+  servieAsing = inject(AsignacionAgendaService);
 
 
   // servicesAsignacionAgenda = inject(Asig);
@@ -85,6 +92,7 @@ export class AsignacionAgendaComponent implements OnInit{
   private readonly alerts = inject(TuiAlertService);
 
   private readonly formBuilder = inject(FormBuilder);
+
 
 
   formGrup = this.formBuilder.nonNullable.group({
@@ -164,6 +172,31 @@ export class AsignacionAgendaComponent implements OnInit{
       },
     });
 
+  }
+
+  questions: QuestionModel[] = [];
+
+
+  cargarPreguntas(){
+    this.servieAsing.preguntasAgenda(this.idAgenda).subscribe({
+      next: (data)=>{
+        this.questions = data;
+      }
+    })
+  }
+
+  modalOpen(){
+    this.cargarPreguntas();
+    this.openModal = true;
+  }
+
+
+  getTypeName(type: string): string {
+  switch (type) {
+    case 'Text': return 'Respuesta de texto';
+    case 'Bool': return 'Respuesta Sí/No';
+    default: return 'Otro';
+  }
   }
 
 }

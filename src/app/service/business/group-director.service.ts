@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateModelGroupDirector, GroupDirector } from '../../models/business/group-director.model';
+import { CreateModelGroupDirector, GroupDirector, GroupDirectorQuery } from '../../models/business/group-director.model';
 import { ModelLogicalDelete } from '../../global/model/logicalDelete.model';
 import { GenericService } from '../api/generic.service';
 
@@ -14,9 +14,13 @@ export class GroupDirectorService extends GenericService<GroupDirector, CreateMo
     super('GroupDirector')
   }
 
-     override obtenerTodos(status: number = 1): Observable<GroupDirector[]> {
-      return this.http.get<GroupDirector[]>(`${this.urlBase}?status=${status}`);
-}
+  override obtenerTodos(status: number = 1): Observable<GroupDirector[]> {
+    return this.http.get<GroupDirector[]>(`${this.urlBase}?status=${status}`);
+  }
+
+  public GroupDirector(teacherId: number): Observable<GroupDirectorQuery[]> {
+    return this.http.get<GroupDirectorQuery[]>(`${this.urlBase}/Groups/${teacherId}`);
+  }
 }
 
 export type { GroupDirector };

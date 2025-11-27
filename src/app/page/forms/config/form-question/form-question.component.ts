@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, input, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -18,11 +18,12 @@ import { TuiStringHandler } from '@taiga-ui/cdk/types';
 import { TuiTextfield, TuiDataList} from "@taiga-ui/core";
 import { CommonModule } from '@angular/common';
 import { TuiChevron, TuiSelect, TuiInputNumber, TuiInputDate} from '@taiga-ui/kit';
-import { QuestionCreate, QuestionModel } from '../../../../models/parameters/question.model';
+import { QuestionCreate, QuestionModel, QuestionOptionCreate } from '../../../../models/parameters/question.model';
 import { AlertApp } from '../../../../utilities/alert-taiga';
 import { TypeAswerService } from '../../../../service/parameters/typeAswer.service';
 import { TypeAwareModel } from '../../../../models/parameters/TypeAsware.model';
 import { infoModal } from '../../../../models/global/info-modal.model';
+import { QuestionService } from '../../../../service/parameters/question.service';
 
 
 @Component({
@@ -83,6 +84,7 @@ export class FormQuestionComponent {
     // =========================== start servicios ========================================
   
     servicesTypeAsware = inject(TypeAswerService);
+    private servicesQuestion = inject(QuestionService);
 
     
     alertService = inject(AlertApp);
@@ -114,17 +116,42 @@ export class FormQuestionComponent {
   
     ngOnInit(): void {
       this.cargarTipoRespuesta();
+
+      this.form.controls.typeAnswerId.valueChanges.subscribe(id => {
+        if (this.isOptionType(id)) {
+          if (this.options.length === 0) {
+            this.addOption();
+            this.addOption(); // dos opciones por defecto
+          }
+        } else {
+          this.options.clear();
+        }
+      });
     }
 
     ngOnChanges() : void{
-      if(!this.model) return;
-        
+      if (!this.model) return;
+
       this.form.patchValue({
         text: this.model.text,
         typeAnswerId: this.model.typeAnswerId,
-        status: true,
-
+        status: this.model.status === 1,
       });
+
+      // limpiar opciones actuales
+      this.options.clear();
+
+      if (this.model.options && this.model.options.length > 0) {
+        this.model.options.forEach(o => {
+          const group = this.formBuilder.nonNullable.group({
+            id:    [o.id ?? null],                             // ⬅️ MUY IMPORTANTE
+            text:  [o.text, Validators.required],
+            order: [o.order ?? this.options.length + 1],
+            status:[o.status ?? 1],
+          });
+          this.options.push(group);
+        });
+      }
     }
   
     private _hydrating = false;  
@@ -147,18 +174,48 @@ export class FormQuestionComponent {
   form = this.formBuilder.nonNullable.group({
     status: [true],
     typeAnswerId: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    text: ['', {validators: [Validators.required]}]
+    text: ['', {validators: [Validators.required]}], 
+    options: this.formBuilder.array([])
   });
+
+  get options(): FormArray {
+    return this.form.get('options') as FormArray;
+  }
+
+  
 
 
   // emisor de data de formulario
   emitirData(){
-    let dataForm = this.form.getRawValue();
-    
-    let preData : QuestionCreate = {
-      typeAnswerId: dataForm.typeAnswerId ?? 0,
-      text: dataForm.text,
-      status: 1
+    const raw = this.form.getRawValue() as {
+      status: boolean;
+      typeAnswerId: number | null;
+      text: string;
+      options?: { id: number | null; text: string; order?: number; status: number }[];
+    };
+
+    const preData: QuestionCreate = {
+      id: this.model?.id,                         // para edición
+      typeAnswerId: raw.typeAnswerId ?? 0,
+      text: raw.text,
+      status: raw.status ? 1 : 0,
+    };
+
+    if (this.isOptionType(raw.typeAnswerId)) {
+       preData.options = (raw.options ?? []).map((o, index) => {
+        const opt: QuestionOptionCreate = {
+          text: o.text,
+          order: o.order ?? index + 1,
+          status: o.status ?? 1,
+        };
+
+        // solo seteamos id si viene definido
+        if (o.id != null) {
+          opt.id = o.id;
+        }
+
+        return opt;
+      });
     }
 
     this.posteoForm.emit(preData);
@@ -173,4 +230,31 @@ export class FormQuestionComponent {
       }
     });
   }
+
+
+  // =========================================================================
+  //                                 Helpers 
+  // =========================================================================
+  addOption() {
+    const group = this.formBuilder.nonNullable.group({
+      id:    [null],
+      text:  ['', Validators.required],
+      order: [this.options.length + 1],
+      status:[1],
+    });
+
+    this.options.push(group);
+  }
+
+  removeOption(index: number) {
+    this.options.removeAt(index);
+    this.servicesQuestion.deleteChamp(index);
+  }
+
+  isOptionType(id: number | null | undefined): boolean {
+    if (id == null) return false;
+    const tipo = this.tipoRespuesta.find(t => t.id === id);
+    return tipo?.name === 'OptionSingle' || tipo?.name === 'OptionMulti';
+  }
+
 }

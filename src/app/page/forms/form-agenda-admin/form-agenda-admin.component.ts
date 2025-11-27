@@ -37,7 +37,6 @@ import { infoModal } from '../../../models/global/info-modal.model';
     TuiTextfield,
     TuiDataList,
     CommonModule,
-    TuiChevron,
     TuiSelect,
     TuiInputNumber,
     TuiInputDate
