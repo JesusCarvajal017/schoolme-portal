@@ -20,3 +20,17 @@ export interface CreateModelAcademicLoad{
     days: string;
     status: number;
 }
+
+export interface horarioDay {
+
+    teacherId: number;
+    fullName: string;
+    subjectId: number;
+    subjectName: string;
+    groupId: number;
+    groupName: string;
+    countStudents: number;
+    id: number;
+    status: number;
+
+}

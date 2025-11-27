@@ -11,6 +11,8 @@ export interface Student {
     groupName: string;
     status: number;
 }
+
+
 export interface CreateModelStudent{
     id?: number;
     personId: number;

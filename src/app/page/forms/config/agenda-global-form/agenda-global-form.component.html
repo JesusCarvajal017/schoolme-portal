@@ -1,0 +1,109 @@
+<form
+  class="agenda-form"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  *ngIf="form"
+>
+  <div class="question-list">
+    @for (q of questions; track q.id; let idx = $index) {
+
+      <section class="agenda-question-card">
+        <!-- Header de la pregunta -->
+        <div class="question-header">
+          <div class="question-badge">
+            {{ idx + 1 }}
+          </div>
+
+          <div>
+            <h3 class="question-title">
+              {{ q.text }}
+            </h3>
+            <p class="question-subtitle">
+              @if (q.nameAnswer === 'Text') {
+                Respuesta de texto
+              } @else if (q.nameAnswer === 'Bool') {
+                Sí / No
+              } @else if (q.nameAnswer === 'OptionSingle') {
+                Selecciona una opción
+              } @else if (q.nameAnswer === 'OptionMulti') {
+                Puedes marcar varias opciones
+              } @else {
+                Respuesta
+              }
+            </p>
+          </div>
+        </div>
+
+        <!-- Body de la pregunta -->
+        <div class="question-body">
+
+          <!-- TEXT (sin opciones) -->
+          @if (q.options.length === 0 && q.nameAnswer === 'Text') {
+            <mat-form-field appearance="outline" class="full-width">
+              <textarea
+                matInput
+                rows="3"
+                [formControlName]="controlName(q)"
+                placeholder="Escribe aquí..."
+              ></textarea>
+            </mat-form-field>
+          }
+
+          <!-- BOOL -->
+          @if (q.options.length === 0 && q.nameAnswer === 'Bool') {
+            <div class="toggle-wrapper">
+              <mat-slide-toggle [formControlName]="controlName(q)">
+                Sí / No
+              </mat-slide-toggle>
+            </div>
+          }
+
+          <!-- OPCIÓN ÚNICA (radio) -->
+          @if (q.options.length > 0 && q.nameAnswer === 'OptionSingle') {
+            <div class="options-row">
+              <mat-radio-group [formControlName]="controlName(q)">
+                @for (opt of q.options; track opt.id) {
+                  <mat-radio-button
+                    class="option-pill-radio"
+                    [value]="opt.id"
+                  >
+                    {{ opt.text }}
+                  </mat-radio-button>
+                }
+              </mat-radio-group>
+            </div>
+          }
+
+          <!-- OPCIÓN MÚLTIPLE (checkboxes) -->
+          @if (q.options.length > 0 && q.nameAnswer === 'OptionMulti') {
+            <div class="options-row multi-options">
+              @for (opt of q.options; track opt.id) {
+                <label class="option-pill-checkbox">
+                  <mat-checkbox
+                    [checked]="isSelected(q, opt.id)"
+                    (change)="toggleMulti(q, opt.id, $event.checked)"
+                  >
+                  </mat-checkbox>
+                  <span>{{ opt.text }}</span>
+                </label>
+              }
+            </div>
+          }
+
+        </div>
+      </section>
+
+    }
+  </div>
+
+  <div class="agenda-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      class="btn-save-record"
+    >
+      Guardar registro
+    </button>
+  </div>
+</form>

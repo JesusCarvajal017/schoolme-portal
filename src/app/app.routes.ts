@@ -91,6 +91,7 @@ export const routes: Routes = [
             {path: 'acudientes/mifamilia/:id' , component: MiFamiliaComponent, canActivate: [esAdminGuard]},
             {path: 'mihorario' , component: HorarioDocenteComponent, canActivate: [esAdminGuard]},
             {path: 'dashagenda' , component: DirectorCursosDashboardComponent, canActivate: [esAdminGuard]},
+            // vista del registro diario de agenda
             {path: 'agendadirector', component: AgendaDirectorCursoComponent, canActivate: [esAdminGuard]},
             {path: 'composicion', component: ComposicionPreguntasComponent, canActivate: [esAdminGuard]},
 

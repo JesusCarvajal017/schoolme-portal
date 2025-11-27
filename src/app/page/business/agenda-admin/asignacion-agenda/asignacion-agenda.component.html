@@ -38,6 +38,7 @@
           <button
             mat-raised-button
             class="sm-primary-btn w-100"
+            (click)="modalOpen()"
           >
             <mat-icon class="me-2">assignment</mat-icon>
             Ver agenda
@@ -157,4 +158,55 @@
   </div>
 
 </div>
+
+<ng-template let-observer [tuiDialogOptions]="{label: 'Agregar pregunta', size: 'm'}" [(tuiDialog)]="openModal" >
+
+  <div class="modal-content">
+    <div class="question-list-container">
+      @if (questions.length > 0) {
+
+        @for (item of questions; track item.id) {
+
+          <div class="question-item">
+
+            <div class="icon">
+              @switch (item.text) {
+
+                @case ('Text') {
+                  <i class="bi bi-text-left text-primary"></i>
+                }
+
+                @case ('Bool') {
+                  <i class="bi bi-check2-square text-success"></i>
+                }
+
+                @default {
+                  <i class="bi bi-question-circle text-secondary"></i>
+                }
+              }
+            </div>
+
+            <div class="info">
+              <h4>{{ item.nameAnswer }}</h4>
+              <small class="type-label">{{ getTypeName(item.text) }}</small>
+            </div>
+
+          </div>
+
+        }
+
+      } @else {
+
+        <div class="empty">
+          No hay preguntas registradas.
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+
+</ng-template>
 

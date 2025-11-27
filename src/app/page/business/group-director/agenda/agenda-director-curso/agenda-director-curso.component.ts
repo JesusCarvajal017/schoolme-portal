@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output } from '@angular/core';
 
 // angular material
 import { MatCardModule } from '@angular/material/card';
@@ -18,6 +18,14 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 // componentes
 import { ListadoGenericoComponent } from "../../../../../components/listado-generico/listado-generico.component";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouteConfigLoadEnd, Router } from '@angular/router';
+import { Student, StudentService } from '../../../../../service/parameters/student.service';
+import { group } from '@angular/animations';
+import { AgendaDayModel } from '../../../../../models/business/agenda.model';
+import { GroupDirectorQuery } from '../../../../../models/business/group-director.model';
+import { AgendaGlobalFormComponent } from "../../../../forms/config/agenda-global-form/agenda-global-form.component";
+import { AgedaDayStudentService } from '../../../../../service/business/agendaDayStudent.service';
 
 interface Estudiante {
   id: number;
@@ -36,19 +44,27 @@ interface Estudiante {
     TuiTitle,
     MatCardModule,
     TuiHeader,
-    TuiButtonGroup,
-    TuiAppearance,
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
     SweetAlert2Module,
     TuiInputModule,
-    ListadoGenericoComponent
-  ],
+    ListadoGenericoComponent,
+    MatTooltipModule,
+    AgendaGlobalFormComponent
+],
   templateUrl: './agenda-director-curso.component.html',
   styleUrl: './agenda-director-curso.component.css',
 })
 export class AgendaDirectorCursoComponent implements OnInit {
+
+  dataCurso!: GroupDirectorQuery;
+
+  private serviceStudent = inject(StudentService);
+  private servicesAgendaStudent = inject(AgedaDayStudentService);
+
+  listStudents: Student[] = [];
+
 
   students: Estudiante[] = [];
   filteredStudents: Estudiante[] = [];
@@ -57,21 +73,31 @@ export class AgendaDirectorCursoComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 1;
 
-  estudianteSeleccionado: Estudiante | null = null;
+  route = inject(Router);
 
   ngOnInit(): void {
+
+    // data de agenda day para su uso de logica
+    const nav = this.route.getCurrentNavigation();
+    const fromNav = nav?.extras?.state?.['curso'];
+    const fromHistory = history.state['curso'];
+
+    this.dataCurso = fromNav || fromHistory || null;
+
+
     this.cargarData();
   }
 
   cargarData(): void {
-    // Datos de ejemplo
-    this.students = [
-      { id: 1, fullName: 'Juan Pérez', acronymDocument: 'CC', identification: '12345678', groupName: 'Grupo 5A', status: 1 },
-      { id: 2, fullName: 'María García', acronymDocument: 'TI', identification: '87654321', groupName: 'Grupo 5A', status: 1 },
-      { id: 3, fullName: 'Pedro López', acronymDocument: 'CC', identification: '11223344', groupName: 'Grupo 5A', status: 0 },
-      { id: 4, fullName: 'Ana Rodríguez', acronymDocument: 'TI', identification: '44332211', groupName: 'Grupo 5A', status: 1 },
-      { id: 5, fullName: 'Carlos Sánchez', acronymDocument: 'CC', identification: '55667788', groupName: 'Grupo 5A', status: 1 },
-    ];
+    this.serviceStudent.StudentGroups(this.dataCurso.groupId).subscribe({
+      next: (data) =>{
+        this.listStudents = data;
+        // console.log(this.dataCurso)
+      }
+    })
+
+    
+
     this.applyFilters();
   }
 
@@ -81,7 +107,7 @@ export class AgendaDirectorCursoComponent implements OnInit {
   }
 
   applyFilters(): void {
-    let filtered = this.students;
+    let filtered = this.listStudents;
 
     if (this.searchTerm.trim() !== '') {
       filtered = filtered.filter((r) =>
@@ -110,11 +136,30 @@ export class AgendaDirectorCursoComponent implements OnInit {
     }
   }
 
-  abrirAgenda(estudiante: Estudiante): void {
-    this.estudianteSeleccionado = estudiante;
+  studentIndividual: Student | null = null;
+  agendaGlobalBandera: boolean = false;
+
+  abrirAgenda(estudiante?: Student): void {
+    console.log("se supone que no es agenda individual");
+    if(estudiante){
+      this.studentIndividual = estudiante;
+      this.agendaGlobalBandera = false;
+      return;
+    }else{
+      this.agendaGlobalBandera = true;
+      this.studentIndividual = null;
+    }
+
+    
   }
 
   cerrarAgenda(): void {
-    this.estudianteSeleccionado = null;
+    this.studentIndividual = null;
+    this.agendaGlobalBandera = false;
   }
+
+  volverGrupos(){
+    this.route.navigate(["/dashboard/dashagenda"]);
+  }
+
 }

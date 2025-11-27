@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
-import { QuestionModel } from '../../../../models/parameters/question.model';
+import { QuestionCompositionModel, QuestionModel } from '../../../../models/parameters/question.model';
 import { AsignacionAgendaService } from '../../../../service/business/asignacion-agenda.service';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { TuiAlertService, TuiDialog } from '@taiga-ui/core';
@@ -49,7 +49,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
   agenda !: AgendaModel;
   question!: QuestionModel;
 
-  listQuestion: QuestionModel[] = [];
+  listQuestion: QuestionCompositionModel[] = [];
 
   listQuestionAdd: QuestionModel[] = [];
 
