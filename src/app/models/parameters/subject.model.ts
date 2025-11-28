@@ -5,7 +5,7 @@ export interface Subject {
 }
 
 export interface CreateModelSubject {
-    id: number;
+    id?: number;
     name: string;
     status: number;
 }
