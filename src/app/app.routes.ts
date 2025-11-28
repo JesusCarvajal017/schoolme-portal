@@ -45,6 +45,8 @@ import { MateriasComponent } from './page/paramaters/configuracion/materias/mate
 
 
 
+
+
 export const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
     {
@@ -102,6 +104,9 @@ export const routes: Routes = [
             {path: 'agendas/asignacion/:id', component: AsignacionAgendaComponent, canActivate: [esAdminGuard]},
             {path: 'agendas/config/:id', component: ConfiguracionAgendaComponent, canActivate: [esAdminGuard]},
             {path: 'CMaterias', component: MateriasComponent, canActivate: [esAdminGuard]},
+            {path: 'CGrado', component: GradosComponent, canActivate: [esAdminGuard]},
+            {path: 'CAulas', component: AulasComponent, canActivate: [esAdminGuard]},
+
         ]
     },
     {path: '**', component: NotFoundComponent}

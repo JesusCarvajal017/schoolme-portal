@@ -72,14 +72,14 @@
 
         <div class="pagination" *ngIf="totalPages > 1">
           <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
-            &lt;
+            <
           </button>
           <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
             [class.active]="currentPage === i + 1">
             {{ i + 1 }}
           </button>
           <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            &gt;
+            >
           </button>
         </div>
       </section>
@@ -89,9 +89,9 @@
 
 <ng-template let-observer [tuiDialogOptions]="{label: modalInfo.title || 'Grado', size: 'm'}" [(tuiDialog)]="open">
   <div class="modal-content">
-    <app-form-grade 
-      [modalInfo]="modalInfo" 
-      [model]="modelGrade" 
+    <app-form-grade
+      [modalInfo]="modalInfo"
+      [model]="modelGrade"
       (posteoForm)="handleSubmit($event)">
     </app-form-grade>
   </div>
