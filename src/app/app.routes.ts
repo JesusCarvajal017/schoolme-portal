@@ -41,6 +41,7 @@ import { AsignacionAgendaComponent } from './page/business/agenda-admin/asignaci
 import { ConfiguracionAgendaComponent } from './page/business/agenda-admin/configuracion-agenda/configuracion-agenda.component';
 import { GradosComponent } from './page/paramaters/configuracion/grados/grados.component';
 import { AulasComponent } from './page/paramaters/configuracion/aulas/aulas.component';
+import { MateriasComponent } from './page/paramaters/configuracion/materias/materias.component';
 
 
 
@@ -73,11 +74,11 @@ export const routes: Routes = [
             { path: 'asiganacionModulos', component: LandingModuleFormComponent, canActivate: [esAdminGuard]},
             { path: 'asignacionRoles', component: LandingUserRolComponent, canActivate: [esAdminGuard]},
             { path: 'asignacionPermisos', component: LandingRolFormPermissionComponent, canActivate: [esAdminGuard]},
-            // { path: 'grados', component: LandingGradeComponent, canActivate: [esAdminGuard]},
+            { path: 'grados', component: GradosComponent, canActivate: [esAdminGuard]},
             { path: 'tipoIdentificacion', component: LandingDocumentTypeComponent, canActivate: [esAdminGuard]},
             { path: 'eps', component: LandingEpsComponent, canActivate: [esAdminGuard]},
             { path: 'municipio', component: LandingMunicipalityComponent, canActivate: [esAdminGuard]},
-            { path: 'grupos', component: LandingGroupsComponent, canActivate: [esAdminGuard]},
+            { path: 'grupos', component: AulasComponent, canActivate: [esAdminGuard]},
             { path: 'perfil', component: ProfileComponent, canActivate: [esAdminGuard] },
             { path: 'ajustes-security', component: AjustesSecurityComponent },
             {path: 'directorGrupo', component: LandingGroupDirectorComponent, canActivate: [esAdminGuard]},
@@ -100,8 +101,7 @@ export const routes: Routes = [
             {path: 'agendas', component: LadingAgendaAdminComponent, canActivate: [esAdminGuard]},
             {path: 'agendas/asignacion/:id', component: AsignacionAgendaComponent, canActivate: [esAdminGuard]},
             {path: 'agendas/config/:id', component: ConfiguracionAgendaComponent, canActivate: [esAdminGuard]},
-            {path: 'CGrado', component: GradosComponent, canActivate: [esAdminGuard]},
-            {path: 'CAulas', component: AulasComponent, canActivate: [esAdminGuard]},
+            {path: 'CMaterias', component: MateriasComponent, canActivate: [esAdminGuard]},
         ]
     },
     {path: '**', component: NotFoundComponent}

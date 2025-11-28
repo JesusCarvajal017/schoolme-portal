@@ -1,0 +1,175 @@
+header h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.count {
+  text-align: center;
+  width: 100px;
+  border: 1.5px solid #000;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+}
+
+.btn-add mat-icon {
+  font-size: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tabs button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tabs button.active {
+  background: #000;
+  color: white;
+  border: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.search-box mat-icon {
+  font-size: 20px;
+  margin-right: 5px;
+  color: #666;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+.custom-table {
+  width: 100%;
+}
+
+.custom-table thead {
+  background: #f9f9f9;
+}
+
+.custom-table th {
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
+
+.custom-table tr:hover td {
+  background: #f7f7f7;
+}
+
+.actions-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.actions-col button[mat-icon-button] {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.pagination button {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #3f51b5;
+  color: white;
+  border: none;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-content {
+  min-height: 300px;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 15px;
+    min-height: 250px;
+  }
+}

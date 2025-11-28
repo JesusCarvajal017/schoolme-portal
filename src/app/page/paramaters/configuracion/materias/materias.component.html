@@ -1,15 +1,15 @@
 <header tuiHeader class="m-1">
   <h1 tuiTitle>
     <div class="col-12 d-flex">
-      <span>Grados</span>
-      <p class="count">{{ filteredGrades.length }} Grados</p>
+      <span>Materias</span>
+      <p class="count">{{ filteredSubjects.length }} Materias</p>
     </div>
   </h1>
   <aside tuiAccessories>
     <div tuiAppearance="secondary" tuiButtonGroup>
       <button class="btn-add" (click)="modalCommand(1)">
         <mat-icon>add_circle</mat-icon>
-        Crear Grado
+        Crear Materia
       </button>
     </div>
   </aside>
@@ -33,20 +33,20 @@
     </div>
   </div>
 
-  <app-listado-generico [elements]="filteredGrades">
+  <app-listado-generico [elements]="filteredSubjects">
     <ng-container contenido>
       <section class="table-container">
         <table class="custom-table">
           <thead>
             <tr>
               <th>#</th>
-              <th>Nombre del Grado</th>
+              <th>Nombre de la Materia</th>
               <th>Status</th>
               <th class="text-center">Acción</th>
             </tr>
           </thead>
           <tbody>
-            @for (item of paginatedGrades; track item.id) {
+            @for (item of paginatedSubjects; track item.id) {
             <tr>
               <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
               <td>{{ item.name }}</td>
@@ -59,7 +59,7 @@
                 </button>
                 <button mat-icon-button [swal]="{
                       title: 'Confirmación',
-                      text: '¿Deseas borrar este grado?',
+                      text: '¿Deseas borrar esta materia?',
                       showCancelButton: true
                   }" (confirm)="deleteRegister(item.id)">
                   <mat-icon>delete</mat-icon>
@@ -72,14 +72,14 @@
 
         <div class="pagination" *ngIf="totalPages > 1">
           <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
-            &lt;
+            <
           </button>
           <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
             [class.active]="currentPage === i + 1">
             {{ i + 1 }}
           </button>
           <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            &gt;
+            >
           </button>
         </div>
       </section>
@@ -87,12 +87,12 @@
   </app-listado-generico>
 </section>
 
-<ng-template let-observer [tuiDialogOptions]="{label: modalInfo.title || 'Grado', size: 'm'}" [(tuiDialog)]="open">
+<ng-template let-observer [tuiDialogOptions]="{label: modalInfo.title || 'Materia', size: 'm'}" [(tuiDialog)]="open">
   <div class="modal-content">
-    <app-form-grade 
-      [modalInfo]="modalInfo" 
-      [model]="modelGrade" 
+    <app-form-subject
+      [modalInfo]="modalInfo"
+      [model]="modelSubject"
       (posteoForm)="handleSubmit($event)">
-    </app-form-grade>
+    </app-form-subject>
   </div>
 </ng-template>

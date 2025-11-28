@@ -91,7 +91,7 @@
   </app-listado-generico>
 </section>
 
-<ng-template let-observer [tuiDialogOptions]="{label: modalInfo?.title || 'Grupo', size: 'm'}" [(tuiDialog)]="open">
+<ng-template let-observer [tuiDialogOptions]="{label: modalInfo.title || 'Grupo', size: 'm'}" [(tuiDialog)]="open">
   <div class="modal-content">
     <app-form-groups
       [modalInfo]="modalInfo"
