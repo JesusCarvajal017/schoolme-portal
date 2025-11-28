@@ -11,6 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { AsignacionAgendaService } from '../../../../service/business/asignacion-agenda.service';
 import { QuestionCompositionQueryDto } from '../../../../models/business/agenda.model';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { RegisterGlobalStudentAnswersDto, StudentAnswerInputDto } from '../../../../models/business/studentAsware.mode';
+import { StudentAnswerService } from '../../../../service/business/stundeAsware.service';
+
 @Component({
   selector: 'app-agenda-global-form',
   imports: [
@@ -22,7 +27,8 @@ import { QuestionCompositionQueryDto } from '../../../../models/business/agenda.
     MatCheckboxModule,
     MatSlideToggleModule,
     MatButtonModule,
-
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './agenda-global-form.component.html',
   styleUrl: './agenda-global-form.component.css'
@@ -30,9 +36,15 @@ import { QuestionCompositionQueryDto } from '../../../../models/business/agenda.
 export class AgendaGlobalFormComponent {
   private fb = inject(FormBuilder);
   private agendaService = inject(AsignacionAgendaService);
+  private studentAnswerService = inject(StudentAnswerService);
+
 
   /** id de la agenda que vas a pintar (se lo pasas desde el padre) */
   @Input({required: true}) agendaId!: number;
+
+  @Input({required: true}) agendaDayId!: number;
+  @Input({required: true}) groupId!: number;
+
 
   questions: QuestionCompositionQueryDto[] = [];
   form!: FormGroup;
@@ -58,7 +70,12 @@ export class AgendaGlobalFormComponent {
         group[name] = new FormControl<number[]>([]); // ids de opciones seleccionadas
       } else if (q.nameAnswer === 'OptionSingle') {
         group[name] = new FormControl<number | null>(null); // id de la opción
-      } else {
+      }else if (q.nameAnswer === 'Number') {
+        group[name] = new FormControl<number | null>(null);
+
+      }else if (q.nameAnswer === 'Date') {
+        group[name] = new FormControl<Date | null>(null);
+      }else {
         // Text u otros
         group[name] = new FormControl<string | null>(null);
       }
@@ -110,7 +127,65 @@ export class AgendaGlobalFormComponent {
     if (this.form.invalid) return;
 
     const raw = this.form.value;
-    console.log('Respuestas de la agenda:', raw);
-    // aquí luego armas el payload para guardar respuestas
+
+    const answers: StudentAnswerInputDto[] = this.questions.map(q => {
+      const controlName = this.controlName(q);
+      const value = raw[controlName];
+
+      const dto: StudentAnswerInputDto = {
+        questionId: q.id,
+      };
+
+      switch (q.nameAnswer) {
+        case 'Text':
+          dto.valueText = value ?? null;
+          break;
+
+        case 'Bool':
+          dto.valueBool = value ?? null;
+          break;
+
+        case 'Number':
+          dto.valueNumber = value ?? null;
+          break;
+
+        case 'Date':
+          // value es un Date (por matDatepicker)
+          dto.valueDate = value ? (value as Date).toISOString() : null;
+          break;
+
+        case 'OptionSingle':
+          // value = id de la opción seleccionada (number | null)
+          dto.optionIds = value != null ? [value as number] : [];
+          break;
+
+        case 'OptionMulti':
+          // value = number[]
+          dto.optionIds = (value as number[] | null) ?? [];
+          break;
+      }
+
+      return dto;
+    });
+
+    const payload: RegisterGlobalStudentAnswersDto = {
+      agendaDayId: this.agendaDayId,
+      groupId: this.groupId,
+      answers,
+    };
+
+    console.log('Payload GLOBAL a enviar:', payload);
+
+    this.studentAnswerService.saveGlobalAnswers(payload).subscribe({
+      next: () => {
+        // aquí puedes mostrar un toast/snackbar
+        console.log('Agenda global guardada correctamente');
+        this.form.markAsPristine();
+      },
+      error: (err) => {
+        console.error('Error guardando agenda global', err);
+        // aquí tu AlertService si quieres
+      },
+    });
   }
 }

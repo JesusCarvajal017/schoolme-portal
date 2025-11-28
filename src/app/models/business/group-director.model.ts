@@ -33,6 +33,6 @@ export interface GroupDirectorQuery
     status: number;
     agendaState: number;
     agendaId?: number;
-    agendaDay?:number;
+    agendaDayId?:number;
 
 }

@@ -30,5 +30,5 @@ export interface StudentComplete {
 
 export interface UpdateGrupStudent {
     id: number;
-    groupId: number;
+    groupId?: number;
 }

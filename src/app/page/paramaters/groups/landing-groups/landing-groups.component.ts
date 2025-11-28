@@ -26,13 +26,14 @@ import { FormGroupsComponent } from "../../../forms/form-groups/form-groups.comp
 import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
 import { GradeService } from '../../../../service/parameters/grade.service';
 import { Grade } from '../../../../models/parameters/grade.model';
-import { Student } from '../../../../models/parameters/student.model';
+import { Student, UpdateGrupStudent } from '../../../../models/parameters/student.model';
 import { StudentService } from '../../../../service/parameters/student.service';
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatSelect, MatOption, MatSelectChange } from "@angular/material/select";
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TutionService } from '../../../../service/business/tution.service';
 import { TutionCreateModel, TutionQuery } from '../../../../models/business/tutition.model';
+import { UpdateGrade } from '../../../../models/parameters/StatusCivil';
 // import { FormGroupsComponent } from '../../forms/form-groups/form-groups.component';
 
 @Component({
@@ -80,9 +81,8 @@ export class LandingGroupsComponent implements OnInit {
   idGradeTemp!: number;
 
 
-  sin(){
-    alert("sin")
-  }
+  private readonly alerts = inject(TuiAlertService);
+
 
   // titulo de los modales, segun la acción a relizar del crud
   titleGroups!: string;
@@ -136,7 +136,6 @@ export class LandingGroupsComponent implements OnInit {
   //  ======================= end =======================
 
   // servicio de alerta de taiga
-  private readonly alerts = inject(TuiAlertService);
   private readonly serviceGrade = inject(GradeService);
   private readonly serviceStudents = inject(StudentService);
   private readonly serviceTutition = inject(TutionService);
@@ -267,6 +266,35 @@ export class LandingGroupsComponent implements OnInit {
     this.serviceStudents.StudentGroups(gradeId).subscribe({
       next: (data) => {
         this.students = data;
+      }
+    })
+  }
+
+  quitarNino(id: number){
+    let data : UpdateGrupStudent =  { id: id };
+    this.serviceStudents.UpdateGrup(data).subscribe({
+      next: () =>{
+
+        this.serviceTutition.obtenerPorId(id).subscribe({
+          next: (data) => {
+            this.serviceTutition.eliminarLogico(data.id, 1).subscribe({
+              next: ()=>{
+                 // this.serviceTutition.eliminarLogico(){}
+                  this.listTutions(this.idGradeTemp);
+                  
+                  this.alerts
+                    .open('Se a disvinculado el estudiante del grupo', {
+                      label: 'Existoso',
+                      appearance: 'success',
+                      autoClose: 5000
+                    })
+                    .subscribe();
+              }
+            });
+
+          }
+        })
+       
       }
     })
   }

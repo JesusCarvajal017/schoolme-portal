@@ -45,9 +45,9 @@ export interface AgendaDayStudentHeader {
   studentId: number;
   fullName: string;
   document: string;
+  typeDocumetation: string;
+  agendaId: number;
 }
-
-
 
 // modelos de vista de agenda mas especificos para no confundirse:
 export interface QuestionOptionCompositionDto {

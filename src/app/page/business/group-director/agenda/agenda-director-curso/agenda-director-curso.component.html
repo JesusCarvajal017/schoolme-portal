@@ -58,12 +58,12 @@
                 </tr>
               </thead>
               <tbody>
-                @for (item of listStudents; track item.id) {
+                @for (item of listStudents; track item.agendaDayStudentId) {
                 <tr>
                   <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
                   <td>{{ item.fullName}}
-                  <td>{{ item.acronymDocument }}
-                  <td>{{ item.identification }}</td>
+                  <td>{{ item.typeDocumetation }}
+                  <td>{{ item.document }}</td>
                   <td class="actions-col">
                     <button mat-icon-button (click)="abrirAgenda(item)">
                       <mat-icon>calendar_month</mat-icon>
@@ -107,9 +107,13 @@
     <section class="agenda-content">
       <mat-tab-group>
         <mat-tab label="Registro">
-          <app-agenda-global-form [agendaId]="dataCurso.agendaId ?? 0"></app-agenda-global-form>
-          <!-- <textarea placeholder="Observaciones del estudiante..." rows="10" cols="50"></textarea> -->
+          <app-agenda-global-form
+            [agendaId]="dataCurso.agendaId ?? 0"
+            [agendaDayId]="dataCurso.agendaDayId ?? 0"
+            [groupId]="dataCurso.groupId"
+          ></app-agenda-global-form>
         </mat-tab>
+
         <mat-tab label="Observaciones">
           <textarea placeholder="Registro de asistencia..." rows="10" cols="50"></textarea>
         </mat-tab>

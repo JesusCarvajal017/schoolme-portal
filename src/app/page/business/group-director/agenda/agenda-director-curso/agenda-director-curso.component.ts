@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouteConfigLoadEnd, Router } from '@angular/router';
 import { Student, StudentService } from '../../../../../service/parameters/student.service';
 import { group } from '@angular/animations';
-import { AgendaDayModel } from '../../../../../models/business/agenda.model';
+import { AgendaDayModel, AgendaDayStudentHeader } from '../../../../../models/business/agenda.model';
 import { GroupDirectorQuery } from '../../../../../models/business/group-director.model';
 import { AgendaGlobalFormComponent } from "../../../../forms/config/agenda-global-form/agenda-global-form.component";
 import { AgedaDayStudentService } from '../../../../../service/business/agendaDayStudent.service';
@@ -63,11 +63,11 @@ export class AgendaDirectorCursoComponent implements OnInit {
   private serviceStudent = inject(StudentService);
   private servicesAgendaStudent = inject(AgedaDayStudentService);
 
-  listStudents: Student[] = [];
+  listStudents: AgendaDayStudentHeader[] = [];
 
 
   students: Estudiante[] = [];
-  filteredStudents: Estudiante[] = [];
+  filteredStudents: AgendaDayStudentHeader[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
@@ -89,7 +89,7 @@ export class AgendaDirectorCursoComponent implements OnInit {
   }
 
   cargarData(): void {
-    this.serviceStudent.StudentGroups(this.dataCurso.groupId).subscribe({
+    this.servicesAgendaStudent.ByAgendaDayStudents(this.dataCurso.agendaDayId ?? 0).subscribe({
       next: (data) =>{
         this.listStudents = data;
         // console.log(this.dataCurso)
@@ -111,7 +111,7 @@ export class AgendaDirectorCursoComponent implements OnInit {
 
     if (this.searchTerm.trim() !== '') {
       filtered = filtered.filter((r) =>
-        `${r.fullName} ${r.identification} ${r.groupName}`
+        `${r.fullName} ${r.document}`
           .toLowerCase()
           .includes(this.searchTerm)
       );
@@ -136,10 +136,10 @@ export class AgendaDirectorCursoComponent implements OnInit {
     }
   }
 
-  studentIndividual: Student | null = null;
+  studentIndividual: AgendaDayStudentHeader | null = null;
   agendaGlobalBandera: boolean = false;
 
-  abrirAgenda(estudiante?: Student): void {
+  abrirAgenda(estudiante?: AgendaDayStudentHeader): void {
     console.log("se supone que no es agenda individual");
     if(estudiante){
       this.studentIndividual = estudiante;

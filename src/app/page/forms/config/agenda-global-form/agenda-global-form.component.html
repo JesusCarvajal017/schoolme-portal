@@ -19,10 +19,14 @@
               {{ q.text }}
             </h3>
             <p class="question-subtitle">
-              @if (q.nameAnswer === 'Text') {
+             @if (q.nameAnswer === 'Text') {
                 Respuesta de texto
               } @else if (q.nameAnswer === 'Bool') {
                 Sí / No
+              } @else if (q.nameAnswer === 'Number') {
+                Respuesta numérica
+              } @else if (q.nameAnswer === 'Date') {
+                Fecha
               } @else if (q.nameAnswer === 'OptionSingle') {
                 Selecciona una opción
               } @else if (q.nameAnswer === 'OptionMulti') {
@@ -90,6 +94,30 @@
             </div>
           }
 
+          @if (q.options.length === 0 && q.nameAnswer === 'Number') {
+            <mat-form-field appearance="outline" class="full-width">
+              <input
+                matInput
+                type="number"
+                [formControlName]="controlName(q)"
+                placeholder="Escribe un valor numérico..." 
+              />
+            </mat-form-field>
+          }
+
+          <!-- DATE (sin opciones) -->
+          @if (q.options.length === 0 && q.nameAnswer === 'Date') {
+            <mat-form-field appearance="outline" class="full-width">
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [formControlName]="controlName(q)"
+                placeholder="Selecciona una fecha"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          }
         </div>
       </section>
 
