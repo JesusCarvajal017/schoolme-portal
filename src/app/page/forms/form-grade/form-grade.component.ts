@@ -13,6 +13,7 @@ import {TuiInputModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
 import { TuiCheckbox } from '@taiga-ui/kit';
 import { MatIconModule } from "@angular/material/icon";
 import { CreateModelGrade, Grade } from '../../../models/parameters/grade.model';
+import { infoModal } from '../../../models/global/info-modal.model';
 
 @Component({
   selector: 'app-form-grade',
@@ -34,11 +35,8 @@ import { CreateModelGrade, Grade } from '../../../models/parameters/grade.model'
 })
 export class FormGradeComponent implements OnInit, OnChanges { 
 
-  @Input({required: true})
-  title: string = '';
-
-  @Input({required: true})
-  actionDescriptio !: string;
+  @Input()
+  modalInfo?: infoModal;
 
   @Input()
   model?: Grade;

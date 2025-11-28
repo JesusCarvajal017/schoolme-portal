@@ -39,6 +39,8 @@ import { ComposicionPreguntasComponent } from './page/business/composicion-pregu
 import { LadingAgendaAdminComponent } from './page/business/agenda-admin/lading-agenda-admin/lading-agenda-admin.component';
 import { AsignacionAgendaComponent } from './page/business/agenda-admin/asignacion-agenda/asignacion-agenda.component';
 import { ConfiguracionAgendaComponent } from './page/business/agenda-admin/configuracion-agenda/configuracion-agenda.component';
+import { GradosComponent } from './page/paramaters/configuracion/grados/grados.component';
+import { AulasComponent } from './page/paramaters/configuracion/aulas/aulas.component';
 
 
 
@@ -98,6 +100,8 @@ export const routes: Routes = [
             {path: 'agendas', component: LadingAgendaAdminComponent, canActivate: [esAdminGuard]},
             {path: 'agendas/asignacion/:id', component: AsignacionAgendaComponent, canActivate: [esAdminGuard]},
             {path: 'agendas/config/:id', component: ConfiguracionAgendaComponent, canActivate: [esAdminGuard]},
+            {path: 'CGrado', component: GradosComponent, canActivate: [esAdminGuard]},
+            {path: 'CAulas', component: AulasComponent, canActivate: [esAdminGuard]},
         ]
     },
     {path: '**', component: NotFoundComponent}
