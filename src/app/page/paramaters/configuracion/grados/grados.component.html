@@ -1,0 +1,98 @@
+<header tuiHeader class="m-1">
+  <h1 tuiTitle>
+    <div class="col-12 d-flex">
+      <span>Grados</span>
+      <p class="count">{{ filteredGrades.length }} Grados</p>
+    </div>
+  </h1>
+  <aside tuiAccessories>
+    <div tuiAppearance="secondary" tuiButtonGroup>
+      <button class="btn-add" (click)="modalCommand(1)">
+        <mat-icon>add_circle</mat-icon>
+        Crear Grado
+      </button>
+    </div>
+  </aside>
+</header>
+
+<section class="table-container">
+  <div class="col-12 row ">
+    <div class="col-6">
+      <div class="tabs">
+        <button [ngClass]="{'active' : indicadorActive === 1}" (click)="cambiarStatus(1)">Activos</button>
+        <button [ngClass]="{'active' : indicadorActive === 0}" (click)="cambiarStatus(0)">Inactivos</button>
+      </div>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+      <div class="actions">
+        <div class="search-box m-1">
+          <mat-icon>search</mat-icon>
+          <input #searchInput type="text" placeholder="Buscar..." (input)="onSearch(searchInput.value)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-listado-generico [elements]="filteredGrades">
+    <ng-container contenido>
+      <section class="table-container">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre del Grado</th>
+              <th>Status</th>
+              <th class="text-center">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of paginatedGrades; track item.id) {
+            <tr>
+              <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
+              <td>{{ item.name }}</td>
+              <td>
+                <mat-slide-toggle [checked]="item.status === 1" (change)="logical($event, item.id)"></mat-slide-toggle>
+              </td>
+              <td class="actions-col">
+                <button mat-icon-button (click)="modalCommand(2, item.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button [swal]="{
+                      title: 'Confirmación',
+                      text: '¿Deseas borrar este grado?',
+                      showCancelButton: true
+                  }" (confirm)="deleteRegister(item.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="pagination" *ngIf="totalPages > 1">
+          <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+            &lt;
+          </button>
+          <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+            [class.active]="currentPage === i + 1">
+            {{ i + 1 }}
+          </button>
+          <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            &gt;
+          </button>
+        </div>
+      </section>
+    </ng-container>
+  </app-listado-generico>
+</section>
+
+<ng-template let-observer [tuiDialogOptions]="{label: modalInfo?.title}" [(tuiDialog)]="open">
+  <div class="modal-content">
+    <app-form-grade 
+      [modalInfo]="modalInfo" 
+      [model]="modelGrade" 
+      (posteoForm)="handleSubmit($event)">
+    </app-form-grade>
+  </div>
+</ng-template>

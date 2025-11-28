@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="col-12 text-center">
-            <h6>Información del grado</h6>
+            <h6>Información del grupo</h6>
             <p class="text-muted small">Configure los datos básicos</p>
         </div>
         <div class="row p-3">
@@ -18,12 +18,17 @@
                 </tui-input>
             </div>
             <div class="col-md-12 p-2">
-                <tui-input tuiAutoFocus [formControl]="form.controls.gradeName">
-                    Nombre del grado
-                </tui-input>
+                <mat-form-field>
+                    <mat-label>Grado</mat-label>
+                    <mat-select [formControl]="form.controls.gradeId" placeholder="Selecciona un grado">
+                        <mat-option *ngFor="let grade of grades" [value]="grade.id">
+                            {{ grade.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-2">
-                <tui-input tuiAutoFocus [formControl]="form.controls.amountStudents">
+                <tui-input type="number" [formControl]="form.controls.amountStudents">
                     N° de estudiantes
                 </tui-input>
             </div>
@@ -37,6 +42,6 @@
     </div>
 
     <div class="form-actions">
-        <button type="submit" mat-flat-button [disabled]="form.invalid">{{actionDescriptio}}</button>
+        <button type="submit" mat-flat-button [disabled]="form.invalid">{{modalInfo?.titleButton}}</button>
     </div>
 </form>
