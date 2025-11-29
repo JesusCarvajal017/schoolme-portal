@@ -5,7 +5,7 @@ import { GenericService } from '../api/generic.service';
 
 import { ModelLogicalDelete } from '../../global/model/logicalDelete.model';
 import { AgendaDayStudentHeader, AgendaDayStudentModel} from '../../models/business/agenda.model';
-import { RegisterGlobalStudentAnswersDto, StudentAnswerModel } from '../../models/business/studentAsware.mode';
+import { RegisterGlobalStudentAnswersDto, RegisterStudentAnswersDto, StudentAnswerModel } from '../../models/business/studentAsware.mode';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +20,18 @@ export class StudentAnswerService  extends GenericService<StudentAnswerModel, St
     return this.http.get<[]>(`${this.urlBase}?status=${status}`);
   }
 
+  getStudentAnswers(agendaDayStudentId: number) {
+    return this.http.get<RegisterStudentAnswersDto>(
+      `${this.urlBase}/${agendaDayStudentId}/answers`
+    );
+  }
 
   saveGlobalAnswers(dto: RegisterGlobalStudentAnswersDto): Observable<void> {
     return this.http.post<void>(`${this.urlBase}/answers/global`, dto);
   }
 
+  saveStudentAnswers(dto: RegisterStudentAnswersDto) {
+    return this.http.post<void>(`${this.urlBase}/answers`, dto);
+  }
 
 }

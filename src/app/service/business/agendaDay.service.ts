@@ -20,4 +20,9 @@ export class AgedaDayService extends GenericService<AgendaDayModel, AgendaDayMod
     return this.http.get<[]>(`${this.urlBase}?status=${status}`);
   }
 
+  public closeAgenda(agendaDayId : number): Observable<void> {
+    return this.http.post<void>(`${this.urlBase}/${agendaDayId}/close`, { });
+  }
+
+
 }

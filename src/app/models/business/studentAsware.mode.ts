@@ -1,4 +1,6 @@
 export interface StudentAnswerInputDto {
+  id?: number | null;
+  status?: number;
   questionId: number;
   valueText?: string | null;
   valueBool?: boolean | null;
@@ -22,4 +24,11 @@ export interface StudentAnswerModel {
   valueBool: boolean;
   valueNumber: number;
   valueDate: string;   // ISO datetime
+}
+
+export interface RegisterStudentAnswersDto {
+   id?: number | null;
+  status?: number;
+  agendaDayStudentId: number;
+  answers: StudentAnswerInputDto[];
 }

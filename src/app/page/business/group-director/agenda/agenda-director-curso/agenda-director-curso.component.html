@@ -15,8 +15,8 @@
 
           <!-- Derecha: botones de acciones de agenda -->
           <div class="top-agenda-actions d-flex align-items-center gap-2">
-            <button class="btn-agenda-outline m-1" >
-              <!-- (click)="cerrarAgendaGrupo()" -->
+            <button class="btn-agenda-outline m-1" (click)="cerrarAgendaGrupo()">
+              
               cerrar agenda
             </button>
 
@@ -99,11 +99,15 @@
   <!-- Sección Derecha: Vista de la Agenda -->
   <div class="right-section" *ngIf="studentIndividual || agendaGlobalBandera">
     <header class="agenda-header">
-      <h2>Agenda de {{ studentIndividual ? studentIndividual.fullName : 'Agenda General'  }}</h2>
+      <h2>
+        Agenda de
+        {{ studentIndividual ? studentIndividual.fullName : 'Agenda General' }}
+      </h2>
       <button mat-icon-button (click)="cerrarAgenda()">
         <mat-icon>close</mat-icon>
       </button>
     </header>
+
     <section class="agenda-content">
       <mat-tab-group>
         <mat-tab label="Registro">
@@ -111,11 +115,17 @@
             [agendaId]="dataCurso.agendaId ?? 0"
             [agendaDayId]="dataCurso.agendaDayId ?? 0"
             [groupId]="dataCurso.groupId"
+            [mode]="agendaGlobalBandera ? 'global' : 'student'"
+            [agendaDayStudentId]="studentIndividual?.agendaDayStudentId ?? null"
           ></app-agenda-global-form>
         </mat-tab>
 
         <mat-tab label="Observaciones">
-          <textarea placeholder="Registro de asistencia..." rows="10" cols="50"></textarea>
+          <textarea
+            placeholder="Registro de asistencia..."
+            rows="10"
+            cols="50"
+          ></textarea>
         </mat-tab>
       </mat-tab-group>
     </section>

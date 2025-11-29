@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +13,7 @@ import { QuestionCompositionQueryDto } from '../../../../models/business/agenda.
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { RegisterGlobalStudentAnswersDto, StudentAnswerInputDto } from '../../../../models/business/studentAsware.mode';
+import { RegisterGlobalStudentAnswersDto, RegisterStudentAnswersDto, StudentAnswerInputDto } from '../../../../models/business/studentAsware.mode';
 import { StudentAnswerService } from '../../../../service/business/stundeAsware.service';
 
 @Component({
@@ -33,7 +33,7 @@ import { StudentAnswerService } from '../../../../service/business/stundeAsware.
   templateUrl: './agenda-global-form.component.html',
   styleUrl: './agenda-global-form.component.css'
 })
-export class AgendaGlobalFormComponent {
+export class AgendaGlobalFormComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
   private agendaService = inject(AsignacionAgendaService);
   private studentAnswerService = inject(StudentAnswerService);
@@ -45,12 +45,26 @@ export class AgendaGlobalFormComponent {
   @Input({required: true}) agendaDayId!: number;
   @Input({required: true}) groupId!: number;
 
+  @Input() mode: 'global' | 'student' = 'global';
+  @Input() agendaDayStudentId?: number | null;
+
 
   questions: QuestionCompositionQueryDto[] = [];
   form!: FormGroup;
 
   ngOnInit(): void {
     this.loadQuestions();
+  }
+
+  ngOnChanges(): void {
+    // Si ya están las preguntas cargadas y cambia el modo o el estudiante, recargamos respuestas
+    if (this.form && this.questions.length > 0) {
+      if (this.mode === 'student' && this.agendaDayStudentId) {
+        this.loadStudentAnswers();
+      } else if (this.mode === 'global') {
+        this.form.reset();
+      }
+    }
   }
 
   // nombre del control por pregunta
@@ -150,17 +164,14 @@ export class AgendaGlobalFormComponent {
           break;
 
         case 'Date':
-          // value es un Date (por matDatepicker)
           dto.valueDate = value ? (value as Date).toISOString() : null;
           break;
 
         case 'OptionSingle':
-          // value = id de la opción seleccionada (number | null)
           dto.optionIds = value != null ? [value as number] : [];
           break;
 
         case 'OptionMulti':
-          // value = number[]
           dto.optionIds = (value as number[] | null) ?? [];
           break;
       }
@@ -168,24 +179,106 @@ export class AgendaGlobalFormComponent {
       return dto;
     });
 
-    const payload: RegisterGlobalStudentAnswersDto = {
-      agendaDayId: this.agendaDayId,
-      groupId: this.groupId,
-      answers,
-    };
+    // 🔹 MODO GLOBAL
+    if (this.mode === 'global') {
+      const payload: RegisterGlobalStudentAnswersDto = {
+        agendaDayId: this.agendaDayId,
+        groupId: this.groupId,
+        answers,
+      };
 
-    console.log('Payload GLOBAL a enviar:', payload);
+      console.log('Payload GLOBAL a enviar:', payload);
 
-    this.studentAnswerService.saveGlobalAnswers(payload).subscribe({
-      next: () => {
-        // aquí puedes mostrar un toast/snackbar
-        console.log('Agenda global guardada correctamente');
-        this.form.markAsPristine();
-      },
-      error: (err) => {
-        console.error('Error guardando agenda global', err);
-        // aquí tu AlertService si quieres
-      },
-    });
+      this.studentAnswerService.saveGlobalAnswers(payload).subscribe({
+        next: () => {
+          console.log('Agenda global guardada correctamente');
+          this.form.markAsPristine();
+        },
+        error: (err) => {
+          console.error('Error guardando agenda global', err);
+        },
+      });
+
+    // 🔹 MODO INDIVIDUAL (estudiante)
+    } else if (this.mode === 'student' && this.agendaDayStudentId) {
+      const payload: RegisterStudentAnswersDto = {
+        agendaDayStudentId: this.agendaDayStudentId,
+        answers,
+        status: 1
+      };
+
+      console.log('Payload INDIVIDUAL a enviar:', payload);
+
+      this.studentAnswerService.saveStudentAnswers(payload).subscribe({
+        next: () => {
+          console.log('Agenda individual guardada correctamente');
+          this.form.markAsPristine();
+        },
+        error: (err) => {
+          console.error('Error guardando agenda individual', err);
+        },
+      });
+    }
+  }
+
+
+
+  private loadStudentAnswers(): void {
+    if (!this.agendaDayStudentId) return;
+
+    this.studentAnswerService
+      .getStudentAnswers(this.agendaDayStudentId)
+      .subscribe({
+        next: (dto) => {
+          if (!dto || !dto.answers) return;
+
+          // dto.answers: StudentAnswerInputDto[]
+          for (const a of dto.answers) {
+            const q = this.questions.find(q => q.id === a.questionId);
+            if (!q) continue;
+
+            const ctrlName = this.controlName(q);
+            const ctrl = this.form.get(ctrlName);
+            if (!ctrl) continue;
+
+            switch (q.nameAnswer) {
+              case 'Text':
+                ctrl.setValue(a.valueText ?? null);
+                break;
+
+              case 'Bool':
+                ctrl.setValue(a.valueBool ?? null);
+                break;
+
+              case 'Number':
+                ctrl.setValue(a.valueNumber ?? null);
+                break;
+
+              case 'Date':
+                ctrl.setValue(a.valueDate ? new Date(a.valueDate) : null);
+                break;
+
+              case 'OptionSingle':
+                // opción única → primer id de OptionIds
+                ctrl.setValue(
+                  a.optionIds && a.optionIds.length > 0
+                    ? a.optionIds[0]
+                    : null
+                );
+                break;
+
+              case 'OptionMulti':
+                // múltiple → arreglo completo
+                ctrl.setValue(a.optionIds ?? []);
+                break;
+            }
+
+            ctrl.markAsPristine();
+          }
+        },
+        error: (err) => {
+          console.error('Error cargando respuestas del estudiante', err);
+        },
+      });
   }
 }

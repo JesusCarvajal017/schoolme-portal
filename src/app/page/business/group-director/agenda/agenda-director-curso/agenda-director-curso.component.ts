@@ -26,6 +26,8 @@ import { AgendaDayModel, AgendaDayStudentHeader } from '../../../../../models/bu
 import { GroupDirectorQuery } from '../../../../../models/business/group-director.model';
 import { AgendaGlobalFormComponent } from "../../../../forms/config/agenda-global-form/agenda-global-form.component";
 import { AgedaDayStudentService } from '../../../../../service/business/agendaDayStudent.service';
+import { AgedaDayService } from '../../../../../service/business/agendaDay.service';
+import Swal from 'sweetalert2';
 
 interface Estudiante {
   id: number;
@@ -62,6 +64,7 @@ export class AgendaDirectorCursoComponent implements OnInit {
 
   private serviceStudent = inject(StudentService);
   private servicesAgendaStudent = inject(AgedaDayStudentService);
+  private servicesAgendaDay = inject(AgedaDayService);
 
   listStudents: AgendaDayStudentHeader[] = [];
 
@@ -153,13 +156,58 @@ export class AgendaDirectorCursoComponent implements OnInit {
     
   }
 
-  cerrarAgenda(): void {
-    this.studentIndividual = null;
-    this.agendaGlobalBandera = false;
+  cerrarAgendaGrupo(): void {
+    const id = this.dataCurso.agendaDayId ?? 0;
+
+    if (!id) {
+      console.error("No hay agendaDayId");
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Cerrar agenda del grupo?",
+      text: "Una vez cerrada no podrás modificar los registros.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, cerrar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        this.servicesAgendaDay.closeAgenda(id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: "Agenda cerrada",
+              text: "La agenda del grupo se cerró exitosamente.",
+              icon: "success",
+              confirmButtonText: "Aceptar"
+            }).then(() => {
+              this.route.navigate(["/dashboard/dashagenda"]);
+            });
+          },
+          error: (err) => {
+            console.error("Error cerrando agenda", err);
+            Swal.fire(
+              "Error",
+              "Ocurrió un error al cerrar la agenda.",
+              "error"
+            );
+          }
+        });
+
+      }
+    });
   }
 
   volverGrupos(){
     this.route.navigate(["/dashboard/dashagenda"]);
+  }
+
+  cerrarAgenda(): void {
+    this.studentIndividual = null;
+    this.agendaGlobalBandera = false;
   }
 
 }
