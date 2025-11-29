@@ -1,0 +1,27 @@
+<div class="contenedor-futurista">
+  <!-- Sección izquierda: días de la semana -->
+  <div class="seccion-dias">
+    <div class="dias-container">
+      <div *ngFor="let dia of diasSemana" class="boton-dia" [class.activo]="diaSeleccionado === dia" (click)="seleccionarDia(dia)">
+        {{ dia }}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Sección derecha: panel dinámico que muestra las tarjetas de cursos -->
+  <div class="seccion-cursos">
+    @if(diaSeleccionado){
+      <div class="panel-cursos">
+        <h2 class="titulo-panel">Horario de {{ diaSeleccionado }}</h2>
+        <div class="lista-cursos">
+          <div *ngFor="let curso of infoDiaHorario; let i = index" class="tarjeta-curso" [style.animation-delay.ms]="i * 100">
+            <div class="nombre-curso">{{ curso.groupName }}</div>
+            <div class="aula-curso">Aula: {{ curso.groupName }}</div>
+            <div class="estudiantes-curso">Estudiantes: {{ curso.countStudents }}</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>|
+</div>

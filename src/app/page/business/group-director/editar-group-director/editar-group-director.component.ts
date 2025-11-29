@@ -1,9 +1,9 @@
 import { Component, inject, Input, numberAttribute, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
-import { FormGroupDirectorComponent } from '../../forms/form-group-director/form-group-director.component';
-import { GroupDirector, GroupDirectorService } from '../../../service/business/group-director.service';
-import { CreateModelGroupDirector } from '../../../models/business/group-director.model';
+import { GroupDirector, CreateModelGroupDirector } from '../../../../models/business/group-director.model';
+import { GroupDirectorService } from '../../../../service/business/group-director.service';
+import { FormGroupDirectorComponent } from '../../../forms/form-group-director/form-group-director.component';
 
 @Component({
   selector: 'app-editar-group-director',
@@ -27,7 +27,7 @@ export class EditarGroupDirectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.queryEntity(this.id);
-    
+
     this.title = `Editar GroupDirector`;
   }
 
@@ -61,5 +61,9 @@ export class EditarGroupDirectorComponent implements OnInit {
           Swal.fire("Exitoso", "Actualizacion exitosa", "success");
           this.router.navigate(['dashboard/roles']);
        }});
+       
   }
+
+
+  
 }

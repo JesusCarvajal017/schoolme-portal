@@ -15,18 +15,18 @@
 
     <!-- contenido  de todo el dashboard -->
     <div class="row g-3">
-      
+
       <aside class="d-none d-lg-block col-lg-2 slidebar-app" >
 
-        <figure class="logo-sidebar m-1">
-          <img src="./logo-colegio.png" alt="Logo Colegio">
+        <figure class="logo-sidebar">
+          <img src="./logos/logo-remaster.jpg" alt="Logo Colegio">
         </figure>
         <!-- <tui-scrollbar class="box"> -->
           <app-menu [dataSlidebar]="sidebarItems" [indicador]="1"></app-menu>
         <!-- </tui-scrollbar> -->
       </aside>
       <!-- =============================================== Sidebar (desktop) =============================================== -->
-     
+
 
       <!-- Main contenido del dashboard -->
       <main class="col-12 col-lg-10">
@@ -43,12 +43,105 @@
 
           <!-- Barra superior -->
           <div class="flex-grow-1 topbar d-flex align-items-center px-3">
-            <!-- aquí podrías poner buscador o botones -->
-            <!-- <div class=""></div> -->
              <div class="col-12">
                <div class="row">
                   <div class="col-10"></div>
-                  <div class="col-2 d-flex justify-content-end">
+                  <div class="col-2 d-flex justify-content-end align-items-center gap-3">
+
+                    <!-- Botón de Notificaciones -->
+                    <div class="dropdown">
+                      <button class="btn btn-link p-0 position-relative"
+                              type="button"
+                              id="dropdownNotifications"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                        <mat-icon>notifications</mat-icon>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                          3
+                        </span>
+                      </button>
+
+                      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownNotifications" style="width: 320px; max-height: 400px;">
+                        <li class="px-3 py-2 border-bottom">
+                          <h6 class="mb-0">Notificaciones</h6>
+                        </li>
+
+                        <li style="max-height: 300px; overflow-y: auto;">
+                          <ul class="list-unstyled mb-0">
+                            <!-- Notificación 1 -->
+                            <li>
+                              <a href="#" class="dropdown-item py-3 border-bottom">
+                                <div class="d-flex align-items-start gap-2">
+                                  <mat-icon class="text-primary" style="font-size: 20px;">info</mat-icon>
+                                  <div class="flex-grow-1">
+                                    <p class="mb-1 fw-semibold" style="font-size: 0.9rem;">Nueva actualización disponible</p>
+                                    <small class="text-muted">Hace 5 minutos</small>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+
+                            <!-- Notificación 2 -->
+                            <li>
+                              <a href="#" class="dropdown-item py-3 border-bottom">
+                                <div class="d-flex align-items-start gap-2">
+                                  <mat-icon class="text-success" style="font-size: 20px;">check_circle</mat-icon>
+                                  <div class="flex-grow-1">
+                                    <p class="mb-1 fw-semibold" style="font-size: 0.9rem;">Tarea completada exitosamente</p>
+                                    <small class="text-muted">Hace 1 hora</small>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+
+                            <!-- Notificación 3 -->
+                            <li>
+                              <a href="#" class="dropdown-item py-3 border-bottom">
+                                <div class="d-flex align-items-start gap-2">
+                                  <mat-icon class="text-warning" style="font-size: 20px;">warning</mat-icon>
+                                  <div class="flex-grow-1">
+                                    <p class="mb-1 fw-semibold" style="font-size: 0.9rem;">Recordatorio: Reunión en 30 minutos</p>
+                                    <small class="text-muted">Hace 2 horas</small>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+
+                            <!-- Notificación 4 -->
+                            <li>
+                              <a href="#" class="dropdown-item py-3 border-bottom">
+                                <div class="d-flex align-items-start gap-2">
+                                  <mat-icon class="text-info" style="font-size: 20px;">mail</mat-icon>
+                                  <div class="flex-grow-1">
+                                    <p class="mb-1 fw-semibold" style="font-size: 0.9rem;">Nuevo mensaje recibido</p>
+                                    <small class="text-muted">Hace 3 horas</small>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+
+                            <!-- Notificación 5 -->
+                            <li>
+                              <a href="#" class="dropdown-item py-3">
+                                <div class="d-flex align-items-start gap-2">
+                                  <mat-icon class="text-secondary" style="font-size: 20px;">group</mat-icon>
+                                  <div class="flex-grow-1">
+                                    <p class="mb-1 fw-semibold" style="font-size: 0.9rem;">Nuevo miembro agregado al equipo</p>
+                                    <small class="text-muted">Ayer</small>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+
+                        <li class="px-3 py-2 border-top text-center">
+                          <a href="#" class="text-decoration-none small">Ver todas las notificaciones</a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <!-- Avatar -->
                     <tui-avatar tuiDropdownHover tuiDropdownMobile="Contact Us" tuiIconButton type="button" [tuiDropdown]="dropdown" src="@tui.user" size="m"/>
 
                     <!-- despligue de menu de perfil -->
@@ -71,13 +164,10 @@
                               <mat-icon class="m-1">exit_to_app</mat-icon>
                               Salir
                           </a>
-                          
                       </tui-data-list>
                   </ng-template>
-                    
+
                   </div>
-                      <!-- </section> -->
-                  <!-- </div> -->
                </div>
              </div>
 

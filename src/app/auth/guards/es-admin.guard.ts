@@ -3,7 +3,6 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthMainService } from '../../service/auth/auth-main.service';
 
 export const esAdminGuard: CanActivateFn = (route, state) => {
-  
   const router = inject(Router);
   const securityServices  = inject(AuthMainService);
 

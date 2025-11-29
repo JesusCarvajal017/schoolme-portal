@@ -8,11 +8,16 @@ export interface Groups{
     status: number;
 }
 export interface CreateModelGroups{
-    id: number;
+    id?: number;
     name: string;
     gradeId: number;
-    gradeName: string;
-    amountStudents: string;
-    agendaId: number;
+    amountStudents: number;
+    agendaId?: number;
     status: number;
+}
+
+export interface QGroupAgendaRelation{
+    id: number, 
+    name: string,
+    isAssigned : boolean;  
 }

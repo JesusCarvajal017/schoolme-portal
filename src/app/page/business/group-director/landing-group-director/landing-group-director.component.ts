@@ -65,12 +65,12 @@ export class LandingGroupDirectorComponent implements OnInit {
   // NUEVAS PROPIEDADES PARA EL MODAL
   modelGroupDirector?: GroupDirector; // Para editar un rol existente
   isEditMode: boolean = false; // Indica si estamos editando o creando
-  
+
   //  ======================= funcionalidad del modal del taiga =======================
   protected open = false;
 
   // MÉTODO ACTUALIZADO para manejar creación y edición
-  protected modalCommand(title: string, groupDirector?: GroupDirector): void { 
+  protected modalCommand(title: string, groupDirector?: GroupDirector): void {
       this.titleGroups = title;
       this.isEditMode = !!groupDirector; // true si rol existe, false si es undefined
       this.modelGroupDirector = groupDirector; // undefined para crear, objeto Rol para editar
@@ -79,14 +79,14 @@ export class LandingGroupDirectorComponent implements OnInit {
 
   // NUEVO MÉTODO para manejar el submit del formulario
   handleGroupDirectorSubmit(data: CreateModelGroupDirector): void {
-    
+
     if (this.isEditMode && this.modelGroupDirector) {
       // Actualizar rol existente
       const updateData: CreateModelGroupDirector = {
         ...data,
         id: this.modelGroupDirector.id
       };
-      
+
       console.log("holaaa")
 
       this.serviceGroupDirector.actualizar(updateData).subscribe({

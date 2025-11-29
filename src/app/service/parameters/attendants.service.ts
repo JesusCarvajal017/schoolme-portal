@@ -15,7 +15,11 @@ export class AttendantsService extends GenericService<Attendants, CreateModelAtt
     super('Attendants');
   }
  override obtenerTodos(status: number = 1): Observable<Attendants[]> {
-        return this.http.get<Attendants[]>(`${this.urlBase}?status=${status}`);
+    return this.http.get<Attendants[]>(`${this.urlBase}?status=${status}`);
+  }
+
+  obtenerRelacionNinos(status: number = 1, idperson: number): Observable<Attendants[]> {
+    return this.http.get<Attendants[]>(`${this.urlBase}/Relation?status=${status}&personId=${idperson}`);
   }
 
 

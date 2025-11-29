@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { TuiHeader } from '@taiga-ui/layout';
 import { TuiButtonGroup  } from '@taiga-ui/kit';
 import { TuiTitle, TuiAppearance, TuiAlertService, TuiButton, TuiDialog, TuiHint } from '@taiga-ui/core';
-import {TuiInputModule} from '@taiga-ui/legacy';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 // terceros
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
@@ -22,105 +22,120 @@ import Swal from 'sweetalert2';
 // servicios y modelos
 import { GradeService } from '../../../../service/parameters/grade.service';
 import { Grade, CreateModelGrade } from '../../../../models/parameters/grade.model'; // Agregar CreateModelRol
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormGradeComponent } from '../../../forms/form-grade/form-grade.component';
+import { CreateModelGroups, Groups } from '../../../../models/parameters/groups.model';
+import { Student, UpdateGrupStudent } from '../../../../models/parameters/student.model';
+import { TutionCreateModel, TutionQuery } from '../../../../models/business/tutition.model';
+import { StudentService } from '../../../../service/parameters/student.service';
+import { TutionService } from '../../../../service/business/tution.service';
+import { GroupsService } from '../../../../service/parameters/groups.service';
+import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatOption, MatSelect } from "@angular/material/select";
 
 @Component({
   standalone: true,
   selector: 'app-landing-grade',
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     TuiTitle,
     MatSidenavModule,
     MatCardModule,
     TuiHeader,
-    TuiButtonGroup,
-    TuiAppearance,
     MatIconModule,
     MatSlideToggleModule,
     MatButtonModule,
-    // RouterLink,
     SweetAlert2Module,
-    // TuiButton,
     TuiDialog,
     TuiHint,
-    TuiInputModule,
-    FormGradeComponent
+    ListadoGenericoComponent,
+    MatFormField,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    MatTooltipModule
 ],
   templateUrl: './landing-grade.component.html',
   styleUrl: './landing-grade.component.css',
 })
-export class LandingGradeComponent implements OnInit {
+export class LandingGradeTutuionComponent implements OnInit {
 
   // Atributos importantes de modulo
-  grade: Grade[] = [];
-  filteredUsers: Grade[] = [];
+  groups: Groups[] = [];
+  filteredUsers: Groups[] = [];
   idicadorActive : number = 1;
 
+  grades : Grade[] = [];
+  students: Student[] = [];
+  tutions : TutionQuery[] = [];
+
+  studentsNotTution : Student[] = [];
+
+  idicadorProceso : boolean = true;
+  iFormProces: boolean = true;
+  ninoSelect!: string; 
+  studentId !: number;
+  idGradeTemp!: number;
+
+
+
   // titulo de los modales, segun la acción a relizar del crud
-  titleGrade!: string;
+  titleGroups!: string;
 
   // NUEVAS PROPIEDADES PARA EL MODAL
-  modelGrade?: Grade; // Para editar un rol existente
+  modelGroups?: Groups; // Para editar un rol existente
   isEditMode: boolean = false; // Indica si estamos editando o creando
   
   //  ======================= funcionalidad del modal del taiga =======================
   protected open = false;
 
   // MÉTODO ACTUALIZADO para manejar creación y edición
-  protected modalCommand(title: string, grade?: Grade): void { 
-      this.titleGrade = title;
-      this.isEditMode = !!grade; // true si rol existe, false si es undefined
-      this.modelGrade = grade; // undefined para crear, objeto Rol para editar
-      this.open = true;
-  }
+  protected modalCommand(nameStudent: string, idnino: number): void { 
+    this.iFormProces = true;
+    this.open = true;
+    this.ninoSelect = nameStudent;
+    this.studentId = idnino;
 
-  // NUEVO MÉTODO para manejar el submit del formulario
-  handleRolSubmit(data: CreateModelGrade): void {
-    if (this.isEditMode && this.modelGrade) {
-      // Actualizar rol existente
-      const updateData: CreateModelGrade = {
-        ...data,
-        id: this.modelGrade.id
-      };
-      
-      this.serviceGrade.actualizar(updateData).subscribe({
-        next: () => {
-          Swal.fire("Exitoso", "Grado actualizado correctamente", "success");
-          this.closeModal();
-          this.cargarData(this.idicadorActive); // Recargar la lista
-        },
-        error: (err) => {
-          Swal.fire("Error", "No se pudo actualizar el grado", "error");
-          console.error(err);
-        }
-      });
-    } else {
-      // Crear nuevo rol
-      this.serviceGrade.crear(data).subscribe({
-        next: () => {
-          Swal.fire("Exitoso", "Grado creado correctamente", "success");
-          this.closeModal();
-          this.cargarData(this.idicadorActive); // Recargar la lista
-        },
-        error: (err) => {
-          Swal.fire("Error", "No se pudo crear el grado ", "error");
-          console.error(err);
-        }
-      });
-    }
+  }
+  
+  private readonly formBuilder = inject(FormBuilder);
+
+  formTution = this.formBuilder.nonNullable.group({
+    gradeId:  new FormControl<number | null>(null, { validators: [Validators.required] })
+  })
+
+  formGrupos = this.formBuilder.nonNullable.group({
+    groupId:  new FormControl<number | null>(null, { validators: [Validators.required] })
+  })
+
+  notMatriculate(){
+    this.idicadorProceso = true;
+    this.serviceStudents.NoMatriculados().subscribe({
+      next: (data) =>{
+        // carga data para lista los estudiantes especificos que no tienne matricula
+        this.studentsNotTution = data; 
+      },
+      error: () => console.warn("No fue posible recuperar la data de los estudiantes no matriculados")
+    })
   }
 
   // NUEVO MÉTODO para cerrar modal y limpiar datos
   closeModal(): void {
     this.open = false;
-    this.modelGrade = undefined;
+    this.modelGroups = undefined;
     this.isEditMode = false;
+    this.studentId = 0;
   }
   //  ======================= end =======================
 
   // servicio de alerta de taiga
   private readonly alerts = inject(TuiAlertService);
+  private readonly serviceGrade = inject(GradeService);
+  private readonly servicesGroup = inject(GroupsService);
+  private readonly serviceStudents = inject(StudentService);
+  private readonly serviceTutition = inject(TutionService);
 
   // búsqueda
   searchTerm: string = '';
@@ -130,29 +145,16 @@ export class LandingGradeComponent implements OnInit {
   pageSize: number = 5; // 5 por página
   totalPages: number = 1;
 
-  constructor(private serviceGrade: GradeService, private router: Router) {
-    this.cargarData();
+  ngOnInit(): void {
+    this.cargarGrades();
+    this.notMatriculate();
   }
-
-  ngOnInit(): void {}
 
   // notificación de estado
   protected showNotification(message: string): void {
     this.alerts.open(message, { label: 'Se a cambiado el estado!' }).subscribe();
   }
 
-  cambiarStatus(status : number){
-    this.idicadorActive = status;
-    this.cargarData(this.idicadorActive);
-  }
-
-  // cargar roles desde el servicio
-  cargarData(status : number = 1) {
-    this.serviceGrade.obtenerTodos(status).subscribe((data) => {
-      this.grade = data;
-      this.applyFilters();
-    });
-  }
 
   // búsqueda
   onSearch(term: string) {
@@ -162,11 +164,15 @@ export class LandingGradeComponent implements OnInit {
 
   // aplicar búsqueda + paginación
   applyFilters() {
-    let filtered = this.grade;
+    let filtered = this.groups;
 
     if (this.searchTerm.trim() !== '') {
-      filtered = this.grade.filter((r) =>
-        `${r.name}`
+      filtered = this.groups.filter((r) =>
+        `${r.name}
+         ${r.amountStudents}
+         ${r.gradeName}
+         ${r.gradeId}`
+
           .toLowerCase()
           .includes(this.searchTerm)
       );
@@ -194,23 +200,103 @@ export class LandingGradeComponent implements OnInit {
     }
   }
 
-  // activar/desactivar rol
-  logical(event: any, id: number) {
-    let value: number = event.checked ? 1 : 0;
-
-    this.serviceGrade.eliminarLogico(id, value).subscribe({
-      next: () => {
-        this.cargarData(this.idicadorActive);
-        this.showNotification('Se ha cambiado el estado');
-      },
-    });
-  }
-
   // eliminar rol
   deleteRegister(id: number) {
-    this.serviceGrade.eliminar(id).subscribe(() => {
-      Swal.fire('Exitoso', 'El registro ha sido eliminado correctamente', 'success');
-      this.cargarData(this.idicadorActive);
+    this.serviceTutition.eliminar(id).subscribe(() => {
+      this.listTutions(this.idGradeTemp);
+      Swal.fire('Exitoso', 'Matricula borrada exitosamente', 'success');
     });
   }
+
+  cargarGrades(){
+    this.serviceGrade.obtenerTodos(1).subscribe({
+      next: (data) =>{
+        this.grades = data;
+      }
+    })
+  }
+
+  cargarGrupos(){
+    this.servicesGroup.grupGrade(this.idGradeTemp).subscribe({
+      next: (data) =>{
+        console.log(data)
+        this.groups = data;
+      }
+    });
+  }
+
+  studentNoTution(){
+    this.serviceStudents.NoMatriculados().subscribe({
+      next: (data) =>{
+        this.students = data;
+      }
+    })
+  }
+
+
+  matricular(){
+    let dataForm = this.formTution.getRawValue();
+
+    let data : TutionCreateModel = {
+      studentId: this.studentId,
+      status: 1, 
+      gradeId: dataForm.gradeId ?? 0
+    }
+
+    this.serviceTutition.crear(data).subscribe({
+      next: () =>{
+        this.closeModal();
+        this.notMatriculate();
+        Swal.fire('Exitoso', 'Matricula exitosa', 'success');
+      }
+    });
+  }
+
+
+  listTutions(gradeId : number){
+    this.idicadorProceso = false;
+
+    this.idGradeTemp = gradeId;
+
+    this.serviceTutition.tutionGrade(gradeId).subscribe({
+      next: (data) => {
+        this.tutions = data;
+      }
+    })
+  }
+
+  tutionIdtemp!:number;
+
+  agrupar(idS : number, idT: number){
+    this.tutionIdtemp= idT;
+    this.cargarGrupos();
+    this.iFormProces = false;
+    this.studentId = idS;
+    this.open = true;
+  }
+
+
+  AsiganarGrupo(){
+    let dataForm = this.formGrupos.getRawValue();
+
+    let data : UpdateGrupStudent = {
+      id: this.studentId,
+      groupId: dataForm.groupId ?? 0
+    }
+
+
+    this.serviceStudents.UpdateGrup(data).subscribe({
+      next: ()=>{
+        this.serviceTutition.eliminarLogico(this.tutionIdtemp,5).subscribe({
+          next: () => {
+            this.closeModal();
+            this.listTutions(this.idGradeTemp);
+            Swal.fire('Exitoso', 'Agrupacion exitosa', 'success');
+          }  
+        })
+      }
+    })
+
+  }
+  
 }

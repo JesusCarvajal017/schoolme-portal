@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
@@ -9,20 +9,27 @@ import { RouterLink } from '@angular/router';
 
 import { TuiHeader} from '@taiga-ui/layout';
 import { TuiDataList, TuiHint, TuiIcon, TuiTextfield, TuiTitle } from '@taiga-ui/core';
-import {TuiInputModule, TuiTextfieldControllerModule} from '@taiga-ui/legacy';
+import {TuiInputModule, TuiTextfieldControllerModule, TuiSelectModule} from '@taiga-ui/legacy';
 
 import { TuiCheckbox } from '@taiga-ui/kit';
 import { MatIconModule } from "@angular/material/icon";
 import { CreateModelGroups, Groups } from '../../../models/parameters/groups.model';
+import { infoModal } from '../../../models/global/info-modal.model';
+import { GradeService } from '../../../service/parameters/grade.service';
+import { Grade } from '../../../models/parameters/grade.model';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-form-groups',
   imports: [FormsModule, MatFormFieldModule,
     MatInputModule, ReactiveFormsModule,
     MatButtonModule, MatSlideToggleModule,
+    MatSelectModule, MatOptionModule,
     // RouterLink, TuiTitle, TuiHeader,
     TuiInputModule,
     TuiTextfieldControllerModule,
+    TuiSelectModule,
     TuiDataList,
     TuiHint,
     TuiCheckbox, MatIconModule,
@@ -34,11 +41,8 @@ import { CreateModelGroups, Groups } from '../../../models/parameters/groups.mod
 })
 export class FormGroupsComponent implements OnInit, OnChanges { 
 
-  @Input({required: true})
-  title: string = '';
-
-  @Input({required: true})
-  actionDescriptio !: string;
+  @Input()
+  modalInfo?: infoModal;
 
   @Input()
   model?: Groups;
@@ -46,16 +50,35 @@ export class FormGroupsComponent implements OnInit, OnChanges {
   @Output()
   posteoForm = new EventEmitter<CreateModelGroups>();
 
+  grades: Grade[] = [];
+
+  stringifyGrade = (grade: Grade): string => grade.name;
+
+  private readonly gradeService = inject(GradeService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
   ngOnInit(): void {
-    // Inicialización si es necesaria
+    this.loadGrades();
+  }
+
+  loadGrades(): void {
+    this.gradeService.obtenerTodos(1).subscribe({
+      next: (data) => {
+        this.grades = data;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error loading grades:', err);
+      }
+    });
   }
 
   private readonly formBuilder = inject(FormBuilder);
 
   form = this.formBuilder.nonNullable.group({
     name: ['', {validators: [Validators.required, Validators.minLength(2)]}],
-    gradeName: ['', {validators: [Validators.required, Validators.minLength(5)]}],
-    amountStudents: ['', {validators: [Validators.required, Validators.minLength(5)]}],
+    gradeId: [0, {validators: [Validators.required, Validators.min(1)]}],
+    amountStudents: ['0', {validators: [Validators.required, Validators.minLength(1)]}],
     status: [true],
   });
 
@@ -63,7 +86,7 @@ export class FormGroupsComponent implements OnInit, OnChanges {
     if(this.model){
       let values = {
         name: this.model.name,
-        gradeName: this.model.gradeName,
+        gradeId: this.model.gradeId,
         amountStudents: this.model.amountStudents,
         status: this.model.status == 1 ? true : false, // convertir el valor numerico a un valor booleano
       }
@@ -75,15 +98,20 @@ export class FormGroupsComponent implements OnInit, OnChanges {
   emitirValoresForm(){
     let capture = this.form.getRawValue(); // capturar los datos del formulario
 
-    const dataGroups : CreateModelGroups = {
-      ...capture,
+    const dataGroups: any = {
+      name: capture.name,
+      gradeId: capture.gradeId,
+      amountStudents: parseInt(capture.amountStudents) || 0,
       status: capture.status ? 1 : 0,
-      id: 0,
-      gradeId: 0,
       agendaId: 0
     }
 
-    this.posteoForm.emit(dataGroups);
+    // Only include id for updates
+    if (this.model?.id) {
+      dataGroups.id = this.model.id;
+    }
+
+    this.posteoForm.emit(dataGroups as CreateModelGroups);
   }
 
   guardarCambios(){

@@ -1,0 +1,134 @@
+<div class="agenda-container" [ngClass]="{'split-view': studentIndividual}">
+
+  <!-- Sección Izquierda: Listado de Estudiantes -->
+  <div class="left-section">
+    <header tuiHeader class="m-2">
+      <h1 tuiTitle>
+        <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+          <!-- Izquierda: título + contador -->
+          <div class="d-flex align-items-center flex-wrap gap-2">
+            <mat-icon class="m-1" matTooltip="volver" (click)="volverGrupos()">chevron_left</mat-icon>
+            <span>{{dataCurso.nameGroup}}</span>
+            <p class="count">{{ listStudents.length }} Estudiantes</p>
+          </div>
+
+          <!-- Derecha: botones de acciones de agenda -->
+          <div class="top-agenda-actions d-flex align-items-center gap-2">
+            <button class="btn-agenda-outline m-1" (click)="cerrarAgendaGrupo()">
+              
+              cerrar agenda
+            </button>
+
+            <button class="btn-agenda-solid m-1" (click)="abrirAgenda()">
+              <!-- (click)="abrirAgendaGlobal()" -->
+              agenda global
+            </button>
+          </div>
+
+        </div>
+      </h1>
+    </header>
+
+    <section class="table-container">
+      <!-- <div class="col-12 d-flex justify-content-end"> -->
+        <!-- Buscador -->
+        <!-- <div class="actions">
+          <div class="search-box m-1">
+            <mat-icon>search</mat-icon>
+            <input #searchInput type="text" placeholder="Buscar..." (input)="onSearch(searchInput.value)" />
+          </div>
+        </div> -->
+      <!-- </div> -->
+
+      <app-listado-generico [elements]="listStudents">
+        <ng-container contenido>
+          <section class="table-container">
+
+
+            <!-- Tabla -->
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombres</th>
+                  <th>Tipo</th>
+                  <th>Identificación</th>
+                  <th class="text-center">Agenda</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of listStudents; track item.agendaDayStudentId) {
+                <tr>
+                  <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
+                  <td>{{ item.fullName}}
+                  <td>{{ item.typeDocumetation }}
+                  <td>{{ item.document }}</td>
+                  <td class="actions-col">
+                    <button mat-icon-button (click)="abrirAgenda(item)">
+                      <mat-icon>calendar_month</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <div class="pagination" *ngIf="totalPages > 1">
+              <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                <
+              </button>
+
+              <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+                [class.active]="currentPage === i + 1">
+                {{ i + 1 }}
+              </button>
+
+              <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                >
+              </button>
+            </div>
+          </section>
+        </ng-container>
+
+      </app-listado-generico>
+    </section>
+  </div>
+
+  <!-- Sección Derecha: Vista de la Agenda -->
+  <div class="right-section" *ngIf="studentIndividual || agendaGlobalBandera">
+    <header class="agenda-header">
+      <h2>
+        Agenda de
+        {{ studentIndividual ? studentIndividual.fullName : 'Agenda General' }}
+      </h2>
+      <button mat-icon-button (click)="cerrarAgenda()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </header>
+
+    <section class="agenda-content">
+      <mat-tab-group>
+        <mat-tab label="Registro">
+          <app-agenda-global-form
+            [agendaId]="dataCurso.agendaId ?? 0"
+            [agendaDayId]="dataCurso.agendaDayId ?? 0"
+            [groupId]="dataCurso.groupId"
+            [mode]="agendaGlobalBandera ? 'global' : 'student'"
+            [agendaDayStudentId]="studentIndividual?.agendaDayStudentId ?? null"
+          ></app-agenda-global-form>
+        </mat-tab>
+
+        <mat-tab label="Observaciones">
+          <textarea
+            placeholder="Registro de asistencia..."
+            rows="10"
+            cols="50"
+          ></textarea>
+        </mat-tab>
+      </mat-tab-group>
+    </section>
+  </div>
+
+</div>
