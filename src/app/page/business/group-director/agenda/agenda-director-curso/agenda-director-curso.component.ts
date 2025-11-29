@@ -24,10 +24,10 @@ import { Student, StudentService } from '../../../../../service/parameters/stude
 import { group } from '@angular/animations';
 import { AgendaDayModel, AgendaDayStudentHeader } from '../../../../../models/business/agenda.model';
 import { GroupDirectorQuery } from '../../../../../models/business/group-director.model';
-import { AgendaGlobalFormComponent } from "../../../../forms/config/agenda-global-form/agenda-global-form.component";
 import { AgedaDayStudentService } from '../../../../../service/business/agendaDayStudent.service';
 import { AgedaDayService } from '../../../../../service/business/agendaDay.service';
 import Swal from 'sweetalert2';
+import { AgendaGlobalFormComponent } from '../../../../forms/config/agenda-global-form/agenda-global-form.component';
 
 interface Estudiante {
   id: number;
@@ -54,6 +54,7 @@ interface Estudiante {
     ListadoGenericoComponent,
     MatTooltipModule,
     AgendaGlobalFormComponent
+  
 ],
   templateUrl: './agenda-director-curso.component.html',
   styleUrl: './agenda-director-curso.component.css',
