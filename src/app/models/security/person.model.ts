@@ -72,6 +72,7 @@ export interface CreateModelPerson{
   secondLastName: string;
   phone: number;
   gender: number;
+  email: string;
   dataBasic: CreateDataBasic;
 }
 
@@ -87,8 +88,11 @@ export interface PersonComplete {
   secondLastName: string;
   phone: number;
   gender: number;
+  email:string;
   dataBasic: DataBasicComplete;
 }
+
+
 
 
 // modelo para el formulario reactivo

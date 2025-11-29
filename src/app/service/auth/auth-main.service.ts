@@ -5,6 +5,7 @@ import { CredencialesUsuario, RespondAuth } from '../../global/dtos/seguridad';
 import { Observable, tap, firstValueFrom, catchError, throwError } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
 import { UserService } from '../user.service';
+import { StatusSystem } from '../../models/global/StatusSystem.model';
 
 // Interface para el usuario decodificado del JWT
 interface DecodedToken {
@@ -100,6 +101,14 @@ export class AuthMainService {
       );
   }
 
+  enviarCodigo(email: string) : Observable<StatusSystem>{
+    return this.http.post<StatusSystem>(`${this.urlBase}/Auth/ResetPassword/${email}`, null)
+  }
+
+  validateCodigo(email: string, codigo: string) : Observable<StatusSystem> {
+    return this.http.post<StatusSystem>(`${this.urlBase}/Auth/ValidationCode/${email}/${codigo}`, null);
+  }
+
   // ************** Guardar token en localStorage **************
   public guardaToken(authReponde: RespondAuth) {
     localStorage.setItem(this.llaveToken, authReponde.token);
@@ -178,4 +187,9 @@ export class AuthMainService {
       return 0;
     }
   }
+
+
+
+
+
 }

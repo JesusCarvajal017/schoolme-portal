@@ -1,0 +1,11 @@
+.chart-wrapper {
+  position: relative;
+  height: 320px;
+}
+.chart-wrapper.tall {
+  height: 380px;
+}
+@media (min-width: 992px) {
+  .chart-wrapper { height: 360px; }
+  .chart-wrapper.tall { height: 420px; }
+}

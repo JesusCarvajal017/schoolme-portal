@@ -1,0 +1,35 @@
+<div class="teacher-list-container">
+  <div class="teacher-list-header">
+    <h6>
+      <mat-icon>people</mat-icon>
+      Seleccione un docente para gestionar su carga académica
+    </h6>
+    <span class="teacher-count">{{ teachers.length }} docente(s)</span>
+  </div>
+
+  <div class="teacher-grid">
+    <div
+      *ngFor="let teacher of teachers"
+      class="teacher-card"
+      [class.selected]="selectedTeacherId === teacher.id"
+      (click)="onTeacherClick(teacher)">
+
+      <div class="teacher-avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+
+      <div class="teacher-info">
+        <span class="teacher-name">{{ teacher.fullName }}</span>
+      </div>
+
+      <div class="teacher-action">
+        <mat-icon>arrow_forward</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="teachers.length === 0" class="empty-state">
+    <mat-icon>search_off</mat-icon>
+    <p>No hay docentes disponibles</p>
+  </div>
+</div>

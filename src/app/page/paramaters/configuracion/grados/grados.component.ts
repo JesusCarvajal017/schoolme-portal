@@ -1,0 +1,236 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+
+// angular material
+import { MatCardModule } from '@angular/material/card';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+
+// taiga-ui
+import { TuiHeader } from '@taiga-ui/layout';
+import { TuiButtonGroup } from '@taiga-ui/kit';
+import { TuiTitle, TuiAppearance, TuiAlertService, TuiDialog } from '@taiga-ui/core';
+
+// terceros
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2';
+
+// servicios y modelos
+import { GradeService } from '../../../../service/parameters/grade.service';
+import { Grade, CreateModelGrade } from '../../../../models/parameters/grade.model';
+import { ListadoGenericoComponent } from "../../../../components/listado-generico/listado-generico.component";
+import { FormGradeComponent } from "../../../forms/form-grade/form-grade.component";
+import { infoModal } from '../../../../models/global/info-modal.model';
+
+@Component({
+  standalone: true,
+  selector: 'app-landing-grade',
+  imports: [
+    CommonModule,
+    TuiTitle,
+    MatSidenavModule,
+    MatCardModule,
+    TuiHeader,
+    TuiButtonGroup,
+    TuiAppearance,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatButtonModule,
+    SweetAlert2Module,
+    TuiDialog,
+    ListadoGenericoComponent,
+    FormGradeComponent
+  ],
+  templateUrl: './grados.component.html',
+  styleUrl: './grados.component.css',
+})
+export class GradosComponent implements OnInit {
+  
+  // Modelos
+  grades: Grade[] = [];
+  filteredGrades: Grade[] = [];
+  modelGrade?: Grade;
+  modalInfo!: infoModal;
+
+  indicadorActive: number = 1;
+  isEditMode: boolean = false;
+
+  // Modal
+  protected open = false;
+
+  // Búsqueda y paginación
+  searchTerm: string = '';
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 1;
+
+  // Servicios
+  private readonly alerts = inject(TuiAlertService);
+  private serviceGrade = inject(GradeService);
+
+  ngOnInit(): void {
+    this.cargarData();
+  }
+
+  protected showNotification(message: string): void {
+    this.alerts.open(message, { label: 'Estado actualizado!' }).subscribe();
+  }
+
+  protected modalCommand(action: number, id: number = 0): void { 
+    if(action === 2) {
+      // Modo edición
+      this.isEditMode = true;
+      
+      this.serviceGrade.obtenerPorId(id).subscribe({
+        next: (data) => {
+          this.modelGrade = data;
+          
+          this.modalInfo = {
+            title: "Actualización de Grado",
+            titleButton: "Actualizar",
+            descripcion: ""
+          };
+          
+          this.open = true;
+        },
+        error: (err) => {
+          console.error('Error al cargar grado:', err);
+          Swal.fire("Error", "No se pudo cargar el grado", "error");
+        }
+      });
+    } else if(action === 1) {
+      // Modo creación
+      this.clearData();
+      this.isEditMode = false;
+      
+      this.modalInfo = {
+        title: "Registrar Grado",
+        titleButton: "Registrar",
+        descripcion: ""
+      };
+      
+      this.open = true;
+    } else {
+      this.clearData();
+    }
+  }
+
+  clearData(): void {
+    this.modelGrade = undefined;
+  }
+
+  handleSubmit(data: CreateModelGrade): void {
+    if(this.isEditMode && this.modelGrade?.id) {
+      // Actualizar
+      this.serviceGrade.actualizar({ id: this.modelGrade.id, ...data }).subscribe({
+        next: () => {
+          this.closeModal();
+          this.cargarData(this.indicadorActive);
+          Swal.fire("Exitoso", "Grado actualizado correctamente", "success");
+        },
+        error: (err) => {
+          console.error('Error al actualizar:', err);
+          Swal.fire("Error", "No se pudo actualizar el grado", "error");
+        }
+      });
+    } else {
+      // Crear
+      this.serviceGrade.crear(data).subscribe({
+        next: () => {
+          this.closeModal();
+          this.cargarData(this.indicadorActive);
+          Swal.fire("Exitoso", "Grado creado correctamente", "success");
+        }, 
+        error: (err) => {
+          console.error('Error al crear:', err);
+          Swal.fire("Error", "No se pudo crear el grado", "error");
+        }
+      });
+    }
+  }
+
+  closeModal(): void {
+    this.open = false;
+    this.modelGrade = undefined;
+    this.isEditMode = false;
+  }
+
+  cambiarStatus(status: number): void {
+    this.indicadorActive = status;
+    this.cargarData(this.indicadorActive);
+  }
+
+  cargarData(status: number = 1): void {
+    this.serviceGrade.obtenerTodos(status).subscribe({
+      next: (data) => {
+        this.grades = data;
+        this.applyFilters();
+      },
+      error: (err) => {
+        console.error('Error al cargar grados:', err);
+      }
+    });
+  }
+
+  onSearch(term: string): void {
+    this.searchTerm = term.toLowerCase();
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let filtered = this.grades;
+
+    if (this.searchTerm.trim() !== '') {
+      filtered = this.grades.filter((grade) =>
+        grade.name.toLowerCase().includes(this.searchTerm)
+      );
+    }
+
+    this.filteredGrades = filtered;
+    this.totalPages = Math.ceil(this.filteredGrades.length / this.pageSize);
+
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages || 1;
+    }
+  }
+
+  get paginatedGrades() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredGrades.slice(start, start + this.pageSize);
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  logical(event: any, id: number): void {
+    let value: number = event.checked ? 1 : 0;
+
+    this.serviceGrade.eliminarLogico(id, value).subscribe({
+      next: () => {
+        this.cargarData(this.indicadorActive);
+        this.showNotification('Se ha cambiado el estado');
+      },
+      error: (err) => {
+        console.error('Error al cambiar estado:', err);
+      }
+    });
+  }
+
+  deleteRegister(id: number): void {
+    this.serviceGrade.eliminar(id).subscribe({
+      next: () => {
+        Swal.fire('Exitoso', 'El grado ha sido eliminado correctamente', 'success');
+        this.cargarData(this.indicadorActive);
+      },
+      error: (err) => {
+        console.error('Error al eliminar:', err);
+        Swal.fire('Error', 'No se pudo eliminar el grado', 'error');
+      }
+    });
+  }
+}

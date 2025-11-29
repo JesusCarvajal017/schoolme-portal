@@ -19,12 +19,16 @@
     border-radius: 20px;
     background-color: var(--primary);
     overflow-y: auto;
+
+    padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 /* logo del dasboard */
 .logo-sidebar{
-    display: flex;
-    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 
@@ -35,7 +39,11 @@
 }
 
 .logo-sidebar img{
-    width: 70px;
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* opcional, para mantener proporción */
+
 }
 
 

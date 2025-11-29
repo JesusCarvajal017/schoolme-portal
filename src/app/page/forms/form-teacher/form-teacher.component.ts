@@ -1,25 +1,22 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { CreateModelStudent, Student } from '../../../models/parameters/student.model';
-import { RouterLink } from '@angular/router';
 
-import { TuiHeader } from '@taiga-ui/layout';
-import { TuiDataList, TuiHint, TuiIcon, TuiTextfield, TuiTitle } from '@taiga-ui/core';
-import { TuiInputModule, TuiTextfieldControllerModule, TuiSelectModule } from '@taiga-ui/legacy';
 
-import { TuiCheckbox, TuiDataListWrapper, TuiTooltip } from '@taiga-ui/kit';
-import { MatIconModule } from "@angular/material/icon";
-import { CommonModule } from '@angular/common';
+import { MatIconModule, MatIcon } from "@angular/material/icon";
+import { CommonModule, JsonPipe } from '@angular/common';
 
 // Importar servicios para obtener usuarios y roles
 import { PersonService } from '../../../service/person.service';
 import { CreateModelPerson, Person, PersonOrigin } from '../../../models/security/person.model';
 import { Teacher, TeacherService } from '../../../service/parameters/teacher.service';
 import { CreateModelTeacher } from '../../../models/parameters/teacher.model';
+import { TuiStringHandler } from '@taiga-ui/cdk/types';
+import { TuiTextfield, TuiDataList} from "@taiga-ui/core";
+import { TuiChevron, TuiSelect, TuiCheckbox } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-form-teacher',
@@ -31,19 +28,17 @@ import { CreateModelTeacher } from '../../../models/parameters/teacher.model';
     ReactiveFormsModule,
     MatButtonModule,
     MatSlideToggleModule,
-
-    TuiTextfieldControllerModule,
-    TuiInputModule,
-    TuiSelectModule,
+    MatIcon,
+    TuiChevron,
     TuiTextfield,
+    TuiSelect,
     TuiDataList,
-    TuiHint,
-    MatIconModule,
-
-    TuiDataListWrapper,
-  ],
+    TuiCheckbox,
+    // FormControl
+],
   templateUrl: './form-teacher.component.html',
-  styleUrl: './form-teacher.component.css'
+  styleUrl: './form-teacher.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormTeacherComponent implements OnInit, OnChanges {
 
@@ -61,12 +56,18 @@ export class FormTeacherComponent implements OnInit, OnChanges {
 
   // Listas para los dropdowns
   persons: Person[] = [];
+  personList: PersonOrigin[] = [];
 
   // Loading states
   loadingPerson = false;
 
   private readonly formBuilder = inject(FormBuilder);
   private readonly personService = inject(PersonService);
+  
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  protected readonly stringify: TuiStringHandler<number> = (id) =>
+    this.personList.find((item) => item.id === id)?.fisrtName ?? '';
   
 
   form = this.formBuilder.nonNullable.group({
@@ -75,7 +76,6 @@ export class FormTeacherComponent implements OnInit, OnChanges {
   });
 
   ngOnInit(): void {
-    // this.loadUsers();
     this.cargarPerson();
   }
 
@@ -89,22 +89,6 @@ export class FormTeacherComponent implements OnInit, OnChanges {
     }
   }
 
-  // // Cargar usuarios desde el servicio
-  // loadUsers(): void {
-  //   this.loadingPerson = true;
-  //   this.personService.obtenerTodos(1).subscribe({
-  //     next: (data) => {
-  //       this.persons = data;
-  //       this.loadingPerson = false;
-  //     },
-  //     error: (err) => {
-  //       console.error('Error cargando usuarios:', err);
-  //       this.loadingPerson = false;
-  //     }
-  //   });
-  // }
-
- 
   // Obtener nombre del usuario seleccionado
   getSelectedPersonName(): string {
     const PersonId = this.form.get('PersonId')?.value;
@@ -113,19 +97,18 @@ export class FormTeacherComponent implements OnInit, OnChanges {
   }
 
 
-
   // Función principal para emitir los valores del formulario
   emitirValoresForm(): void {
     if (this.form.valid) {
       let capture = this.form.getRawValue();
 
       const dataGroupDirector: CreateModelTeacher = {
-        id: this.model?.id || 0,
+        // id: this.model?.id || 0,
         personId: capture.personId,
-        fullName: this.getSelectedPersonName(),
         status: capture.status ? 1 : 0,
-
       }
+
+      // console.log(dataGroupDirector);
 
       this.posteoForm.emit(dataGroupDirector);
     }
@@ -141,7 +124,7 @@ export class FormTeacherComponent implements OnInit, OnChanges {
 
 
   // lista de la data a traer del la db
-  personList: PersonOrigin[] = [];
+  
   personListById = new Map(this.personList.map(d => [d.id, d.fullName]));
 
   idToNamePerson = (v: number | string | null | undefined): string => {
@@ -151,9 +134,27 @@ export class FormTeacherComponent implements OnInit, OnChanges {
   };
 
   cargarPerson(): void {
-    this.personService.obtenerTodos().subscribe(data => {
+    this.personService.obtenerTodosOrigin().subscribe(data => {
       this.personList = data;
-      this.personListById = new Map(this.personList.map(d => [d.id, d.fullName]));
+      this.cdr.markForCheck();
+      // this.personListById = new Map(this.personList.map(d => [d.id, d.fullName]));
     });
   }
+
+
+   protected readonly items: readonly Python[] = [
+        {id: 42, name: 'John Cleese'},
+        {id: 237, name: 'Eric Idle'},
+        {id: 666, name: 'Michael Palin'},
+        {id: 123, name: 'Terry Gilliam'},
+        {id: 777, name: 'Terry Jones'},
+        {id: 999, name: 'Graham Chapman'},
+    ];
+
+  
+  }
+
+interface Python {
+  readonly id: number;
+  readonly name: string;
 }

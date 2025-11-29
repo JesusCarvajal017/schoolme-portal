@@ -1,3 +1,5 @@
+import { PersonComplete } from "../security/person.model";
+
 export interface Student {
     id: number;
     personId: number;
@@ -9,11 +11,24 @@ export interface Student {
     groupName: string;
     status: number;
 }
+
+
 export interface CreateModelStudent{
+    id?: number;
+    personId: number;
+    groupId?: number;
+    status: number;
+}
+
+export interface StudentComplete {
     id: number;
     personId: number;
-    groupName: string;
-    fullName: string;
-    groupId: number;
     status: number;
+    groupId: number;
+    person: PersonComplete;
+}
+
+export interface UpdateGrupStudent {
+    id: number;
+    groupId?: number;
 }

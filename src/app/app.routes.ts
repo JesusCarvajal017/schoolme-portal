@@ -16,11 +16,9 @@ import { LandingFormComponent } from './page/security/form/landing-form/landing-
 import { LandingModuleFormComponent } from './page/security/module-form/landing-module-form/landing-module-form.component';
 import { LandingUserRolComponent } from './page/security/user-rol/landing-user-rol/landing-user-rol.component';
 import { LandingRolFormPermissionComponent } from './page/security/rol-form-permission/landing-rol-form-permission/landing-rol-form-permission.component';
-import { LandingGradeComponent } from './page/paramaters/grade/landing-grade/landing-grade.component';
 import { LandingDocumentTypeComponent } from './page/paramaters/document-type/landing-document-type/landing-document-type.component';
 import { LandingEpsComponent } from './page/paramaters/eps/landing-eps/landing-eps.component';
 import { LandingMunicipalityComponent } from './page/paramaters/municipality/landing-municipality/landing-municipality.component';
-import { LandingRhComponent } from './page/paramaters/rh/landing-rh/landing-rh.component';
 import { LandingGroupsComponent } from './page/paramaters/groups/landing-groups/landing-groups.component';
 import { ProfileComponent } from './page/security/user/profile/profile/profile.component';
 import { LandingHomeComponent } from './page/home/landing-home/landing-home.component';
@@ -28,12 +26,33 @@ import { LandingGroupDirectorComponent } from './page/business/group-director/la
 import { LandingAcademicLoadComponent } from './page/business/academic-load/landing-academic-load/landing-academic-load.component';
 import { LandingStudentComponent } from './page/paramaters/student/landing-student/landing-student.component';
 import { LandingTeacherComponent } from './page/paramaters/teacher/landing-teacher/landing-teacher.component';
-import { LandingAttendantsComponent } from './page/business/attendants/landing-attendants/landing-attendants.component';
 import { AjustesSecurityComponent } from './page/security/user/ajustes-security/ajustes-security.component';
+import { PanelComponent } from './page/home/panel/panel.component';
+import { LandingComponent } from './page/home/landing-page/landing.component';
+import { LandigPageComponent } from './page/paramaters/acudientes/landig-page/landig-page.component';
+import { MiFamiliaComponent } from './page/paramaters/acudientes/mi-familia/mi-familia.component';
+import { HorarioDocenteComponent } from './page/business/group-director/horario-docente/horario-docente.component';
+import { DirectorCursosDashboardComponent } from './page/business/group-director/agenda/director-cursos-dashboard/director-cursos-dashboard.component';
+import { AgendaDirectorCursoComponent } from './page/business/group-director/agenda/agenda-director-curso/agenda-director-curso.component';
+import { LandingGradeTutuionComponent } from './page/paramaters/grade/landing-grade/landing-grade.component';
+import { ComposicionPreguntasComponent } from './page/business/composicion-preguntas/composicion-preguntas.component';
+import { LadingAgendaAdminComponent } from './page/business/agenda-admin/lading-agenda-admin/lading-agenda-admin.component';
+import { AsignacionAgendaComponent } from './page/business/agenda-admin/asignacion-agenda/asignacion-agenda.component';
+import { ConfiguracionAgendaComponent } from './page/business/agenda-admin/configuracion-agenda/configuracion-agenda.component';
+import { GradosComponent } from './page/paramaters/configuracion/grados/grados.component';
+import { AulasComponent } from './page/paramaters/configuracion/aulas/aulas.component';
+import { MateriasComponent } from './page/paramaters/configuracion/materias/materias.component';
+
+
+
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '', redirectTo: '', pathMatch: 'full' },
+    {
+        path: '',
+        component: LandingComponent
+    },
     {
         path: 'login',
         component: LoginMainComponent
@@ -57,25 +76,39 @@ export const routes: Routes = [
             { path: 'asiganacionModulos', component: LandingModuleFormComponent, canActivate: [esAdminGuard]},
             { path: 'asignacionRoles', component: LandingUserRolComponent, canActivate: [esAdminGuard]},
             { path: 'asignacionPermisos', component: LandingRolFormPermissionComponent, canActivate: [esAdminGuard]},
-            { path: 'grados', component: LandingGradeComponent, canActivate: [esAdminGuard]},
+            { path: 'grados', component: GradosComponent, canActivate: [esAdminGuard]},
             { path: 'tipoIdentificacion', component: LandingDocumentTypeComponent, canActivate: [esAdminGuard]},
             { path: 'eps', component: LandingEpsComponent, canActivate: [esAdminGuard]},
             { path: 'municipio', component: LandingMunicipalityComponent, canActivate: [esAdminGuard]},
-            { path: 'rh',  component: LandingRhComponent, canActivate: [esAdminGuard]},
-            { path: 'grupos', component: LandingGroupsComponent, canActivate: [esAdminGuard]},
+            { path: 'grupos', component: AulasComponent, canActivate: [esAdminGuard]},
             { path: 'perfil', component: ProfileComponent, canActivate: [esAdminGuard] },
             { path: 'ajustes-security', component: AjustesSecurityComponent },
             {path: 'directorGrupo', component: LandingGroupDirectorComponent, canActivate: [esAdminGuard]},
             {path: 'cargaAcademica', component: LandingAcademicLoadComponent, canActivate: [esAdminGuard]},
             {path: 'ninos', component: LandingStudentComponent, canActivate: [esAdminGuard]},
             {path: 'docentes' , component: LandingTeacherComponent, canActivate: [esAdminGuard]},
-            {path: 'acudientes' , component: LandingAttendantsComponent, canActivate: [esAdminGuard]},
-            {path: 'aulas' , component: LandingGroupsComponent, canActivate: [esAdminGuard ]},
-            {path: 'agrupación' , component: LandingGradeComponent, canActivate: [esAdminGuard]},
-            {path: 'cargaAcademica' , component: LandingAcademicLoadComponent, canActivate: [esAdminGuard]}
+            {path: 'aulas' , component: LandingGradeTutuionComponent, canActivate: [esAdminGuard ]},
+            {path: 'agrupación' , component: LandingGroupsComponent, canActivate: [esAdminGuard]},
+            {path: 'cargaAcademica' , component: LandingAcademicLoadComponent, canActivate: [esAdminGuard]},
+            
+            {path: 'panel' , component: PanelComponent, canActivate: [esAdminGuard]},
+            {path: 'acudientes' , component: LandigPageComponent, canActivate: [esAdminGuard]},
+            {path: 'acudientes/mifamilia/:id' , component: MiFamiliaComponent, canActivate: [esAdminGuard]},
+            {path: 'mihorario' , component: HorarioDocenteComponent, canActivate: [esAdminGuard]},
+            {path: 'dashagenda' , component: DirectorCursosDashboardComponent, canActivate: [esAdminGuard]},
+            // vista del registro diario de agenda
+            {path: 'agendadirector', component: AgendaDirectorCursoComponent, canActivate: [esAdminGuard]},
+            {path: 'composicion', component: ComposicionPreguntasComponent, canActivate: [esAdminGuard]},
+
+            {path: 'agendas', component: LadingAgendaAdminComponent, canActivate: [esAdminGuard]},
+            {path: 'agendas/asignacion/:id', component: AsignacionAgendaComponent, canActivate: [esAdminGuard]},
+            {path: 'agendas/config/:id', component: ConfiguracionAgendaComponent, canActivate: [esAdminGuard]},
+            {path: 'CMaterias', component: MateriasComponent, canActivate: [esAdminGuard]},
+            {path: 'CGrado', component: GradosComponent, canActivate: [esAdminGuard]},
+            {path: 'CAulas', component: AulasComponent, canActivate: [esAdminGuard]},
 
         ]
     },
-    {path: '**', component: NotFoundComponent}      
-    
+    {path: '**', component: NotFoundComponent}
+
 ];

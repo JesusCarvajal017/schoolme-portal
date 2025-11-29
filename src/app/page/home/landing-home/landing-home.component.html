@@ -1,60 +1,52 @@
 <div class="main-container">
   <!-- Header Section -->
   <div class="header-section">
-    <div class="logo-container">
-      <h1 class="title-colegio">By SchoolMe</h1>
-      <img src="./logo-colegio.png" alt="Logo Colegio" class="icon-colegio">
+    <div class="header-content">
+      <img src="./logos/logo_colegio_sn_fondo.png" alt="Logo Colegio" class="school-logo">
+      <div class="text-content">
+        <div class="logo-container">
+          <h1 class="title-colegio">SchoolMe</h1>
+          <span class="icon-colegio">🎓</span>
+        </div>
+        <p class="subtitle">Tu Colegio Digital</p>
+      </div>
     </div>
   </div>
 
-  <!-- Description Text -->
+  <!-- Description Section -->
   <div class="description-section">
     <p class="description-text">
-      🛡️ By SchoolMe ha llegado Tu colegio, más organizado, más inteligente. Agenda, datos, gestión…
-       todo en un solo lugar. Moderno, confiable y hecho para ti. ¡Bienvenido al nuevo estándar escolar!
+      Agenda, datos, gestión… todo en un solo lugar. Moderno, confiable y hecho para ti.
+    </p>
+  </div>
 
-  <!-- Content Section: Cards + Image -->
+  <!-- Swiper Carousel Section -->
   <div class="content-section">
-    <!-- Left Side: Stats Cards -->
-    <div class="stats-container">
-      <div class="stat-card animate-in">
-        <div class="stat-icon persons-icon">
-          <i class="fas fa-users"></i>
-        </div>
-        <div class="stat-label">Personas</div>
-        <span class="stat-number">{{ countRegister.persons }}</span>
-      </div>
+    <div class="tranding-slider-container">
+      <swiper-container
+        #swiperContainer
+        class="tranding-slider"
+        effect="coverflow"
+        grab-cursor="true"
+        centered-slides="true"
+        loop="true"
+        slides-per-view="auto"
+        [coverflow-effect]="{
+          rotate: 0,
+          stretch: 0,
+          depth: 100,
+          modifier: 2.5
+        }"
+        navigation="true">
 
-      <div class="stat-card animate-in">
-        <div class="stat-icon teachers-icon">
-          <i class="fas fa-chalkboard-teacher"></i>
-        </div>
-        <div class="stat-label">Docentes</div>
-        <span class="stat-number">{{ countRegister.teachers }}</span>
-      </div>
-
-      <div class="stat-card animate-in">
-        <div class="stat-icon students-icon">
-          <i class="fas fa-graduation-cap"></i>
-        </div>
-        <div class="stat-label">Estudiantes</div>
-        <span class="stat-number">{{ countRegister.students }}</span>
-      </div>
-
-      <div class="stat-card animate-in">
-        <div class="stat-icon attendants-icon">
-          <i class="fas fa-user-friends"></i>
-        </div>
-        <div class="stat-label">Acudientes</div>
-        <span class="stat-number">{{ countRegister.attendats }}</span>
-      </div>
-    </div>
-
-    <!-- Right Side: School Image -->
-    <div class="image-section">
-      <img src="./colegio/foto-colegio-home.jpg" 
-           alt="Colegio" 
-           class="school-image animate-in">
+        @for (image of images; track image.src; let i = $index) {
+          <swiper-slide class="tranding-slide">
+            <div class="tranding-slide-img">
+              <img [src]="image.src" [alt]="image.alt">
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
     </div>
   </div>
 </div>

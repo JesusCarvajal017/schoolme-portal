@@ -9,7 +9,6 @@ import {MatIconModule} from '@angular/material/icon';
   styleUrl: './listado-generico.component.css'
 })
 export class ListadoGenericoComponent {
-
   @Input({required: true})
   elements?: any[];
 
