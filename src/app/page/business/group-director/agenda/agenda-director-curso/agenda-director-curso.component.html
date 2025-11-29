@@ -15,8 +15,8 @@
 
           <!-- Derecha: botones de acciones de agenda -->
           <div class="top-agenda-actions d-flex align-items-center gap-2">
-            <button class="btn-agenda-outline m-1" >
-              <!-- (click)="cerrarAgendaGrupo()" -->
+            <button class="btn-agenda-outline m-1" (click)="cerrarAgendaGrupo()">
+              
               cerrar agenda
             </button>
 
@@ -58,12 +58,12 @@
                 </tr>
               </thead>
               <tbody>
-                @for (item of listStudents; track item.id) {
+                @for (item of listStudents; track item.agendaDayStudentId) {
                 <tr>
                   <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
                   <td>{{ item.fullName}}
-                  <td>{{ item.acronymDocument }}
-                  <td>{{ item.identification }}</td>
+                  <td>{{ item.typeDocumetation }}
+                  <td>{{ item.document }}</td>
                   <td class="actions-col">
                     <button mat-icon-button (click)="abrirAgenda(item)">
                       <mat-icon>calendar_month</mat-icon>
@@ -99,19 +99,33 @@
   <!-- Sección Derecha: Vista de la Agenda -->
   <div class="right-section" *ngIf="studentIndividual || agendaGlobalBandera">
     <header class="agenda-header">
-      <h2>Agenda de {{ studentIndividual ? studentIndividual.fullName : 'Agenda General'  }}</h2>
+      <h2>
+        Agenda de
+        {{ studentIndividual ? studentIndividual.fullName : 'Agenda General' }}
+      </h2>
       <button mat-icon-button (click)="cerrarAgenda()">
         <mat-icon>close</mat-icon>
       </button>
     </header>
+
     <section class="agenda-content">
       <mat-tab-group>
         <mat-tab label="Registro">
-          <app-agenda-global-form [agendaId]="dataCurso.agendaId ?? 0"></app-agenda-global-form>
-          <!-- <textarea placeholder="Observaciones del estudiante..." rows="10" cols="50"></textarea> -->
+          <app-agenda-global-form
+            [agendaId]="dataCurso.agendaId ?? 0"
+            [agendaDayId]="dataCurso.agendaDayId ?? 0"
+            [groupId]="dataCurso.groupId"
+            [mode]="agendaGlobalBandera ? 'global' : 'student'"
+            [agendaDayStudentId]="studentIndividual?.agendaDayStudentId ?? null"
+          ></app-agenda-global-form>
         </mat-tab>
+
         <mat-tab label="Observaciones">
-          <textarea placeholder="Registro de asistencia..." rows="10" cols="50"></textarea>
+          <textarea
+            placeholder="Registro de asistencia..."
+            rows="10"
+            cols="50"
+          ></textarea>
         </mat-tab>
       </mat-tab-group>
     </section>

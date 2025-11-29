@@ -22,10 +22,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouteConfigLoadEnd, Router } from '@angular/router';
 import { Student, StudentService } from '../../../../../service/parameters/student.service';
 import { group } from '@angular/animations';
-import { AgendaDayModel } from '../../../../../models/business/agenda.model';
+import { AgendaDayModel, AgendaDayStudentHeader } from '../../../../../models/business/agenda.model';
 import { GroupDirectorQuery } from '../../../../../models/business/group-director.model';
 import { AgendaGlobalFormComponent } from "../../../../forms/config/agenda-global-form/agenda-global-form.component";
 import { AgedaDayStudentService } from '../../../../../service/business/agendaDayStudent.service';
+import { AgedaDayService } from '../../../../../service/business/agendaDay.service';
+import Swal from 'sweetalert2';
 
 interface Estudiante {
   id: number;
@@ -62,12 +64,13 @@ export class AgendaDirectorCursoComponent implements OnInit {
 
   private serviceStudent = inject(StudentService);
   private servicesAgendaStudent = inject(AgedaDayStudentService);
+  private servicesAgendaDay = inject(AgedaDayService);
 
-  listStudents: Student[] = [];
+  listStudents: AgendaDayStudentHeader[] = [];
 
 
   students: Estudiante[] = [];
-  filteredStudents: Estudiante[] = [];
+  filteredStudents: AgendaDayStudentHeader[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
@@ -89,7 +92,7 @@ export class AgendaDirectorCursoComponent implements OnInit {
   }
 
   cargarData(): void {
-    this.serviceStudent.StudentGroups(this.dataCurso.groupId).subscribe({
+    this.servicesAgendaStudent.ByAgendaDayStudents(this.dataCurso.agendaDayId ?? 0).subscribe({
       next: (data) =>{
         this.listStudents = data;
         // console.log(this.dataCurso)
@@ -111,7 +114,7 @@ export class AgendaDirectorCursoComponent implements OnInit {
 
     if (this.searchTerm.trim() !== '') {
       filtered = filtered.filter((r) =>
-        `${r.fullName} ${r.identification} ${r.groupName}`
+        `${r.fullName} ${r.document}`
           .toLowerCase()
           .includes(this.searchTerm)
       );
@@ -136,10 +139,10 @@ export class AgendaDirectorCursoComponent implements OnInit {
     }
   }
 
-  studentIndividual: Student | null = null;
+  studentIndividual: AgendaDayStudentHeader | null = null;
   agendaGlobalBandera: boolean = false;
 
-  abrirAgenda(estudiante?: Student): void {
+  abrirAgenda(estudiante?: AgendaDayStudentHeader): void {
     console.log("se supone que no es agenda individual");
     if(estudiante){
       this.studentIndividual = estudiante;
@@ -153,13 +156,58 @@ export class AgendaDirectorCursoComponent implements OnInit {
     
   }
 
-  cerrarAgenda(): void {
-    this.studentIndividual = null;
-    this.agendaGlobalBandera = false;
+  cerrarAgendaGrupo(): void {
+    const id = this.dataCurso.agendaDayId ?? 0;
+
+    if (!id) {
+      console.error("No hay agendaDayId");
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Cerrar agenda del grupo?",
+      text: "Una vez cerrada no podrás modificar los registros.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, cerrar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        this.servicesAgendaDay.closeAgenda(id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: "Agenda cerrada",
+              text: "La agenda del grupo se cerró exitosamente.",
+              icon: "success",
+              confirmButtonText: "Aceptar"
+            }).then(() => {
+              this.route.navigate(["/dashboard/dashagenda"]);
+            });
+          },
+          error: (err) => {
+            console.error("Error cerrando agenda", err);
+            Swal.fire(
+              "Error",
+              "Ocurrió un error al cerrar la agenda.",
+              "error"
+            );
+          }
+        });
+
+      }
+    });
   }
 
   volverGrupos(){
     this.route.navigate(["/dashboard/dashagenda"]);
+  }
+
+  cerrarAgenda(): void {
+    this.studentIndividual = null;
+    this.agendaGlobalBandera = false;
   }
 
 }
