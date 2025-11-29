@@ -1,0 +1,395 @@
+/* Paleta SchoolMe (ya sin variables) */
+:host {
+  display: block;
+  background-color: #e3e9f4;
+  min-height: 100vh;
+}
+
+/* Header */
+.agenda-header {
+  padding: 0.4rem 1.25rem;
+  border-radius: 999px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.space-add{
+  width: 80%;
+  display: flex;
+  justify-content: end;
+}
+
+.agenda-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+.back-button {
+  color: #000928;
+}
+
+/* Cards base */
+mat-card {
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+}
+
+/* Summary card */
+.agenda-summary-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.agenda-summary-card .agenda-summary-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.agenda-summary-card .agenda-summary-footer {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.agenda-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #171174;
+}
+
+.agenda-description {
+  font-size: 0.85rem;
+  color: #444444;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.agenda-meta {
+  font-size: 0.87rem;
+  color: #333333;
+}
+
+.agenda-meta .label {
+  opacity: 0.7;
+}
+
+.agenda-meta .value {
+  font-weight: 700;
+  color: #000928;
+}
+
+/* Assignment card */
+.agenda-assign-card {
+  padding: 1.75rem;
+  background: #f5ebff;
+}
+
+.grade-section + .grade-section {
+  margin-top: 1.4rem;
+}
+
+.grade-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+.grade-select {
+  width: 160px;
+}
+
+.grade-select .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* Groups list */
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-left: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+
+
+.group-item .mdc-form-field {
+  color: #333333;
+}
+
+.grade-divider {
+  border-bottom: 1px dashed rgba(23, 17, 116, 0.25);
+  margin-top: 1rem;
+}
+
+/* Botones */
+.sm-primary-btn {
+  background: #000928 !important;
+  color: #ffffff !important;
+  border-radius: 999px;
+  padding-inline: 1.75rem;
+  text-transform: none;
+}
+
+.sm-primary-btn mat-icon {
+  font-size: 18px;
+}
+
+.sm-primary-btn:hover {
+  background-color: #000928 !important; /* puedes ajustar si quieres un tono más oscuro */
+}
+
+/* Responsive */
+@media (max-width: 767.9px) {
+  .agenda-assign-card {
+    padding: 1.3rem;
+  }
+
+  .agenda-header {
+    border-radius: 0.8rem;
+  }
+}
+
+.assign-header {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(23, 17, 116, 0.15);
+}
+
+.assign-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+.assign-subtitle {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.current-grade-label {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #171174;
+}
+
+
+
+/* ============================== estilos de tabla sucio ==================================== */
+/* Header */
+header h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.count {
+  text-align: center;
+  width: 100px;
+  border: 1.5px solid #000;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
+  font-weight: bold;
+  /* display: inline-block; */
+}
+
+.titulo-tabla{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 25px !important;
+}
+
+.container-duo{
+  display: flex;
+  align-items: center;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  /* width: 100px !important; */
+}
+.btn-add mat-icon {
+  font-size: 20px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tabs button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.tabs button.active {
+  background: #000;
+  color: white;
+  border: none;
+}
+
+/* Search & Filter */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.search-box mat-icon {
+  font-size: 20px;
+  margin-right: 5px;
+  color: #666;
+}
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.filter-btn mat-icon {
+  font-size: 18px;
+}
+
+/* Tabla */
+.custom-table {
+  width: 100%;
+  /* height: 10px; */
+  /* border-spacing: 0 8px; */
+  /* overflow-y: ; */
+}
+
+.custom-table thead {
+  background: #f9f9f9;
+  /* border-radius: 20px; */
+}
+.custom-table th {
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  /* height: 20px !important; */
+}
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  /* height: 20px !important; */
+}
+.custom-table tr:hover td {
+  background: #f7f7f7;
+}
+
+
+/* Columna de acciones */
+.actions-col {
+  display: flex;
+  justify-content: center;  /* centra horizontal */
+  align-items: center;      /* centra vertical */
+  gap: 6px;                 /* espacio entre iconos */
+}
+
+/* Forzar que todos los botones sean iguales */
+.actions-col button[mat-icon-button] {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 15px;
+}
+.pagination button {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pagination button.active {
+  background: #3f51b5;
+  color: white;
+  border: none;
+}
+/* Estilos para el modal simplificado */
+.modal-content {
+  min-height: auto;
+  padding: 20px;
+}
+
+.loading-state {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loading-state p {
+  font-size: 16px;
+  color: #999;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 15px;
+    min-height: 350px;
+  }
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-in-out;
+}

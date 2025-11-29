@@ -1,206 +1,469 @@
-/* Header */
-header h1 {
-  font-size: 20px;
+/* ========================================== */
+/*   ESTILOS GENERALES DEL COMPONENTE        */
+/* ========================================== */
+
+.container-fluid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ========================================== */
+/*   ACORDEONES                               */
+/* ========================================== */
+
+::ng-deep .t-wrapper {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+::ng-deep .t-wrapper:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+::ng-deep button[tuiAccordionItemHeader] {
+  font-size: 1.1rem;
   font-weight: 600;
-}
-header .count {
-  font-size: 14px;
-  color: #666;
-  margin-left: 8px;
-  font-weight: normal;
-}
-
-.btn-add {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: #f5f5f5;
-  font-weight: 500;
-  color: #333;
-  text-decoration: none;
-}
-.btn-add mat-icon {
-  font-size: 20px;
-}
-
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.tabs button {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid #ddd;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
-}
-.tabs button.active {
-  background: #000;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #1f39b1 0%, #040b5d 100%);
   color: white;
-  border: none;
+  transition: all 0.3s ease;
+  border-radius: 15px;
 }
 
-/* Search & Filter */
-.actions {
+::ng-deep button[tuiAccordionItemHeader]:hover {
+  background: linear-gradient(135deg, #041574 0%, #4e3f91 100%);
+}
+
+.accordion-content {
+  padding: 32px 24px;
+  background: #ffffff;
+}
+
+/* ========================================== */
+/*   SECCIONES DE DÍAS (ACORDEÓN 1)          */
+/* ========================================== */
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  max-width: 100%;
+}
+
+.day-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid #e2e8f0;
+}
+
+.day-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+.day-header {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #1f3ab1c9 0%, #040b5db8 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: center;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  user-select: none;
 }
-.search-box {
-  display: flex;
-  align-items: center;
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 6px 10px;
-}
-.search-box mat-icon {
+
+.day-header mat-icon {
   font-size: 20px;
-  margin-right: 5px;
-  color: #666;
-}
-.search-box input {
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-}
-.filter-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
-}
-.filter-btn mat-icon {
-  font-size: 18px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
 }
 
-/* Tabla */
-.custom-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
+.day-header.expanded mat-icon {
+  transform: rotate(180deg);
 }
-.custom-table thead {
-  background: #f9f9f9;
-}
-.custom-table th {
-  text-align: left;
-  padding: 12px;
-  font-size: 14px;
+
+.day-count {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #555;
-}
-.custom-table td {
-  padding: 12px;
-  font-size: 14px;
-  background: white;
-  border-bottom: 1px solid #eee;
-}
-.custom-table tr:hover td {
-  background: #f7f7f7;
-}
-/* Columna de acciones */
-.actions-col {
-  display: flex;
-  justify-content: center;  /* centra horizontal */
-  align-items: center;      /* centra vertical */
-  gap: 6px;                 /* espacio entre iconos */
 }
 
-/* Forzar que todos los botones sean iguales */
-.actions-col button[mat-icon-button] {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  min-height: 36px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.day-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
 }
 
-
-
-/* Paginación */
-.pagination {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  margin-top: 15px;
+.day-content.expanded {
+  max-height: 500px;
+  overflow-y: auto;
 }
-.pagination button {
-  border: 1px solid #ddd;
-  background: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
+
+.teacher-item {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+  color: #4a5568;
+  line-height: 1.4;
+  transition: all 0.2s ease;
 }
-.pagination button.active {
-  background: #3f51b5;
+
+.teacher-item:last-child {
+  border-bottom: none;
+}
+
+.teacher-item:hover {
+  background: #f7fafc;
+  padding-left: 18px;
+}
+
+.teacher-item strong {
+  color: #2d3748;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.teacher-item span {
+  color: #718096;
+  font-size: 0.8rem;
+}
+
+.empty-day {
+  padding: 20px;
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================== */
+/*   DETALLES DEL DOCENTE (ACORDEÓN 2)       */
+/* ========================================== */
+
+.teacher-details {
+  margin-top: 32px;
+  padding: 28px;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.teacher-details > h4 {
+  margin: 0 0 28px 0;
+  color: #1a202c;
+  font-size: 1.4rem;
+  font-weight: 700;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border: none;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
-.pagination button:disabled {
-  opacity: 0.5;
+
+/* ========================================== */
+/*   SECCIONES DENTRO DE DETALLES            */
+/* ========================================== */
+
+.section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-left: 5px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.section:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.section h5 {
+  margin: 0 0 20px 0;
+  color: #2d3748;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.section p {
+  margin: 12px 0;
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.section p strong {
+  color: #2d3748;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 100px;
+}
+
+/* ========================================== */
+/*   FORMULARIO                               */
+/* ========================================== */
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+::ng-deep .mat-mdc-form-field {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+::ng-deep .mat-mdc-select-trigger {
+  height: 48px;
+}
+
+/* ========================================== */
+/*   SELECCIÓN DE DÍAS (CHECKBOXES)          */
+/* ========================================== */
+
+.days-selection {
+  margin-bottom: 28px;
+  padding: 20px;
+  background: #f7fafc;
+  border-radius: 12px;
+  border: 2px dashed #cbd5e0;
+}
+
+.days-selection h6 {
+  margin: 0 0 16px 0;
+  color: #2d3748;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+::ng-deep .mat-mdc-checkbox {
+  padding: 10px 16px;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+::ng-deep .mat-mdc-checkbox:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+::ng-deep .mat-mdc-checkbox-checked {
+  background: linear-gradient(135deg, #e8ecff 0%, #f0e6ff 100%);
+  border-color: #667eea;
+}
+
+::ng-deep .mdc-checkbox__background {
+  border-color: #667eea !important;
+}
+
+::ng-deep .mdc-checkbox--selected .mdc-checkbox__background {
+  background-color: #667eea !important;
+  border-color: #667eea !important;
+}
+
+::ng-deep .mat-mdc-checkbox-label {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+/* ========================================== */
+/*   BOTÓN DE ENVÍO                           */
+/* ========================================== */
+
+::ng-deep button[mat-raised-button] {
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+::ng-deep button[mat-raised-button]:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+::ng-deep button[mat-raised-button][disabled] {
+  background: #cbd5e0 !important;
+  color: #a0aec0 !important;
+  box-shadow: none;
   cursor: not-allowed;
 }
-/* Agregar estos estilos a tu landing-rol.component.css existente */
 
-/* Estilos para el modal */
-.modal-content {
-  padding: 0;
-}
+/* ========================================== */
+/*   LISTA SIMPLE DE DOCENTES                 */
+/* ========================================== */
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 15px 20px;
-  border-top: 1px solid #e0e0e0;
-  background-color: #f8f9fa;
-}
-
-/* Ajustar el formulario para el modal */
-::ng-deep .modal-content .form-page {
+::ng-deep app-simple-teacher-list ul {
+  list-style: none;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
 }
 
-/* Ocultar el botón cancelar del formulario cuando está en modal */
-::ng-deep .modal-content .form-page > div:last-child a {
-  display: none;
-}
-
-/* Mejorar la apariencia del botón crear */
-.btn-add {
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 6px;
+::ng-deep app-simple-teacher-list li {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #4a5568;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.btn-add:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+::ng-deep app-simple-teacher-list li:hover {
+  transform: translateY(-4px);
+  border-color: #667eea;
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
 }
 
-.actions-col {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+::ng-deep app-simple-teacher-list li:active {
+  transform: translateY(-2px);
+}
+
+/* ========================================== */
+/*   RESPONSIVIDAD                            */
+/* ========================================== */
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 16px;
+  }
+
+  .accordion-content {
+    padding: 20px 16px;
+  }
+
+  .teacher-details {
+    padding: 20px 16px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .checkboxes {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  ::ng-deep app-simple-teacher-list ul {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 16px;
+  }
+
+  .day-section {
+    padding: 16px;
+  }
+}
+
+/* ========================================== */
+/*   ANIMACIONES ADICIONALES                  */
+/* ========================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.teacher-details {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.section {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* ========================================== */
+/*   MEJORAS VISUALES PARA ESTADOS            */
+/* ========================================== */
+
+.section p:not(:last-child) {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: #f7fafc;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+/* ========================================== */
+/*   HEADER MEJORADO                          */
+/* ========================================== */
+
+::ng-deep .t-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  margin-bottom: 24px;
+}
+
+::ng-deep .t-header h1 {
+  color: white;
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

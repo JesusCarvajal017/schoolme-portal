@@ -1,115 +1,182 @@
 <header tuiHeader class="m-1">
-  <h1 tuiTitle>
-    <div class="col-12 d-flex">
-      <span>Carga academica</span>
-      <p class="count">{{ moduleAcademicLoad.length }} Carga academica </p>
-    </div>
-  </h1>
-  <aside tuiAccessories>
-    <div tuiAppearance="secondary" tuiButtonGroup>
-      <!-- CAMBIO: Usar modalCommand en lugar de routerLink -->
-      <button class="btn-add" (click)="modalCommand('Crear nueva asignación de modulos')">
-        <mat-icon>add_circle</mat-icon>
-        Carga academica
-      </button>
-    </div>
-  </aside>
+  <h1 tuiTitle>Carga Académica</h1>
 </header>
 
-<section class="table-container">
-  <!-- Tabs -->
-  <div class="col-12 row ">
-    <div class="col-6">
-      <div class="tabs">
-        <button [ngClass]="{'active' : idicadorActive}" (click)="cambiarStatus(1)">Activos</button>
-        <button [ngClass]="{'active' : idicadorActive == 0}" (click)="cambiarStatus(0)">Inactivos</button>
-      </div>
-    </div>
-    <div class="col-6 d-flex justify-content-end">
-      <!-- Buscador y filtro -->
-      <div class="actions">
-        <div class="search-box m-1">
-          <mat-icon>search</mat-icon>
-          <input #searchInput type="text" placeholder="Buscar..." (input)="onSearch(searchInput.value)" />
+<section class="container-fluid">
+
+  <tui-accordion>
+
+    <!-- ========================================================= -->
+    <!--   1. ACORDEÓN — HORARIO SEMANAL (TIPO DESPLEGABLE)       -->
+    <!-- ========================================================= -->
+    <tui-accordion-item>
+      <button tuiAccordionItemHeader>📅 Horario Semanal - Docentes Delegados</button>
+
+      <div class="accordion-content">
+
+        <div class="schedule-grid">
+          @for (day of daysOfWeekStrings; track day) {
+            <div class="day-card">
+
+              <!-- HEADER DEL DÍA (Clickeable) -->
+              <div
+                class="day-header"
+                [class.expanded]="expandedDays[day]"
+                (click)="toggleDay(day)">
+                <span>{{ day }}</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="day-count">
+                    {{ (academicLoadByDay[day] || []).length }}
+                  </span>
+                  <mat-icon>expand_more</mat-icon>
+                </div>
+              </div>
+
+              <!-- CONTENIDO DEL DÍA (Desplegable) -->
+              <div
+                class="day-content"
+                [class.expanded]="expandedDays[day]">
+
+                @if ((academicLoadByDay[day] || []).length > 0) {
+                  @for (load of academicLoadByDay[day]; track load.id) {
+                    <div class="teacher-item">
+                      <strong>{{ load.fullName }}</strong>
+                      <span>{{ load.subjectName }} • {{ load.groupName }}</span>
+                    </div>
+                  }
+                } @else {
+                  <div class="empty-day">
+                    Sin docentes asignados
+                  </div>
+                }
+
+              </div>
+
+            </div>
+          }
         </div>
+
       </div>
-    </div>
-  </div>
+    </tui-accordion-item>
 
-  <!-- Tabla -->
-  <table class="custom-table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Profeso</th>
-        <th>Grupo</th>
-        <th>Asignatura</th>
-        <th>Día</th>
-        <th>Status</th>
-        <th class="text-center">Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of paginatedUsers; track $index) {
-      <tr>
-        <td>{{ ($index + 1) + (currentPage - 1) * pageSize }}</td>
-        <td>{{ item.fullName }}</td>
-        <td>{{ item.groupName }}</td>
-        <td>{{ item.subjectName }}</td>
-        <td>{{ item.days }}</td>
-        <td>
-          <mat-slide-toggle [checked]="item.status === 1" (change)="logical($event, item.id)"></mat-slide-toggle>
-        </td>
-        <td class="actions-col">
-          <button mat-icon-button (click)="modalCommand('Editar grado', item)">
-            <mat-icon>edit</mat-icon>
-          </button>
 
-          <button mat-icon-button [swal]="{
-            title: 'Confirmacion',
-            text: '¿Deseas borrar este registro?',
-            showCancelButton: true
-          }" (confirm)="deleteRegister(item.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
+    <!-- ========================================================= -->
+    <!--   2. ACORDEÓN — GESTIÓN DE DOCENTES                      -->
+    <!-- ========================================================= -->
+    <tui-accordion-item>
+      <button tuiAccordionItemHeader>👨‍🏫 Gestión de Docentes y Cargas Académicas</button>
 
-          <button mat-icon-button>
-            <mat-icon>more_vert</mat-icon>
-          </button>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
+      <div class="accordion-content">
 
-  <!-- Paginación -->
-  <div class="pagination" *ngIf="totalPages > 1">
-    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
-      &lt;
-    </button>
+        <!-- LISTADO SIMPLE REUTILIZADO -->
+        <app-simple-teacher-list
+          [teachers]="teachers"
+          (teacherSelected)="onTeacherSelected($event)">
+        </app-simple-teacher-list>
 
-    <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
-      [class.active]="currentPage === i + 1">
-      {{ i + 1 }}
-    </button>
+        <!-- CONTENIDO AL SELECCIONAR UN DOCENTE -->
+        <div *ngIf="selectedTeacher" class="teacher-details">
 
-    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
-      &gt;
-    </button>
-  </div>
+          <h4>📋 Gestión de: {{ selectedTeacher.fullName }}</h4>
+
+          <!-- ============================================== -->
+          <!--   SECCIÓN A — CARGAS ACADÉMICAS ACTUALES       -->
+          <!-- ============================================== -->
+          <div class="section">
+            <h5>📚 Cargas Académicas Actuales</h5>
+
+            <div class="academic-loads-table">
+              @if (getTeacherLoads(selectedTeacher.id).length > 0) {
+                @for (load of getTeacherLoads(selectedTeacher.id); track load.id) {
+                  <div class="load-row">
+
+                    <div class="load-info">
+                      <div class="load-subject">{{ load.subjectName }}</div>
+                      <div class="load-details">
+                        <span>🏫 {{ load.groupName }}</span>
+                        <span>📅 {{ load.days.join(', ') }}</span>
+                      </div>
+                    </div>
+
+                    <div class="load-actions">
+                      <button
+                        class="btn-delete"
+                        (click)="deleteAcademicLoad(load.id)"
+                        title="Eliminar carga">
+                        <mat-icon>delete</mat-icon>
+                        Eliminar
+                      </button>
+                    </div>
+
+                  </div>
+                }
+              } @else {
+                <div class="no-loads">
+                  Este docente no tiene cargas académicas asignadas
+                </div>
+              }
+            </div>
+
+          </div>
+
+          <!-- ============================================== -->
+          <!--   SECCIÓN B — ASIGNAR NUEVA CARGA ACADÉMICA    -->
+          <!-- ============================================== -->
+          <div class="section">
+            <h5>➕ Asignar Nueva Carga Académica</h5>
+
+            <form [formGroup]="academicLoadForm" (ngSubmit)="submitAcademicLoad()">
+
+              <div class="form-row">
+                <mat-form-field>
+                  <mat-label>Materia</mat-label>
+                  <mat-select formControlName="subjectId">
+                    <mat-option *ngFor="let subject of subjects" [value]="subject.id">
+                      {{ subject.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Grupo</mat-label>
+                  <mat-select formControlName="groupId">
+                    <mat-option *ngFor="let group of groups" [value]="group.id">
+                      {{ group.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="days-selection">
+                <h6>Días de la semana:</h6>
+
+                <div class="checkboxes">
+                  @for (day of daysOfWeek; track day.value) {
+                    <mat-checkbox
+                      [checked]="isDaySelected(day.value)"
+                      (change)="onDayChange(day, $event.checked)">
+                      {{ day.name }}
+                    </mat-checkbox>
+                  }
+                </div>
+              </div>
+
+              <button mat-raised-button color="primary"
+                type="submit" [disabled]="!academicLoadForm.valid">
+                <mat-icon>add</mat-icon>
+                Asignar Carga
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </tui-accordion-item>
+
+  </tui-accordion>
+
 </section>
-
-<!-- <ng-template
-    let-observer
-    [tuiDialogOptions]="{label: titleForm, size: 'm'}"
-    [(tuiDialog)]="open"
->
-    <div class="modal-content">
-        <app-form-rol-form-permission
-            [title]="titleForm" 
-            [actionDescriptio]="isEditMode ? 'Actualizar' : 'Crear'"
-            [model]="modelRolFormPermission"
-            (posteoForm)="handleFormRolPermissionSubmit($event)">
-        </app-form-rol-form-permission>
-    </div>
-</ng-template> -->

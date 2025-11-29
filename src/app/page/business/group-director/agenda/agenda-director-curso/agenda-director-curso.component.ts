@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output } from '@angular/core';
 
 // angular material
 import { MatCardModule } from '@angular/material/card';
@@ -18,6 +18,16 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 // componentes
 import { ListadoGenericoComponent } from "../../../../../components/listado-generico/listado-generico.component";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouteConfigLoadEnd, Router } from '@angular/router';
+import { Student, StudentService } from '../../../../../service/parameters/student.service';
+import { group } from '@angular/animations';
+import { AgendaDayModel, AgendaDayStudentHeader } from '../../../../../models/business/agenda.model';
+import { GroupDirectorQuery } from '../../../../../models/business/group-director.model';
+import { AgendaGlobalFormComponent } from "../../../../forms/config/agenda-global-form/agenda-global-form.component";
+import { AgedaDayStudentService } from '../../../../../service/business/agendaDayStudent.service';
+import { AgedaDayService } from '../../../../../service/business/agendaDay.service';
+import Swal from 'sweetalert2';
 
 interface Estudiante {
   id: number;
@@ -36,42 +46,61 @@ interface Estudiante {
     TuiTitle,
     MatCardModule,
     TuiHeader,
-    TuiButtonGroup,
-    TuiAppearance,
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
     SweetAlert2Module,
     TuiInputModule,
-    ListadoGenericoComponent
-  ],
+    ListadoGenericoComponent,
+    MatTooltipModule,
+    AgendaGlobalFormComponent
+],
   templateUrl: './agenda-director-curso.component.html',
   styleUrl: './agenda-director-curso.component.css',
 })
 export class AgendaDirectorCursoComponent implements OnInit {
 
+  dataCurso!: GroupDirectorQuery;
+
+  private serviceStudent = inject(StudentService);
+  private servicesAgendaStudent = inject(AgedaDayStudentService);
+  private servicesAgendaDay = inject(AgedaDayService);
+
+  listStudents: AgendaDayStudentHeader[] = [];
+
+
   students: Estudiante[] = [];
-  filteredStudents: Estudiante[] = [];
+  filteredStudents: AgendaDayStudentHeader[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 1;
 
-  estudianteSeleccionado: Estudiante | null = null;
+  route = inject(Router);
 
   ngOnInit(): void {
+
+    // data de agenda day para su uso de logica
+    const nav = this.route.getCurrentNavigation();
+    const fromNav = nav?.extras?.state?.['curso'];
+    const fromHistory = history.state['curso'];
+
+    this.dataCurso = fromNav || fromHistory || null;
+
+
     this.cargarData();
   }
 
   cargarData(): void {
-    // Datos de ejemplo
-    this.students = [
-      { id: 1, fullName: 'Juan Pérez', acronymDocument: 'CC', identification: '12345678', groupName: 'Grupo 5A', status: 1 },
-      { id: 2, fullName: 'María García', acronymDocument: 'TI', identification: '87654321', groupName: 'Grupo 5A', status: 1 },
-      { id: 3, fullName: 'Pedro López', acronymDocument: 'CC', identification: '11223344', groupName: 'Grupo 5A', status: 0 },
-      { id: 4, fullName: 'Ana Rodríguez', acronymDocument: 'TI', identification: '44332211', groupName: 'Grupo 5A', status: 1 },
-      { id: 5, fullName: 'Carlos Sánchez', acronymDocument: 'CC', identification: '55667788', groupName: 'Grupo 5A', status: 1 },
-    ];
+    this.servicesAgendaStudent.ByAgendaDayStudents(this.dataCurso.agendaDayId ?? 0).subscribe({
+      next: (data) =>{
+        this.listStudents = data;
+        // console.log(this.dataCurso)
+      }
+    })
+
+    
+
     this.applyFilters();
   }
 
@@ -81,11 +110,11 @@ export class AgendaDirectorCursoComponent implements OnInit {
   }
 
   applyFilters(): void {
-    let filtered = this.students;
+    let filtered = this.listStudents;
 
     if (this.searchTerm.trim() !== '') {
       filtered = filtered.filter((r) =>
-        `${r.fullName} ${r.identification} ${r.groupName}`
+        `${r.fullName} ${r.document}`
           .toLowerCase()
           .includes(this.searchTerm)
       );
@@ -110,11 +139,75 @@ export class AgendaDirectorCursoComponent implements OnInit {
     }
   }
 
-  abrirAgenda(estudiante: Estudiante): void {
-    this.estudianteSeleccionado = estudiante;
+  studentIndividual: AgendaDayStudentHeader | null = null;
+  agendaGlobalBandera: boolean = false;
+
+  abrirAgenda(estudiante?: AgendaDayStudentHeader): void {
+    console.log("se supone que no es agenda individual");
+    if(estudiante){
+      this.studentIndividual = estudiante;
+      this.agendaGlobalBandera = false;
+      return;
+    }else{
+      this.agendaGlobalBandera = true;
+      this.studentIndividual = null;
+    }
+
+    
+  }
+
+  cerrarAgendaGrupo(): void {
+    const id = this.dataCurso.agendaDayId ?? 0;
+
+    if (!id) {
+      console.error("No hay agendaDayId");
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Cerrar agenda del grupo?",
+      text: "Una vez cerrada no podrás modificar los registros.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, cerrar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        this.servicesAgendaDay.closeAgenda(id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: "Agenda cerrada",
+              text: "La agenda del grupo se cerró exitosamente.",
+              icon: "success",
+              confirmButtonText: "Aceptar"
+            }).then(() => {
+              this.route.navigate(["/dashboard/dashagenda"]);
+            });
+          },
+          error: (err) => {
+            console.error("Error cerrando agenda", err);
+            Swal.fire(
+              "Error",
+              "Ocurrió un error al cerrar la agenda.",
+              "error"
+            );
+          }
+        });
+
+      }
+    });
+  }
+
+  volverGrupos(){
+    this.route.navigate(["/dashboard/dashagenda"]);
   }
 
   cerrarAgenda(): void {
-    this.estudianteSeleccionado = null;
+    this.studentIndividual = null;
+    this.agendaGlobalBandera = false;
   }
+
 }

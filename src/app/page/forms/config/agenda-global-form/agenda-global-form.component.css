@@ -1,0 +1,169 @@
+/* Contenedor del formulario dentro del tab */
+.agenda-form {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Lista de preguntas */
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tarjeta de cada pregunta */
+.agenda-question-card {
+  background: #f9fafb;
+  border-radius: 18px;
+  padding: 16px 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+/* Header de la pregunta */
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.question-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 6px 14px rgba(88, 101, 242, 0.4);
+}
+
+.question-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.question-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Body */
+.question-body {
+  margin-top: 4px;
+}
+
+/* full width para campos de texto */
+.full-width {
+  width: 100%;
+}
+
+/* Toggle centrado un poco mejor */
+.toggle-wrapper {
+  padding-top: 4px;
+}
+
+/* Opciones tipo pills / filas */
+.options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 6px;
+}
+
+/* Radio como pill */
+.option-pill-radio {
+  margin-right: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.option-pill-radio .mdc-radio {
+  margin-right: 4px;
+}
+
+.option-pill-radio.mat-mdc-radio-checked {
+  background: rgba(129, 140, 248, 0.09);
+  box-shadow: 0 4px 10px rgba(129, 140, 248, 0.35);
+}
+
+/* Checkbox múltiple como pill */
+.option-pill-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-size: 14px;
+  color: #374151;
+}
+
+.option-pill-checkbox:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 10px rgba(129, 140, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.option-pill-checkbox .mat-mdc-checkbox {
+  margin: 0;
+}
+
+/* Botón guardar */
+.agenda-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-save-record {
+  border-radius: 999px;
+  padding: 10px 28px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4f46e5 100%);
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(88, 101, 242, 0.45);
+  text-transform: none;
+}
+
+.btn-save-record:hover {
+  box-shadow: 0 14px 32px rgba(76, 81, 191, 0.65);
+  transform: translateY(-1px);
+}
+
+/* Responsive suave */
+@media (max-width: 768px) {
+  .agenda-form {
+    padding: 16px;
+  }
+
+  .agenda-question-card {
+    padding: 14px 16px;
+  }
+
+  .options-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .agenda-actions {
+    justify-content: center;
+  }
+}

@@ -61,5 +61,9 @@ export class EditarGroupDirectorComponent implements OnInit {
           Swal.fire("Exitoso", "Actualizacion exitosa", "success");
           this.router.navigate(['dashboard/roles']);
        }});
+       
   }
+
+
+  
 }

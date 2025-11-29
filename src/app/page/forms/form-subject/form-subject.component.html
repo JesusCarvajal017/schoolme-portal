@@ -1,0 +1,32 @@
+<!-- Opcional: Versión del formulario optimizada para modal -->
+<form (submit)="emitirValoresForm()" [formGroup]="form" class="form-page-modal">
+    <div class="col-12 lat-rol-info">
+
+        <div class="col-12 d-flex justify-content-center m-2">
+            <div class="rol-icon-small">
+                <mat-icon class="icon-rol-small">school</mat-icon>
+            </div>
+        </div>
+        <div class="col-12 text-center">
+            <h6>Información de la Materia</h6>
+            <p class="text-muted small">Configure los datos básicos</p>
+        </div>
+        <div class="row p-3">
+            <div class="col-md-12 p-2">
+                <tui-input tuiAutoFocus [formControl]="form.controls.name">
+                    Nombre de la materia
+                </tui-input>
+            </div>
+            <div class="col-md-12 p-2">
+                <label>
+                    <input tuiCheckbox type="checkbox" [formControl]="form.controls.status" size="s" />
+                    <span class="fs-6 ms-1">Estado activo</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" mat-flat-button [disabled]="form.invalid">{{modalInfo?.titleButton}}</button>
+    </div>
+</form>

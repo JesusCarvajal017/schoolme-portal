@@ -8,3 +8,8 @@ export interface CreateStatusCivil{
     name: string;
     status: number;
 }
+
+export interface UpdateGrade{
+    id:number;
+    groupId?: number;
+}

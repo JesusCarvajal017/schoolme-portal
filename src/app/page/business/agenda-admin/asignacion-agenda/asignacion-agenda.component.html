@@ -1,0 +1,212 @@
+<div class="agenda-page container-fluid py-4">
+
+  <!-- ================================  Header ========================================== -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="agenda-header d-flex align-items-center">
+        <button mat-icon-button class="me-2 back-button" [routerLink]="'/dashboard/agendas'">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="agenda-title mb-0" >
+          Agenda ({{ agenda.name }})
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content cards -->
+  <div class="row justify-content-center">
+
+    <!-- Left: summary -->
+    <div class="col-12 col-md-4 col-lg-3 mb-3 mb-md-0">
+      <mat-card class="agenda-summary-card">
+        <div class="agenda-summary-body">
+          <h2 class="agenda-name">
+            ({{ agenda.name }})
+          </h2>
+          <p class="agenda-description">
+            {{ agenda.description }}
+          </p>
+
+          <p class="agenda-meta">
+            <!-- <span class="label">Cantidad de preguntas de agenda:</span>
+            <span class="value">{{ agenda.questionCount }}</span> -->
+          </p>
+        </div>
+
+        <div class="agenda-summary-footer">
+          <button
+            mat-raised-button
+            class="sm-primary-btn w-100"
+            (click)="modalOpen()"
+          >
+            <mat-icon class="me-2">assignment</mat-icon>
+            Ver agenda
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Right: assignment -->
+    <div class="col-12 col-md-8 col-lg-7">
+    <mat-card class="agenda-assign-card">
+        <!-- Header de la tarjeta -->
+        <div class="assign-header d-flex justify-content-between align-items-center mb-3">
+          <div class="col-12 row">
+            <div class="col-md-6">
+              <div>
+                <h2 class="assign-title mb-0">Asignación por grado</h2>
+                <small class="assign-subtitle">
+                    Selecciona un grado para ver sus grupos
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              
+              <mat-form-field appearance="outline" class="tui-like-select" [formControl]="formGrup.controls.gradeId" >
+                <mat-label>Grado</mat-label>
+
+                <mat-select panelClass="tui-like-select-panel" (selectionChange)="cargarGrupos($event.value, $event.source.triggerValue)">
+                    @for (item of grades; track $index) {
+                        <mat-option [value]="item.id">{{ item.name }}</mat-option>
+                    }
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+          </div>
+            
+
+            <!-- selector de grados -->
+            <!-- <mat-form-field appearance="fill" class="grade-select" >
+                <mat-label>Grado</mat-label>
+                <mat-select [(ngModel)]="selectedGradeId">
+                    <mat-option
+                    *ngFor="let grade of gradeBlocks"
+                    [value]="grade.id"
+                    >
+                    {{ grade.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+            
+        </div>
+
+        @if(isLoader){
+          <app-loader></app-loader>
+        }@else {
+          <!-- Nombre del grado actual -->
+          <div class="current-grade-label mb-2" *ngIf="nameGrado">
+              {{ nameGrado }}
+          </div>
+
+          <!-- Lista de grupos del grado seleccionado -->
+          @if(groupsAgenda.length != 0){
+            <div class="group-list">
+              @for (group of groupsAgenda; track group.id) {
+                <mat-checkbox
+                  class="group-item"
+                  [(ngModel)]="group.isAssigned"
+                >
+                  {{ group.name }}
+                </mat-checkbox>
+              }
+            </div>
+          }@else if (nameGrado == null) {
+            no se a seleccionado grados
+          }
+          @else {
+            no hay grupos vinculados
+          }
+
+        }
+
+     
+       
+
+        <!-- Botón -->
+        <div class="text-end mt-4">
+            <button
+            mat-raised-button
+            class="sm-primary-btn"
+            (click)="onAssign()"
+            >
+            <mat-icon class="me-2">done_all</mat-icon>
+            Asignación
+            </button>
+        </div>
+    </mat-card>
+
+
+      <!-- <mat-card class="agenda-assign-card"> -->
+       
+
+
+        <!-- <div class="text-end mt-4">
+          <button
+            mat-raised-button
+            class="sm-primary-btn"
+            (click)="onAssign()"
+          >
+            <mat-icon class="me-2">done_all</mat-icon>
+            Asignación
+          </button>
+        </div> -->
+      <!-- </mat-card> -->
+    </div>
+  </div>
+
+</div>
+
+<ng-template let-observer [tuiDialogOptions]="{label: 'Agregar pregunta', size: 'm'}" [(tuiDialog)]="openModal" >
+
+  <div class="modal-content">
+    <div class="question-list-container">
+      @if (questions.length > 0) {
+
+        @for (item of questions; track item.id) {
+
+          <div class="question-item">
+
+            <div class="icon">
+              @switch (item.text) {
+
+                @case ('Text') {
+                  <i class="bi bi-text-left text-primary"></i>
+                }
+
+                @case ('Bool') {
+                  <i class="bi bi-check2-square text-success"></i>
+                }
+
+                @default {
+                  <i class="bi bi-question-circle text-secondary"></i>
+                }
+              }
+            </div>
+
+            <div class="info">
+              <h4>{{ item.nameAnswer }}</h4>
+              <small class="type-label">{{ getTypeName(item.text) }}</small>
+            </div>
+
+          </div>
+
+        }
+
+      } @else {
+
+        <div class="empty">
+          No hay preguntas registradas.
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+
+</ng-template>
+
